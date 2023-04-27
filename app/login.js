@@ -42,6 +42,7 @@ export default function Login() {
         .then((res) => {
           if (res.data == "Login Successful") {
             router.push("/admin");
+            setIsLoading(false);
           }
         })
         .catch((err) => {
@@ -59,6 +60,7 @@ export default function Login() {
         });
     } else {
       setError("students or teachers login fuctionality is not added yet");
+      setIsLoading(false);
     }
   }
 
@@ -84,9 +86,9 @@ export default function Login() {
           setValue={setUserType}
           setItems={setItems}
           placeholder="Select user type"
-          onChangeValue={(value) => {
-            console.log(value);
-          }}
+          // onChangeValue={(value) => {
+          //   console.log(value);
+          // }}
           style={{
             backgroundColor: "#FAFAFC",
             borderColor: "transparent",
