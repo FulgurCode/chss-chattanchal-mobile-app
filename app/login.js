@@ -1,9 +1,9 @@
 import React from "react";
-import styles from "../constants/styles";
+import styles from "../styles/styles";
 import { useState } from "react";
 import axios from "axios";
 import DropDownPicker from "react-native-dropdown-picker";
-import { useRouter } from "expo-router";
+import { Link, useRouter } from "expo-router";
 import {
   Text,
   SafeAreaView,
@@ -28,7 +28,7 @@ export default function Login() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
-  const [inputColor, setInputColor] = useState("transparent");
+  const [inputColor, setInputColor] = useState("#dfdfdf");
   const [isLoading, setIsLoading] = useState(false);
 
   function handleClick() {
@@ -70,13 +70,13 @@ export default function Login() {
         flex: 1,
         justifyContent: "center",
         minHeight: 500,
-        padding: 25,
+        padding: 40,
         backgroundColor: "white",
         gap: 20,
       }}
     >
       <Text style={styles.loginHeaderMain}>CHSS Chattanchal</Text>
-      <Text style={styles.loginHeader}>Start Login</Text>
+      {/* <Text style={styles.loginHeader}>Start Login</Text> */}
       <View style={{ zIndex: 999 }}>
         <DropDownPicker
           open={open}
@@ -91,7 +91,7 @@ export default function Login() {
           // }}
           style={{
             backgroundColor: "#FAFAFC",
-            borderColor: "transparent",
+            borderColor: "#dfdfdf",
             borderRadius: 10,
           }}
           selectedItemContainerStyle={{
@@ -109,24 +109,31 @@ export default function Login() {
         onChangeText={(text) => {
           setUserName(text);
           setError();
-          setInputColor("transparent");
+          setInputColor("#dfdfdf");
         }}
       />
       <TextInput
         style={{ ...styles.input, borderColor: inputColor }}
         placeholder="Password"
         value={password}
+        secureTextEntry={true}
         onChangeText={(text) => {
           setPassword(text);
           setError();
-          setInputColor("transparent");
+          setInputColor("#dfdfdf");
         }}
       />
-      <TouchableOpacity style={styles.btn} onPress={handleClick}>
+      <Link href="#" style={styles.link}>
+        Forget password?
+      </Link>
+      <TouchableOpacity
+        style={{ ...styles.btn, marginTop: 40 }}
+        onPress={handleClick}
+      >
         <Text style={styles.btnText}>LOGIN</Text>
       </TouchableOpacity>
       <Text style={styles.error}>{error}</Text>
-      <ActivityIndicator size="small" animating={isLoading} />
+      <ActivityIndicator size="small" animating={isLoading} color="#28B4AB" />
     </SafeAreaView>
   );
 }

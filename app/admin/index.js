@@ -1,10 +1,34 @@
 import React from "react";
-import { Text, View } from "react-native";
+import { View, SafeAreaView } from "react-native";
+import { TileCard } from "../../components";
+import { useRouter } from "expo-router";
+
+import admissionImg from "../../imgs/adminImages/item1.png";
 
 export default function Admin() {
+  const router = useRouter();
   return (
-    <View>
-      <Text>/admin</Text>
-    </View>
+    <SafeAreaView style={{ backgroundColor: "white", flex: 1, padding: 40 }}>
+      <View
+        style={{
+          display: "flex",
+          flexDirection: "row",
+          flex: 1,
+          gap: 20,
+          paddingTop: 30,
+          // justifyContent: "space-around",
+          flexWrap: "wrap",
+        }}
+      >
+        <TileCard
+          source={admissionImg}
+          text="Admission"
+          onPress={() => {
+            router.push("/admin/admission");
+          }}
+        />
+        {/* <TileCard source={admissionImg} text="Attendence" /> */}
+      </View>
+    </SafeAreaView>
   );
 }
