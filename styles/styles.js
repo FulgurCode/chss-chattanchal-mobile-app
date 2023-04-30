@@ -15,6 +15,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     paddingLeft: 15,
     borderWidth: 1,
+    borderColor: "#dfdfdf",
   },
   btn: {
     backgroundColor: "#28B4AB",
@@ -58,6 +59,30 @@ const styles = StyleSheet.create({
   },
   tileText: {
     fontWeight: 600,
+  },
+  divider: {
+    borderBottomWidth: 1,
+    borderColor: "#ccc",
+    marginTop: 40,
+    marginBottom: 20,
+  },
+  newAdmissionImg: {
+    width: 60,
+    height: 60,
+  },
+  newAdmissionHeading: {
+    fontSize: 17,
+    fontWeight: 600,
+    marginBottom: 30,
+    marginTop: 15,
+  },
+  newAdmissionText: {
+    marginBottom: 10,
+    marginTop: 10,
+    paddingLeft: 5,
+  },
+  mandatory: {
+    color: "red",
   },
 });
 
