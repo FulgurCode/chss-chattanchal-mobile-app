@@ -588,7 +588,7 @@ export default function NewAdmission() {
           style={styles.input}
           name="passingTime"
           onChangeText={handleChangeQualifyingExamDetails}
-          placeholder="mm-yyyy"
+          placeholder="mm-yyyy / month-yyyy"
           value={data.qualifyingExamDetails.passingTime}
         />
       </View>
