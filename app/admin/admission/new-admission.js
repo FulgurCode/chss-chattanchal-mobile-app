@@ -65,7 +65,8 @@ export default function NewAdmission() {
   function handleClick() {
     const regddmmyyyy =
       /^(0[1-9]|[12][0-9]|3[01])[- /.](0[1-9]|1[012])[- /.](19|20)\d\d$/;
-    const regmmyyyy = /^(0[1-9]|1[012])[- /.](19|20)\d\d$/;
+    const regmonthyyyy =
+      /^(january|jan|01|february|feb|02|march|mar|03|april|apr|04|may|05|june|jun|06|july|jul|07|august|aug|08|september|sep|09|october|oct|10|november|nov|11|december|dec|12)-(\d{4})$/i;
 
     if (data.linguisticMinority === "") {
       delete data.linguisticMinority;
@@ -76,7 +77,7 @@ export default function NewAdmission() {
       regddmmyyyy.test(data.dob) &&
       regddmmyyyy.test(data.tcDetailsOnAdmission.date)
     ) {
-      if (regmmyyyy.test(data.qualifyingExamDetails.passingTime)) {
+      if (regmonthyyyy.test(data.qualifyingExamDetails.passingTime)) {
         if (!isEmpty()) {
           setError("");
           setIsLoading(true);
@@ -588,7 +589,6 @@ export default function NewAdmission() {
           name="passingTime"
           onChangeText={handleChangeQualifyingExamDetails}
           placeholder="mm-yyyy"
-          maxLength={7}
           value={data.qualifyingExamDetails.passingTime}
         />
       </View>
