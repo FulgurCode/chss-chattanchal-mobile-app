@@ -428,7 +428,7 @@ export default function NewAdmission() {
       </View>
       <View>
         <Text style={styles.newAdmissionText}>
-          If the student belongs to linguistic minority
+          If the student belongs to linguistic minority specify the language.
         </Text>
         <TextInputComponent
           style={styles.input}
