@@ -188,6 +188,7 @@ export default function StudentDetials() {
                   paddingTop: 15,
                   flex: 2,
                   backgroundColor: "#ddd",
+                  borderTopLeftRadius: 8,
                 }}
               >
                 Name
@@ -210,6 +211,7 @@ export default function StudentDetials() {
                   flex: 1,
                   backgroundColor: "#ddd",
                   textAlign: "center",
+                  borderTopRightRadius: 8,
                 }}
               >
                 Class
