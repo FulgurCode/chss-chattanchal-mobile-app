@@ -8,7 +8,6 @@ const styles = StyleSheet.create({
     marginBottom: 30,
     paddingTop: 100,
   },
-  // loginHeader: { fontSize: 30, fontWeight: 500 },
   input: {
     backgroundColor: "#FAFAFC",
     height: 50,
