@@ -30,8 +30,8 @@ export default function Profile() {
         }}
       >
         <View style={{ flexDirection: "row", gap: 5 }}>
-          <Text style={{ flex: 1 }}>Name:</Text>
-          <Text style={{ flex: 1 }}> {data.name}</Text>
+          <Text style={{ flex: 1, fontWeight: 800 }}>Name:</Text>
+          <Text style={{ flex: 1, fontWeight: 800 }}> {data.name}</Text>
         </View>
         {data.class == undefined ? (
           ""
