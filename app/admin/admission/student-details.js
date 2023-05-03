@@ -1,5 +1,5 @@
 import React from "react";
-import admissionImg from "../../../imgs/adminImages/item1.png";
+import studentDetailsImg from "../../../imgs/adminImages/item2.png";
 import {
   ScrollView,
   Text,
@@ -71,7 +71,7 @@ export default function StudentDetials() {
             paddingTop: 50,
           }}
         >
-          <Image source={admissionImg} style={styles.newAdmissionImg} />
+          <Image source={studentDetailsImg} style={styles.newAdmissionImg} />
           <Text
             style={{
               fontSize: 25,
@@ -93,7 +93,7 @@ export default function StudentDetials() {
         />
         <Text style={{ color: "grey", fontSize: 17, paddingBottom: 50 }}>
           Home &gt; Admission &gt;{" "}
-          <Text style={{ fontWeight: 500 }}>New Admission</Text>
+          <Text style={{ fontWeight: 500 }}>Student Details</Text>
         </Text>
       </View>
 
