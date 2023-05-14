@@ -1,5 +1,5 @@
 import React from "react";
-import studentDetailsImg from "../../../imgs/adminImages/item2.png";
+import studentDetailsImg from "../../../../imgs/adminImages/item2.png";
 import {
   ScrollView,
   Text,
@@ -10,10 +10,10 @@ import {
   FlatList,
   ActivityIndicator,
 } from "react-native";
-import styles from "../../../styles/styles";
+import styles from "../../../../styles/styles";
 import DropDownPicker from "react-native-dropdown-picker";
 import axios from "axios";
-import Item from "../../../components/admin/admission/Item";
+import Item from "../../../../components/admin/admission/Item";
 
 export default function StudentDetials() {
   const [isLoading, setIsLoading] = React.useState(false);
