@@ -1,6 +1,6 @@
 import { View, Text, ScrollView } from "react-native";
 import { useSearchParams } from "expo-router";
-import styles from "../../../styles/styles";
+import styles from "../../../../styles/styles";
 
 export default function Profile() {
   const data = useSearchParams();

@@ -9,8 +9,8 @@ import {
   TouchableOpacity,
   ActivityIndicator,
 } from "react-native";
-import styles from "../../../styles/styles";
-import admissionImg from "../../../imgs/adminImages/item1.png";
+import styles from "../../../../styles/styles";
+import admissionImg from "../../../../imgs/adminImages/item1.png";
 import DropDownPicker from "react-native-dropdown-picker";
 import axios from "axios";
 

@@ -7,6 +7,7 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     marginBottom: 30,
     paddingTop: 100,
+
   },
   input: {
     backgroundColor: "#FAFAFC",
@@ -83,6 +84,8 @@ const styles = StyleSheet.create({
   mandatory: {
     color: "red",
   },
+
+  
 });
 
 export default styles;
