@@ -16,6 +16,7 @@ export default function Admin() {
           flex: 1,
           gap: 20,
           paddingTop: 30,
+          // justifyContent: "space-around",
           flexWrap: "wrap",
         }}
       >

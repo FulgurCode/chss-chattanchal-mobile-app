@@ -1,7 +1,7 @@
 import React from "react";
 import styles from "../styles/styles";
 import { useState } from "react";
-import axios from "axios";
+import Axios from "../stores/Axios"
 import DropDownPicker from "react-native-dropdown-picker";
 import { Link, useRouter } from "expo-router";
 import {
@@ -34,20 +34,41 @@ export default function Login() {
   function handleClick() {
     setIsLoading(true);
     if (userType == "admin") {
-      axios
-        .post("http://192.168.201.41:9000/api/admin/login", {
+      Axios
+        .post("admin/login", {
           username: userName,
           password: password,
         })
         .then((res) => {
-          if (res.data == "Login Successful") {
             router.push("/admin");
             setIsLoading(false);
-          }
+            setError("")
         })
         .catch((err) => {
           setIsLoading(false);
 
+          if (err?.response?.status == 401) {
+            setInputColor("red");
+            setError(err.response.data);
+          } else if (err?.response?.status === undefined) {
+            setError("Server connection error");
+            // console.log(err);
+          } else {
+            setError(err.response.data);
+          }
+        });
+    } else if (userType == "teacher") {
+      Axios.post("teacher/login", {
+        email: userName,
+        password: password,
+      })
+        .then((res) => {
+          router.push("/teacher");
+          setIsLoading(false);
+          setError("")
+        })
+        .catch((err) => {
+          setIsLoading(false);
           if (err?.response?.status == 401) {
             setInputColor("red");
             setError(err.response.data);
@@ -59,8 +80,7 @@ export default function Login() {
           }
         });
     } else {
-      setError("students or teachers login fuctionality is not added yet");
-      setIsLoading(false);
+      setError("students login fuctionality is not added yet");
     }
   }
 
@@ -75,7 +95,7 @@ export default function Login() {
         gap: 20,
       }}
     >
-      <Text style={styles.loginHeaderMain}>CHSS Chattanchal</Text>
+      <Text style={styles.loginHeaderMain}>CHSS CHATTANCHAL</Text>
       {/* <Text style={styles.loginHeader}>Start Login</Text> */}
       <View style={{ zIndex: 999 }}>
         <DropDownPicker
@@ -104,7 +124,7 @@ export default function Login() {
       </View>
       <TextInput
         style={{ ...styles.input, borderColor: inputColor }}
-        placeholder="Username"
+        placeholder={(userType == "admin") ? "Username" : "Email"}
         value={userName}
         onChangeText={(text) => {
           setUserName(text);
@@ -132,6 +152,13 @@ export default function Login() {
       >
         <Text style={styles.btnText}>LOGIN</Text>
       </TouchableOpacity>
+
+      {(userType == "teacher") ? <TouchableOpacity style={{alignItems: "center", position: "absolute", left: "54.5%", bottom: 230}} onPress={()=>router.push("teacher/signup")}  >
+        <Text style={{ color: "grey", fontSize: 15, fontWeight: 500 }}>
+          SIGNUP
+        </Text>
+      </TouchableOpacity> : ""}
+
       <Text style={styles.error}>{error}</Text>
       <ActivityIndicator size="small" animating={isLoading} color="#28B4AB" />
     </SafeAreaView>

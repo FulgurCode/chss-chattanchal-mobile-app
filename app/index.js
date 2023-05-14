@@ -4,17 +4,26 @@ import { SafeAreaView, Text } from "react-native";
 
 export default function Home() {
   return (
-    <SafeAreaView>
-      <Text>index page</Text>
+    <SafeAreaView style={{padding: 10, gap: 10}}>
+      <Text style={{fontWeight: "bold", padding: 10}}>index page</Text>
       <Link href="/login">/login</Link>
       <Link href="/admin">/admin</Link>
-      <Link href="/admin/admission">/admin/admission</Link>
-      <Link href="/admin/admission/student-details">
-        /admin/admission/student-detail
+      <Link href="/teacher">
+        /teacher
       </Link>
-      <Link href="/admin/admission/new-admission">
-        /admin/admission/new-admission
+      <Link href="/teacher/signup">
+        <Text>    </Text>/teacher/signup
+      </Link><Link href="/teacher/signup-otp">
+      <Text>    </Text>/teacher/signup-otp
       </Link>
+      <Link href="/session/common/admission">/session/common/admission</Link>
+      <Link href="/session/common/admission/student-details">
+      <Text>    </Text>/session/common/admission/student-detail
+      </Link>
+      <Link href="/session/common/admission/new-admission">
+      <Text>    </Text>/session/common/admission/new-admission
+      </Link>
+      
     </SafeAreaView>
   );
 }
