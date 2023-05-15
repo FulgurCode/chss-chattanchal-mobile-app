@@ -63,39 +63,7 @@ export default function StudentDetials() {
         backgroundColor: "white",
       }}
     >
-      <View>
-        <View
-          style={{
-            flexDirection: "row",
-            alignItems: "center",
-            paddingTop: 50,
-          }}
-        >
-          <Image source={studentDetailsImg} style={styles.newAdmissionImg} />
-          <Text
-            style={{
-              fontSize: 25,
-              fontWeight: 500,
-              borderColor: "#ccc",
-              borderRightWidth: 2,
-              paddingRight: 20,
-            }}
-          >
-            Student Details
-          </Text>
-        </View>
-        <View
-          style={{
-            borderBottomWidth: 2,
-            borderColor: "#ccc",
-            marginBottom: 10,
-          }}
-        />
-        <Text style={{ color: "grey", fontSize: 17, paddingBottom: 50 }}>
-          Home &gt; Admission &gt;{" "}
-          <Text style={{ fontWeight: 500 }}>Student Details</Text>
-        </Text>
-      </View>
+      
 
       <View style={{ gap: 20 }}>
         <View style={{ zIndex: 999 }}>
