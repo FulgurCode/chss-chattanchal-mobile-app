@@ -4,12 +4,12 @@ import { useState } from "react";
 import Axios from "../../stores/Axios";
 import { useRouter } from "expo-router";
 import { FontAwesome5 } from "@expo/vector-icons";
-import OTPInput from '../../components/common/OTPInput'
 import {
   Text,
   SafeAreaView,
   TouchableOpacity,
   ActivityIndicator,
+  TextInput,
 } from "react-native";
 
 export default function Login() {
@@ -22,8 +22,7 @@ export default function Login() {
     { label: "Student", value: "student" },
   ]);
 
-    const [otpValues, setOTPValues] = useState(Array(6).fill(''));
-
+  const [otpValue, setOTPValue] = useState("");
 
   const [error, setError] = useState("");
 
@@ -31,8 +30,10 @@ export default function Login() {
   const [isLoading, setIsLoading] = useState(false);
 
   function handleClick() {
+    if (otpValue.length == 6){
+    setError("")
     setIsLoading(true);
-    Axios.get(`teacher/signup-otp?otp=${otpValues.join("")}`)
+    Axios.get(`teacher/signup-otp?otp=${otpValue}`)
       .then((res) => {
         router.push("/login");
         setIsLoading(false);
@@ -51,6 +52,7 @@ export default function Login() {
           setError(err.response.data);
         }
       });
+    }else{setError("field is not filled")}
   }
 
   return (
@@ -74,8 +76,15 @@ export default function Login() {
         Enter OTP
       </Text>
 
-        <OTPInput numInputs={6} value={otpValues} onChange={setOTPValues}/>
-      
+      <TextInput
+        style={{...styles.input, fontSize: 20, paddingLeft: "0%", textAlign: "center"}}
+        value={otpValue}
+        onChangeText={
+          (text)=> setOTPValue( text.replace(/[^0-9]/g, ''))
+      }
+        maxLength={6}
+      />
+
       <TouchableOpacity
         style={{ ...styles.btn, marginTop: 40 }}
         onPress={handleClick}
@@ -83,7 +92,7 @@ export default function Login() {
         <Text style={styles.btnText}>VERIFY</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity style={{alignItems: "center"}} >
+      <TouchableOpacity style={{ alignItems: "center" }}>
         <Text style={{ color: "grey", fontSize: 15, fontWeight: 500 }}>
           Resend OTP
         </Text>
@@ -91,7 +100,6 @@ export default function Login() {
 
       <Text style={styles.error}>{error}</Text>
       <ActivityIndicator size="small" animating={isLoading} color="#28B4AB" />
-
     </SafeAreaView>
   );
 }

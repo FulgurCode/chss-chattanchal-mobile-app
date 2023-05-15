@@ -27,26 +27,36 @@ const OTPInput = (props) => {
     props.onChange(updatedOTPValues);
   };
 
-  const handlePaste = async () => {
-    const clipboardContent = await ExpoClipboard.getStringAsync();
-    const otpArray = clipboardContent
-      .slice(0, props.numInputs)
-      .split('')
-      .map((char) => (isNaN(parseInt(char)) ? '' : char));
+  // const handlePaste = async () => {
+  //   const clipboardContent = await ExpoClipboard.getStringAsync();
+  //   const otpArray = clipboardContent
+  //     .slice(0, props.numInputs)
+  //     .split('')
+  //     .map((char) => (isNaN(parseInt(char)) ? '' : char));
 
-    const updatedOTPValues = [...props.value];
-    otpArray.forEach((otpValue, index) => {
-      if (index < props.numInputs) {
-        updatedOTPValues[index] = otpValue;
-      }
-    });
+  //   const updatedOTPValues = [...props.value];
+  //   otpArray.forEach((otpValue, index) => {
+  //     if (index < props.numInputs) {
+  //       updatedOTPValues[index] = otpValue;
+  //     }
+  //   });
 
-    props.onChange(updatedOTPValues);
-  };
+  //   props.onChange(updatedOTPValues);
+  // };
 
   const handleTextInputRef = (ref, index) => {
     inputRefs.current[index] = ref;
   };
+
+  // const handleSelectionChange = (event) => {
+  //   const { start, end } = event.nativeEvent.selection;
+  //   if (start !== end && start === 0 && end > 0) {
+  //     // User has made a selection and it starts from index 0, indicating a paste event
+  //     const pastedText = text.slice(start, end);
+  //     // Handle the pasted text as needed
+  //     console.log('Pasted Text:', pastedText);
+  //   }
+  // };
 
   return (
     <View style={styles.container}>
@@ -63,12 +73,7 @@ const OTPInput = (props) => {
             onFocus={() => handleInputFocus(index)}
             ref={(ref) => handleTextInputRef(ref, index)}
             value={props.value[index]}
-            onSelectionChange={({ nativeEvent }) => {
-              const { start, end } = nativeEvent.selection;
-              if (start === 0 && end === props.value[index].length && start !== end) {
-                handlePaste();
-              }
-            }}
+            // onSelectionChange={handleSelectionChange}
           />
         ))}
     </View>

@@ -12,16 +12,16 @@ export default function Home() {
         /teacher
       </Link>
       <Link href="/teacher/signup">
-        /teacher/signup
+        <Text>    </Text>/teacher/signup
       </Link><Link href="/teacher/signup-otp">
-        /teacher/signup-otp
+      <Text>    </Text>/teacher/signup-otp
       </Link>
       <Link href="/session/common/admission">/session/common/admission</Link>
       <Link href="/session/common/admission/student-details">
-      /session/common/admission/student-detail
+      <Text>    </Text>/session/common/admission/student-detail
       </Link>
       <Link href="/session/common/admission/new-admission">
-      /session/common/admission/new-admission
+      <Text>    </Text>/session/common/admission/new-admission
       </Link>
       
     </SafeAreaView>

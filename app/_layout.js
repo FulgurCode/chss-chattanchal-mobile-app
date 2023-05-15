@@ -38,6 +38,8 @@ export default function Layout() {
       }}
     >
       <Stack.Screen name="login" options={{ headerShown: false }} />
+      <Stack.Screen name="teacher/signup" options={{ headerShown: false }} />
+      <Stack.Screen name="teacher/signup-otp" options={{ headerShown: false }} />
     </Stack>
   );
 }

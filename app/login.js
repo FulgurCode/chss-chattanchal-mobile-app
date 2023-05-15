@@ -95,7 +95,7 @@ export default function Login() {
         gap: 20,
       }}
     >
-      <Text style={styles.loginHeaderMain}>CHSS Chattanchal</Text>
+      <Text style={styles.loginHeaderMain}>CHSS CHATTANCHAL</Text>
       {/* <Text style={styles.loginHeader}>Start Login</Text> */}
       <View style={{ zIndex: 999 }}>
         <DropDownPicker
