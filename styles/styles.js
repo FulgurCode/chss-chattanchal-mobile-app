@@ -84,15 +84,15 @@ const styles = StyleSheet.create({
     color: "red",
   },
 
-  // tableBox: {
-  //   borderWidth: 1,
-  //   borderColor: "black",
-  // },
+  tableBox: {
+    marginBottom: 50
+  },
   table: {
     // borderWidth: 1,
     // borderColor: "red",
     borderRadius: 10,
     overflow: "hidden"
+
   },
   tableHeader:{
     flexDirection: "row",
