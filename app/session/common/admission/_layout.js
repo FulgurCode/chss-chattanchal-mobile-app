@@ -1,5 +1,5 @@
 import { Tabs } from "expo-router";
-import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
+import { Ionicons, MaterialCommunityIcons, Octicons } from "@expo/vector-icons";
 
 export default function Layout() {
   return (
@@ -36,6 +36,15 @@ export default function Layout() {
           // tabBarLabel: "New admission",
           tabBarIcon: () => (
             <Ionicons name="person-add" size={30} color="white" />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="verification"
+        options={{
+          // tabBarLabel: "New admission",
+          tabBarIcon: () => (
+            <Octicons name="verified" size={24} color="white" />
           ),
         }}
       />
