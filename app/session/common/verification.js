@@ -136,7 +136,7 @@ export default function Verification() {
             paddingTop: 50,
           }}
         >
-          <Image source={verificationImg} style={styles.verificationImg} />
+          <Image source={verificationImg}  style={styles.verificationImg} />
           <Text
             style={{
               fontSize: 25,

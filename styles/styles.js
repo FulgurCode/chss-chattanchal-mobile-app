@@ -107,6 +107,12 @@ const styles = StyleSheet.create({
   },
   tableRow:{
     flexDirection: "row"
+  },
+
+  verificationImg:{
+    width: 30,
+    height: 30,
+    margin: 5
   }
 });
 
