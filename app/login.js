@@ -52,7 +52,6 @@ export default function Login() {
             setError(err.response.data);
           } else if (err?.response?.status === undefined) {
             setError("Server connection error");
-            // console.log(err);
           } else {
             setError(err.response.data);
           }
@@ -74,7 +73,6 @@ export default function Login() {
             setError(err.response.data);
           } else if (err?.response?.status === undefined) {
             setError("Server connection error");
-            console.log(err);
           } else {
             setError(err.response.data);
           }
@@ -143,7 +141,9 @@ export default function Login() {
           setInputColor("#dfdfdf");
         }}
       />
-      <Link href="#" style={styles.link}>
+      <Link href="/login" style={styles.link}>
+      {/* <Link href="#" style={styles.link}> Replace with this when needed*/}
+      
         Forget password?
       </Link>
       <TouchableOpacity
@@ -153,7 +153,7 @@ export default function Login() {
         <Text style={styles.btnText}>LOGIN</Text>
       </TouchableOpacity>
 
-      {(userType == "teacher") ? <TouchableOpacity style={{alignItems: "center", position: "absolute", left: "54.5%", bottom: 230}} onPress={()=>router.push("teacher/signup")}  >
+      {(userType == "teacher") ? <TouchableOpacity style={{alignItems: "center", position: "relative"}} onPress={()=>router.push("teacher/signup")}  >
         <Text style={{ color: "grey", fontSize: 15, fontWeight: 500 }}>
           SIGNUP
         </Text>

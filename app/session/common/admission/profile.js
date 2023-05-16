@@ -1,9 +1,32 @@
-import { View, Text, ScrollView } from "react-native";
+import { View, Text, ScrollView, Image } from "react-native";
 import { useSearchParams } from "expo-router";
 import styles from "../../../../styles/styles";
+import { useEffect, useState } from "react";
+import Axios from "../../../../stores/Axios";
+import profileImg from "../../../../imgs/profile.png";
 
 export default function Profile() {
+  const [img, setImg] = useState(profileImg);
+
   const data = useSearchParams();
+
+  function getImg() {
+    Axios.get(`teacher/get-student-photo?studentId=${data._id}`)
+      .then((res) => {
+        setImg("data:img/jpeg;base64," + res.data);
+      })
+      .catch((err) => {
+        if (err.response == undefined){
+          setImg(profileImg);
+        }
+        else{
+          setImg(profileImg);
+        }
+        });
+  }
+
+  useEffect(getImg, [data]);
+
   return (
     <ScrollView
       style={{
@@ -29,6 +52,12 @@ export default function Profile() {
           padding: 20,
         }}
       >
+        <View style={{ justifyContent: "center", alignItems: "center" }}>
+          <Image
+            source={typeof img == "number" ? img : { uri: img, scale: 1 }}
+            style={{ height: 160, width: 160 }}
+          />
+        </View>
         <View style={{ flexDirection: "row", gap: 5 }}>
           <Text style={{ flex: 1, fontWeight: 800 }}>Name:</Text>
           <Text style={{ flex: 1, fontWeight: 800 }}> {data.name}</Text>

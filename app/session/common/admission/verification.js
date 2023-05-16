@@ -272,7 +272,6 @@ export default function Verification() {
                           flex: 1,
                         }}
                         onPress={() => {
-                          console.log(item)
                           router.push({
                             pathname: "/session/common/admission/profile",
                             params: {

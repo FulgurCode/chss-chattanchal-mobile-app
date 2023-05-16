@@ -84,21 +84,22 @@ const styles = StyleSheet.create({
     color: "red",
   },
 
-  // tableBox: {
-  //   borderWidth: 1,
-  //   borderColor: "black",
-  // },
+  tableBox: {
+    marginBottom: 50
+  },
   table: {
     // borderWidth: 1,
     // borderColor: "red",
     borderRadius: 10,
     overflow: "hidden"
+
   },
   tableHeader:{
     flexDirection: "row",
     backgroundColor: "#6A2C70",
 
-    padding: 10
+    padding: 10,
+    minHeight: 45
   },
   tableBody:{
     borderWidth: 1,
@@ -114,7 +115,7 @@ const styles = StyleSheet.create({
   verificationImg:{
     width: 30,
     height: 30,
-    margin: 5
+    margin: 15
   }
 });
 
