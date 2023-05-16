@@ -12,7 +12,7 @@ import {
 } from "react-native";
 import styles from "../../../../styles/styles";
 import DropDownPicker from "react-native-dropdown-picker";
-import axios from "axios";
+import Axois from "../../../../stores/Axios";
 import Item from "../../../../components/admin/admission/Item";
 
 export default function StudentDetials() {
@@ -28,9 +28,9 @@ export default function StudentDetials() {
 
   function handleClick() {
     setIsLoading(true);
-    axios
+    Axois
       .get(
-        `http://192.168.201.41:9000/api/admin/get-students?search=${value}&&value=${search}`
+        `/admin/get-students?search=${value}&&value=${search}`
       )
       .then((res) => {
         setData(res.data);
@@ -63,6 +63,40 @@ export default function StudentDetials() {
         backgroundColor: "white",
       }}
     >
+
+<View>
+        <View
+          style={{
+            flexDirection: "row",
+            alignItems: "center",
+            paddingTop: 50,
+          }}
+        >
+          <Image source={studentDetailsImg} style={styles.newAdmissionImg} />
+          <Text
+            style={{
+              fontSize: 25,
+              fontWeight: 500,
+              borderColor: "#ccc",
+              borderRightWidth: 2,
+              paddingRight: 20,
+            }}
+          >
+            Student Details
+          </Text>
+        </View>
+        <View
+          style={{
+            borderBottomWidth: 2,
+            borderColor: "#ccc",
+            marginBottom: 10,
+          }}
+        />
+        <Text style={{ color: "grey", fontSize: 17, paddingBottom: 50 }}>
+          Home &gt; Admission &gt;{" "}
+          <Text style={{ fontWeight: 500 }}>Student Details</Text>
+        </Text>
+      </View>
       
 
       <View style={{ gap: 20 }}>

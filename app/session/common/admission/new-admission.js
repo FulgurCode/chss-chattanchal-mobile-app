@@ -12,7 +12,7 @@ import {
 import styles from "../../../../styles/styles";
 import admissionImg from "../../../../imgs/adminImages/item1.png";
 import DropDownPicker from "react-native-dropdown-picker";
-import axios from "axios";
+import Axois from "../../../../stores/Axios";
 
 const TextInputComponent = ({ value, onChangeText, name, ...props }) => (
   <TextInput
@@ -83,8 +83,8 @@ export default function NewAdmission() {
           setIsLoading(true);
           setDisabled(true);
 
-          axios
-            .post("http://192.168.201.41:9000/api/admin/new-admission", data)
+          Axois
+            .post("/admin/new-admission", data)
             .then(() => {
               Alert.alert("Status", "new admission sucssesfull");
               setIsLoading(false);

@@ -1,15 +1,22 @@
 import React, { useEffect, useState } from "react";
 import styles from "../../../styles/styles";
 import Axios from "../../../stores/Axios";
-import { SafeAreaView, Text, View, Image } from "react-native";
-import studentDetailsImg from "../../../imgs/adminImages/item2.png";
-
+import {
+  SafeAreaView,
+  Text,
+  View,
+  Image,
+  TextInput,
+  TouchableOpacity,
+  Alert
+} from "react-native";
+import verificationImg from "../../../imgs/adminImages/item3.png";
 
 export default function Verification() {
   const [data, setData] = useState([]);
   const [error, setError] = useState("");
 
-  // const [searchQuery, setSearchQuery] = useState("");
+  const [searchQuery, setSearchQuery] = useState("");
   const [sortColumn, setSortColumn] = useState("name");
   const [sortOrder, setSortOrder] = useState("asc");
 
@@ -30,8 +37,7 @@ export default function Verification() {
     setError("");
     Axios.patch(`teacher/verify-student?studentId=${id}`)
       .then((res) => {
-        setVisibile(true)
-        console.log(visible)
+        Alert.alert("Verification", "Student verified successfully!")
         loadData();
       })
       .catch((err) => {
@@ -115,25 +121,14 @@ export default function Verification() {
 
   return (
     <SafeAreaView
-    style={{
-      paddingLeft: 40,
-      paddingRight: 40,
-      backgroundColor: "white",
-    }}>
-      {/* <View className={styles.main}>
-        <div className={styles.header}>
-          <span>
-            <img
-              src="/imgs/AdmissionImages/item2.png"
-              style={styles.newAdmissionImg}
-            />
-            <h1>Verification</h1>
-          </span>
-          <hr />
-          Home &gt; Admission &gt; <code>Verification</code>
-        </div>
-        <div className={styles.table} > */}
-        <View>
+      style={{
+        paddingLeft: 40,
+        paddingRight: 40,
+        backgroundColor: "white",
+        flex: 1
+      }}
+    >
+      <View>
         <View
           style={{
             flexDirection: "row",
@@ -141,7 +136,7 @@ export default function Verification() {
             paddingTop: 50,
           }}
         >
-          <Image source={studentDetailsImg} style={styles.newAdmissionImg} />
+          <Image source={verificationImg} style={styles.verificationImg} />
           <Text
             style={{
               fontSize: 25,
@@ -151,7 +146,7 @@ export default function Verification() {
               paddingRight: 20,
             }}
           >
-            Student Details
+           Verification
           </Text>
         </View>
         <View
@@ -163,76 +158,73 @@ export default function Verification() {
         />
         <Text style={{ color: "grey", fontSize: 17, paddingBottom: 50 }}>
           Home &gt; Admission &gt;{" "}
-          <Text style={{ fontWeight: 500 }}>Student Details</Text>
+          <Text style={{ fontWeight: 500 }}>Verification</Text>
         </Text>
       </View>
 
+    
+      <View>
+        <View
+          style={{ flexDirection: "column", justifyContent: "space-between" }}
+        >
+          <Text
+            style={{ textAlign: "center", color: "red", left: 0, minWidth: 0 , marginBottom: 15}}
+          >
+            {error}
+          </Text>
+          <TextInput
+            style={{...styles.input, marginBottom: 20}}
+            placeholder="Search Name/Adm No"
+            value={searchQuery}
+            onChangeText={handleSearch}
+          />
+          
+        </View>
 
-          {/* <div >
-            <div style={{ display: "flex", justifyContent: "space-between" }}>
-              <input
-                type="text"
-                placeholder="Search Name/Adm No"
-                value={searchQuery}
-                onChange={handleSearch}
-                className={styles.searchBox}
-              />
-              <code style={{ textAlign: "center", color: "red", left: 0 , minWidth: 0}}>
-                {error}
-              </code>
-            </div>
+        <View style={styles.tableBox}>
+          {/* Replace the <table> and related elements with equivalent components */}
+          <View style={styles.table}>
+            <View style={styles.tableHeader}>
+              <TouchableOpacity onPress={() => handleSort("name")} style={{flex: 1, alignItems: "center"}}>
+                <Text style={{color: "white"}}>Name {getSortIndicator("name")}</Text>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={() => handleSort("class")} style={{flex: 1, alignItems: "center"}}>
+                <Text style={{color: "white"}}>Class {getSortIndicator("class")}</Text>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={() => handleSort("admissionNo")} style={{flex: 1, alignItems: "center"}}>
+                <Text style={{color: "white"}}>Adm No. {getSortIndicator("admissionNo")}</Text>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={() => handleSort("dob")} style={{flex: 1, alignItems: "center"}}>
+                <Text style={{color: "white"}}>D.O.B {getSortIndicator("dob")}</Text>
+              </TouchableOpacity>
+              <TouchableOpacity  style={{width: 60}}>
+                <Text></Text>
+              </TouchableOpacity>
+            </View>
 
-            <div className={styles.tableBox}>
-              <table className={styles.table}>
-                <thead>
-                  <tr>
-                    <th onClick={() => handleSort("name")}>
-                      Name {getSortIndicator("name")}
-                    </th>
-                    <th onClick={() => handleSort("class")}>
-                      Class {getSortIndicator("class")}
-                    </th>
-                    <th onClick={() => handleSort("admissionNo")}>
-                      Adm No. {getSortIndicator("admissionNo")}
-                    </th>
-                    <th onClick={() => handleSort("dob")}>
-                      D.O.B {getSortIndicator("dob")}
-                    </th>
-                    <th></th>
-                  </tr>
-                </thead>
-
-                <tbody className={styles.tableBody}>
-                  {sortedData.length === 0 ? (
-                    <tr>
-                      <td colSpan="">No data found</td>
-                    </tr>
-                  ) : (
-                    sortedData.map((item) => (
-                      <tr key={item._id}>
-                        <td>{item.name}</td>
-                        <td>{item.class}</td>
-                        <td>{item.admissionNo}</td>
-                        <td>{item.dob}</td>
-                        <td>
-                          <button
-                            style={{ marginLeft: "30%" }}
-                            className={styles.deleteBtn}
-                            name=""
-                            onClick={() => verifyStudent(item._id)}
-                          >
-                            Verify
-                          </button>
-                        </td>
-                      </tr>
-                    ))
-                  )}
-                </tbody>
-              </table>
-            </div>
-          </div> */}
-        {/* </div>
-      </div> */}
+            <View style={styles.tableBody}>
+              {sortedData.length === 0 ? (
+                <Text style={{padding: 20, borderBottomWidth: 1, borderColor: "#ddd"}}>No data found</Text>
+              ) : (
+                sortedData.map((item) => (
+                  <View key={item._id} style={{...styles.tableRow, borderBottomWidth: 1, borderColor: "#ddd"}}>
+                    <View style={{flex: 1, backgroundColor: "#eee", justifyContent: "center"}}><Text style={{textAlign: "center"}}>{item.name}</Text></View>
+                    <View style={{flex: 1,  justifyContent: "center"}}><Text style={{textAlign: "center"}}>{item.class}</Text></View>
+                    <View style={{flex: 1, backgroundColor: "#eee",  justifyContent: "center"}}><Text style={{textAlign: "center"}}>{item.admissionNo}</Text></View>
+                    <View style={{flex: 1, justifyContent: "center", padding: 10}}><Text style={{textAlign: "center"}}>{item.dob}</Text></View>
+                    <View style={{minWidth: 50, justifyContent: "center", paddingRight: 5}}><TouchableOpacity
+                      style={{flex: 1, backgroundColor: "rgb(46, 194, 24)", justifyContent: "center", borderRadius: 50, maxWidth: 50, maxHeight: 25}}
+                      onPress={() => verifyStudent(item._id)}
+                    >
+                      <Text style={{ textAlign: "center", color: "white", fontSize: 13}}>Verify</Text>
+                    </TouchableOpacity></View>
+                  </View>
+                ))
+              )}
+            </View>
+          </View>
+        </View>
+      </View>
     </SafeAreaView>
   );
 }
