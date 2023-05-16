@@ -7,7 +7,6 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     marginBottom: 30,
     paddingTop: 100,
-
   },
   input: {
     backgroundColor: "#FAFAFC",
@@ -85,7 +84,38 @@ const styles = StyleSheet.create({
     color: "red",
   },
 
-  
+  // tableBox: {
+  //   borderWidth: 1,
+  //   borderColor: "black",
+  // },
+  table: {
+    // borderWidth: 1,
+    // borderColor: "red",
+    borderRadius: 10,
+    overflow: "hidden"
+  },
+  tableHeader:{
+    flexDirection: "row",
+    backgroundColor: "#6A2C70",
+
+    padding: 10
+  },
+  tableBody:{
+    borderWidth: 1,
+    borderColor: "#ccc",
+    borderBottomWidth: 0
+    
+    // padding: 10
+  },
+  tableRow:{
+    flexDirection: "row"
+  },
+
+  verificationImg:{
+    width: 30,
+    height: 30,
+    margin: 5
+  }
 });
 
 export default styles;

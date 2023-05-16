@@ -8,6 +8,7 @@ export default function Home() {
       <Text style={{ fontWeight: "bold", padding: 10 }}>index page</Text>
       <Link href="/login">/login</Link>
       <Link href="/admin">/admin</Link>
+      
       <Link href="/teacher">/teacher</Link>
       <Link href="/teacher/signup">
         <Text>    </Text>/teacher/signup
@@ -23,8 +24,14 @@ export default function Home() {
       <Link href="/session/common/admission/new-admission">
         <Text>    </Text>/session/common/admission/new-admission
       </Link>
-      <Link href="/session/common/verification">
-        /session/common/verification
+      <Link href="/session/common/admission/profile">
+        <Text>    </Text>/session/common/admission/profile
+      </Link>
+      <Link href="/session/common/admission/verification">
+        <Text>    </Text>/session/common/admission/verification
+      </Link>
+      <Link href="/session/common/admission/conformation">
+        <Text>    </Text>/session/common/admission/conformation
       </Link>
     </SafeAreaView>
   );
