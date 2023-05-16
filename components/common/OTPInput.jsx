@@ -2,7 +2,6 @@ import React, { useState, useRef } from 'react';
 import { View, TextInput, StyleSheet } from 'react-native';
 
 const OTPInput = (props) => {
-  console.log(props)
   const inputRefs = useRef([]);
 
   const handleChangeText = (text, index) => {

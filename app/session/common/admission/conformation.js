@@ -33,7 +33,7 @@ export default function Verification() {
 
   function loadData() {
     setError("");
-    Axios.get("teacher/students-to-verify")
+    Axios.get("admin/students-to-confirm")
       .then((res) => setData(res.data))
       .catch((err) => {
         if (err.response == undefined) {
@@ -46,9 +46,9 @@ export default function Verification() {
 
   function verifyStudent(id) {
     setError("");
-    Axios.patch(`teacher/verify-student?studentId=${id}`)
+    Axios.patch(`admin/confirm-student?studentId=${id}`)
       .then((res) => {
-        Alert.alert("Verification", "Student verified successfully!");
+        Alert.alert("Confirmation", "Student confirmed successfully!");
         loadData();
       })
       .catch((err) => {
@@ -61,7 +61,7 @@ export default function Verification() {
   }
 
   const handleSearch = (e) => {
-    (e === undefined)? console.log("undefined") : setSearchQuery(e.target.value);
+    (e === undefined)? "" : setSearchQuery(e.target.value);
 
   };
 
@@ -165,7 +165,7 @@ export default function Verification() {
                 paddingRight: 20,
               }}
             >
-              Verification
+              Confirmation
             </Text>
           </View>
           <View
@@ -177,7 +177,7 @@ export default function Verification() {
           />
           <Text style={{ color: "grey", fontSize: 17, paddingBottom: 50 }}>
             Home &gt; Admission &gt;{" "}
-            <Text style={{ fontWeight: 500 }}>Verification</Text>
+            <Text style={{ fontWeight: 500 }}>Confirmation</Text>
           </Text>
         </View>
 
@@ -273,7 +273,6 @@ export default function Verification() {
                           flex: 1,
                         }}
                         onPress={() => {
-                          console.log(item)
                           router.push({
                             pathname: "/session/common/admission/profile",
                             params: {
@@ -348,7 +347,7 @@ export default function Verification() {
                               fontSize: 13,
                             }}
                           >
-                            Verify
+                            Cofrm
                           </Text>
                         </TouchableOpacity>
                       </View>
