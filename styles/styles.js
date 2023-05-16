@@ -88,10 +88,12 @@ const styles = StyleSheet.create({
   //   borderWidth: 1,
   //   borderColor: "black",
   // },
-  // table: {
-  //   borderWidth: 1,
-  //   borderColor: "red"
-  // },
+  table: {
+    // borderWidth: 1,
+    // borderColor: "red",
+    borderRadius: 10,
+    overflow: "hidden"
+  },
   tableHeader:{
     flexDirection: "row",
     backgroundColor: "#6A2C70",

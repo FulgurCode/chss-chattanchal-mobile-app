@@ -30,6 +30,9 @@ export default function Home() {
       <Link href="/session/common/admission/verification">
         <Text>    </Text>/session/common/admission/verification
       </Link>
+      <Link href="/session/common/admission/conformation">
+        <Text>    </Text>/session/common/admission/conformation
+      </Link>
     </SafeAreaView>
   );
 }

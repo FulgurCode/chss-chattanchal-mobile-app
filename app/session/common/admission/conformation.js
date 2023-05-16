@@ -60,8 +60,9 @@ export default function Verification() {
       });
   }
 
-  const handleSearch = (value) => {
-    setSearchQuery(value);
+  const handleSearch = (e) => {
+    (e === undefined)? console.log("undefined") : setSearchQuery(e.target.value);
+
   };
 
   const handleSort = (column) => {
@@ -198,7 +199,7 @@ export default function Verification() {
             <TextInput
               style={{ ...styles.input, marginBottom: 20 }}
               placeholder="Search Name/Adm No"
-              // value={searchQuery}
+              value={searchQuery}
               onChangeText={handleSearch}
             />
           </View>
