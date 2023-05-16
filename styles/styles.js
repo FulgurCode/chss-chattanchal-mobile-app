@@ -114,7 +114,7 @@ const styles = StyleSheet.create({
   verificationImg:{
     width: 30,
     height: 30,
-    margin: 5
+    margin: 15
   }
 });
 
