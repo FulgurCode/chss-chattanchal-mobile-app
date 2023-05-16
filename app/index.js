@@ -27,8 +27,8 @@ export default function Home() {
       <Link href="/session/common/admission/profile">
         <Text>    </Text>/session/common/admission/profile
       </Link>
-      <Link href="/session/common/verification">
-        /session/common/verification
+      <Link href="/session/common/admission/verification">
+        <Text>    </Text>/session/common/admission/verification
       </Link>
     </SafeAreaView>
   );
