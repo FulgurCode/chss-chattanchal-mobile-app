@@ -98,7 +98,8 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     backgroundColor: "#6A2C70",
 
-    padding: 10
+    padding: 10,
+    minHeight: 45
   },
   tableBody:{
     borderWidth: 1,
