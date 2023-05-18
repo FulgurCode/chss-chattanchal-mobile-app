@@ -9,10 +9,10 @@ import {
   TouchableOpacity,
   ActivityIndicator,
 } from "react-native";
-import styles from "../../../../styles/styles";
-import admissionImg from "../../../../imgs/adminImages/item1.png";
+import styles from "../../../styles/styles";
+import admissionImg from "../../../imgs/adminImages/item1.png";
 import DropDownPicker from "react-native-dropdown-picker";
-import Axois from "../../../../stores/Axios";
+import Axois from "../../../stores/Axios";
 
 const TextInputComponent = ({ value, onChangeText, name, ...props }) => (
   <TextInput

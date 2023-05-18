@@ -49,7 +49,7 @@ export default function Layout() {
         }}
       />
       <Tabs.Screen
-        name="conformation"
+        name="confirmation"
         options={{
           // tabBarLabel: "New admission",
           tabBarIcon: () => (

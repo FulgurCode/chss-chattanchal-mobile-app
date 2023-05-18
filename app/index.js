@@ -8,6 +8,19 @@ export default function Home() {
       <Text style={{ fontWeight: "bold", padding: 10 }}>index page</Text>
       <Link href="/login">/login</Link>
       <Link href="/admin">/admin</Link>
+      <Link href="admin/admission">
+        <Text>    </Text>/admin/admission/
+      </Link><Link href="admin/admission/student-details">
+        <Text>        </Text>/admin/admission/student-details
+      </Link><Link href="admin/admission/new-admission">
+        <Text>        </Text>/admin/admission/new-admission
+      </Link><Link href="admin/admission/profile">
+        <Text>        </Text>/admin/admission/profile
+      </Link><Link href="admin/admission/verification">
+        <Text>        </Text>/admin/admission/verification
+      </Link><Link href="admin/admission/confirmation">
+        <Text>        </Text>/admin/admission/confirmation
+      </Link>
       
       <Link href="/teacher">/teacher</Link>
       <Link href="/teacher/signup">
@@ -16,23 +29,19 @@ export default function Home() {
       <Link href="/teacher/signup-otp">
         <Text>    </Text>/teacher/signup-otp
       </Link>
-
-      <Link href="/session/common/admission">/session/common/admission</Link>
-      <Link href="/session/common/admission/student-details">
-        <Text>    </Text>/session/common/admission/student-detail
+      <Link href="teacher/admission/">
+        <Text>    </Text>/teacher/admission/
       </Link>
-      <Link href="/session/common/admission/new-admission">
-        <Text>    </Text>/session/common/admission/new-admission
+      <Link href="teacher/admission/student-details">
+        <Text>        </Text>/teacher/admission/student-details
+      </Link><Link href="teacher/admission/new-admission">
+        <Text>        </Text>/teacher/admission/new-admission
+      </Link><Link href="teacher/admission/profile">
+        <Text>        </Text>/teacher/admission/profile
+      </Link><Link href="teacher/admission/verification">
+        <Text>        </Text>/teacher/admission/verification
       </Link>
-      <Link href="/session/common/admission/profile">
-        <Text>    </Text>/session/common/admission/profile
-      </Link>
-      <Link href="/session/common/admission/verification">
-        <Text>    </Text>/session/common/admission/verification
-      </Link>
-      <Link href="/session/common/admission/conformation">
-        <Text>    </Text>/session/common/admission/conformation
-      </Link>
+      
     </SafeAreaView>
   );
 }

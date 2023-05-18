@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import styles from "../../../../styles/styles";
-import Axios from "../../../../stores/Axios";
+import styles from "../../../styles/styles";
+import Axios from "../../../stores/Axios";
 import {
   SafeAreaView,
   Text,
@@ -13,7 +13,7 @@ import {
   ScrollView,
 } from "react-native";
 import { useRouter } from "expo-router";
-import verificationImg from "../../../../imgs/adminImages/item3.png";
+import verificationImg from "../../../imgs/adminImages/item3.png";
 
 export default function Verification() {
   const [data, setData] = useState([]);
@@ -33,7 +33,7 @@ export default function Verification() {
 
   function loadData() {
     setError("");
-    Axios.get("teacher/students-to-verify")
+    Axios.get("admin/students-to-verify")
       .then((res) => setData(res.data))
       .catch((err) => {
         if (err.response == undefined) {
@@ -46,7 +46,7 @@ export default function Verification() {
 
   function verifyStudent(id) {
     setError("");
-    Axios.patch(`teacher/verify-student?studentId=${id}`)
+    Axios.patch(`admin/verify-student?studentId=${id}`)
       .then((res) => {
         Alert.alert("Verification", "Student verified successfully!");
         loadData();
@@ -273,7 +273,7 @@ export default function Verification() {
                         }}
                         onPress={() => {
                           router.push({
-                            pathname: "/session/common/admission/profile",
+                            pathname: "/admin/admission/profile",
                             params: {
                               ...item,
                               ...item.qualifyingExamDetails,

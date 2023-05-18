@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import styles from "../../../../styles/styles";
-import Axios from "../../../../stores/Axios";
+import styles from "../../../styles/styles";
+import Axios from "../../../stores/Axios";
 import {
   SafeAreaView,
   Text,
@@ -13,7 +13,7 @@ import {
   ScrollView,
 } from "react-native";
 import { useRouter } from "expo-router";
-import verificationImg from "../../../../imgs/adminImages/item3.png";
+import verificationImg from "../../../imgs/adminImages/item3.png";
 
 export default function Verification() {
   const [data, setData] = useState([]);
@@ -33,7 +33,7 @@ export default function Verification() {
 
   function loadData() {
     setError("");
-    Axios.get("admin/students-to-confirm")
+    Axios.get("teacher/students-to-verify")
       .then((res) => setData(res.data))
       .catch((err) => {
         if (err.response == undefined) {
@@ -46,9 +46,9 @@ export default function Verification() {
 
   function verifyStudent(id) {
     setError("");
-    Axios.patch(`admin/confirm-student?studentId=${id}`)
+    Axios.patch(`teacher/verify-student?studentId=${id}`)
       .then((res) => {
-        Alert.alert("Confirmation", "Student confirmed successfully!");
+        Alert.alert("Verification", "Student verified successfully!");
         loadData();
       })
       .catch((err) => {
@@ -60,9 +60,8 @@ export default function Verification() {
       });
   }
 
-  const handleSearch = (e) => {
-    (e === undefined)? "" : setSearchQuery(e.target.value);
-
+  const handleSearch = (value) => {
+    setSearchQuery(value);
   };
 
   const handleSort = (column) => {
@@ -165,7 +164,7 @@ export default function Verification() {
                 paddingRight: 20,
               }}
             >
-              Confirmation
+              Verification
             </Text>
           </View>
           <View
@@ -177,7 +176,7 @@ export default function Verification() {
           />
           <Text style={{ color: "grey", fontSize: 17, paddingBottom: 50 }}>
             Home &gt; Admission &gt;{" "}
-            <Text style={{ fontWeight: 500 }}>Confirmation</Text>
+            <Text style={{ fontWeight: 500 }}>Verification</Text>
           </Text>
         </View>
 
@@ -199,7 +198,7 @@ export default function Verification() {
             <TextInput
               style={{ ...styles.input, marginBottom: 20 }}
               placeholder="Search Name/Adm No"
-              value={searchQuery}
+              // value={searchQuery}
               onChangeText={handleSearch}
             />
           </View>
@@ -347,7 +346,7 @@ export default function Verification() {
                               fontSize: 13,
                             }}
                           >
-                            Cofrm
+                            Verify
                           </Text>
                         </TouchableOpacity>
                       </View>
