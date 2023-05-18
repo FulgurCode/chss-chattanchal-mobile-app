@@ -16,7 +16,9 @@ export default function Profile() {
         setImg("data:img/jpeg;base64," + res.data);
       })
       .catch((err) => {
-        if (err.respose == undefined){}
+        if (err.respose == undefined){
+          setImg(profileImg);
+        }
         else{
           // console.log(err.response.data);
           setImg(profileImg);
