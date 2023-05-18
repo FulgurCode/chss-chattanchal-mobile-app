@@ -14,12 +14,14 @@ export default function Profile() {
     Axios.get(`teacher/get-student-photo?studentId=${data._id}`)
       .then((res) => {
         setImg("data:img/jpeg;base64," + res.data);
-        console.log("data: " + res.data);
       })
       .catch((err) => {
-        console.log(err.response.data);
-        setImg(profileImg);
-      });
+        if (err.respose == undefined){}
+        else{
+          // console.log(err.response.data);
+          setImg(profileImg);
+        }
+        });
   }
 
   useEffect(getImg, [data]);
