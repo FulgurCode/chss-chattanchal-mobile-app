@@ -13,6 +13,11 @@ import styles from "../../../styles/styles";
 import admissionImg from "../../../imgs/adminImages/item1.png";
 import DropDownPicker from "react-native-dropdown-picker";
 import Axois from "../../../stores/Axios";
+import Loader from "../../../components/common/Loader";
+import {AdminCheckLogin} from "../../../stores/CheckLogin";
+import { useState, useEffect } from "react";
+import { useRouter } from "expo-router";
+
 
 const TextInputComponent = ({ value, onChangeText, name, ...props }) => (
   <TextInput
@@ -23,6 +28,7 @@ const TextInputComponent = ({ value, onChangeText, name, ...props }) => (
 );
 
 export default function NewAdmission() {
+  router = useRouter()
   const [open1, setOpen1] = React.useState(false);
   const [open2, setOpen2] = React.useState(false);
   const [open3, setOpen3] = React.useState(false);
@@ -203,7 +209,16 @@ export default function NewAdmission() {
     }));
   }
 
+  const [loading, setLoading] = useState(true);
+  useEffect(()=>{AdminCheckLogin(setLoading, router.replace, link="/login")},[]);
+
+
+  
+
   return (
+    <>
+      <Loader show={loading} />
+
     <ScrollView
       style={{
         paddingLeft: 40,
@@ -662,5 +677,6 @@ export default function NewAdmission() {
         style={{ marginTop: 20, marginBottom: 40 }}
       />
     </ScrollView>
+    </>
   );
 }

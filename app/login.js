@@ -40,7 +40,7 @@ export default function Login() {
           password: password,
         })
         .then((res) => {
-            router.push("/admin");
+            router.replace("/admin");
             setIsLoading(false);
             setError("")
         })
@@ -62,7 +62,7 @@ export default function Login() {
         password: password,
       })
         .then((res) => {
-          router.push("/teacher");
+          router.replace("/teacher");
           setIsLoading(false);
           setError("")
         })

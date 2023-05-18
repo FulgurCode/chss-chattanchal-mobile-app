@@ -14,6 +14,8 @@ import {
 } from "react-native";
 import { useRouter } from "expo-router";
 import verificationImg from "../../../imgs/adminImages/item3.png";
+import Loader from "../../../components/common/Loader";
+import {AdminCheckLogin} from "../../../stores/CheckLogin";
 
 export default function Confirmation() {
   const [data, setData] = useState([]);
@@ -26,6 +28,10 @@ export default function Confirmation() {
   const [refreshing, setRefreshing] = useState(false);
 
   const router = useRouter();
+
+  const [loading, setLoading] = useState(true);
+  useEffect(()=>{AdminCheckLogin(setLoading, router.replace, link="/login")},[]);
+
 
   const handleRefresh = () => {
     loadData();
@@ -138,6 +144,7 @@ export default function Confirmation() {
         flex: 1,
       }}
     >
+      <Loader show={loading} />
       <ScrollView
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />

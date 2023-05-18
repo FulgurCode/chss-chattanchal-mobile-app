@@ -5,7 +5,16 @@ import { useEffect, useState } from "react";
 import Axios from "../../../stores/Axios";
 import profileImg from "../../../imgs/profile.png";
 
+import Loader from "../../../components/common/Loader";
+import {TeacherCheckLogin} from "../../../stores/CheckLogin";
+import {useRouter} from "expo-router"
+
 export default function Profile() {
+
+  const router = useRouter();
+  const [loading, setLoading] = useState(true);
+  useEffect(()=>{TeacherCheckLogin(setLoading, router.replace, link="/login")},[]);
+
   const [img, setImg] = useState(profileImg);
 
   const data = useSearchParams();
@@ -28,6 +37,8 @@ export default function Profile() {
   useEffect(getImg, [data]);
 
   return (
+    <>
+    <Loader show={loading} />
     <ScrollView
       style={{
         flex: 1,
@@ -283,5 +294,6 @@ export default function Profile() {
         )}
       </View>
     </ScrollView>
+    </>
   );
 }
