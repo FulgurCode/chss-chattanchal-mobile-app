@@ -20,7 +20,6 @@ export default function Profile() {
           setImg(profileImg);
         }
         else{
-          // console.log(err.response.data);
           setImg(profileImg);
         }
         });

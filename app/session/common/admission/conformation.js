@@ -61,7 +61,7 @@ export default function Verification() {
   }
 
   const handleSearch = (e) => {
-    (e === undefined)? console.log("undefined") : setSearchQuery(e.target.value);
+    (e === undefined)? "" : setSearchQuery(e.target.value);
 
   };
 
@@ -273,7 +273,6 @@ export default function Verification() {
                           flex: 1,
                         }}
                         onPress={() => {
-                          console.log(item)
                           router.push({
                             pathname: "/session/common/admission/profile",
                             params: {
