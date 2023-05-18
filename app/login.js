@@ -52,7 +52,6 @@ export default function Login() {
             setError(err.response.data);
           } else if (err?.response?.status === undefined) {
             setError("Server connection error");
-            // console.log(err);
           } else {
             setError(err.response.data);
           }
@@ -74,7 +73,6 @@ export default function Login() {
             setError(err.response.data);
           } else if (err?.response?.status === undefined) {
             setError("Server connection error");
-            console.log(err);
           } else {
             setError(err.response.data);
           }
