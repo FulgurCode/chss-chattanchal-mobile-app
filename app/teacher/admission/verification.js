@@ -273,7 +273,7 @@ export default function Verification() {
                         }}
                         onPress={() => {
                           router.push({
-                            pathname: "/session/common/admission/profile",
+                            pathname: "teacher/admission/profile",
                             params: {
                               ...item,
                               ...item.qualifyingExamDetails,

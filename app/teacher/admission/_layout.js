@@ -6,6 +6,7 @@ export default function Layout() {
     <Tabs
       screenOptions={{
         // swipeEnabled: true,
+        tabBarHideOnKeyboard: true,
         headerShown: false,
         // tabBarLabelStyle: { fontSize: 15, color: "white" },
         tabBarShowLabel: false,

@@ -274,7 +274,7 @@ export default function Confirmation() {
                         }}
                         onPress={() => {
                           router.push({
-                            pathname: "/session/common/admission/profile",
+                            pathname: "admin/admission/profile",
                             params: {
                               ...item,
                               ...item.qualifyingExamDetails,
