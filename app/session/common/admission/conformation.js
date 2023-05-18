@@ -48,7 +48,7 @@ export default function Verification() {
     setError("");
     Axios.patch(`admin/confirm-student?studentId=${id}`)
       .then((res) => {
-        Alert.alert("Conformation", "Student conformed successfully!");
+        Alert.alert("Confirmation", "Student confirmed successfully!");
         loadData();
       })
       .catch((err) => {
