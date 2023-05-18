@@ -15,7 +15,17 @@ import DropDownPicker from "react-native-dropdown-picker";
 import Axois from "../../../stores/Axios";
 import Item from "../../../components/admin/admission/Item";
 
+import {useState, useEffect} from "react"
+import Loader from "../../../components/common/Loader";
+import {TeacherCheckLogin} from "../../../stores/CheckLogin";
+import {useRouter} from "expo-router"
+
 export default function StudentDetials() {
+
+  const router = useRouter();
+  const [loading, setLoading] = useState(true);
+  useEffect(()=>{TeacherCheckLogin(setLoading, router.replace, link="/login")},[]);
+
   const [isLoading, setIsLoading] = React.useState(false);
   const [error, setError] = React.useState("");
 
@@ -56,6 +66,8 @@ export default function StudentDetials() {
   }
 
   return (
+    <>
+    <Loader show={loading} />
     <ScrollView
       style={{
         paddingLeft: 40,
@@ -224,5 +236,6 @@ export default function StudentDetials() {
         />
       </View>
     </ScrollView>
+    </>
   );
 }

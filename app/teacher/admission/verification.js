@@ -15,7 +15,14 @@ import {
 import { useRouter } from "expo-router";
 import verificationImg from "../../../imgs/adminImages/item3.png";
 
+import Loader from "../../../components/common/Loader";
+import {TeacherCheckLogin} from "../../../stores/CheckLogin";
+
 export default function Verification() {
+
+  const [loading, setLoading] = useState(true);
+  useEffect(()=>{TeacherCheckLogin(setLoading, router.replace, link="/login")},[]);
+
   const [data, setData] = useState([]);
   const [error, setError] = useState("");
 
@@ -131,6 +138,8 @@ export default function Verification() {
   useEffect(loadData, []);
 
   return (
+    <>
+    <Loader show={loading} />
     <SafeAreaView
       style={{
         backgroundColor: "white",
@@ -359,5 +368,6 @@ export default function Verification() {
         </View>
       </ScrollView>
     </SafeAreaView>
+    </>
   );
 }

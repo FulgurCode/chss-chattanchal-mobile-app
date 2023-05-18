@@ -4,11 +4,20 @@ import styles from "../../../styles/styles";
 import { useEffect, useState } from "react";
 import Axios from "../../../stores/Axios";
 import profileImg from "../../../imgs/profile.png";
+import Loader from "../../../components/common/Loader";
+import {AdminCheckLogin} from "../../../stores/CheckLogin";
+
+import { useRouter } from "expo-router";
+
 
 export default function Profile() {
   const [img, setImg] = useState(profileImg);
+  const [loading, setLoading] = useState(true);
+
 
   const data = useSearchParams();
+  const router = useRouter();
+  useEffect(()=>AdminCheckLogin(setLoading, router.replace, "/login"), [])
 
   function getImg() {
     Axios.get(`admin/get-student-photo?studentId=${data._id}`)
@@ -28,6 +37,9 @@ export default function Profile() {
   useEffect(getImg, [data]);
 
   return (
+    <>
+    <Loader show={loading} />
+
     <ScrollView
       style={{
         flex: 1,
@@ -283,5 +295,6 @@ export default function Profile() {
         )}
       </View>
     </ScrollView>
+    </>
   );
 }

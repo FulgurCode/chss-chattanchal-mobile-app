@@ -14,6 +14,11 @@ import admissionImg from "../../../imgs/adminImages/item1.png";
 import DropDownPicker from "react-native-dropdown-picker";
 import Axois from "../../../stores/Axios";
 
+import {useState, useEffect} from "react"
+import Loader from "../../../components/common/Loader";
+import {TeacherCheckLogin} from "../../../stores/CheckLogin";
+import {useRouter} from "expo-router"
+
 const TextInputComponent = ({ value, onChangeText, name, ...props }) => (
   <TextInput
     value={value}
@@ -23,6 +28,12 @@ const TextInputComponent = ({ value, onChangeText, name, ...props }) => (
 );
 
 export default function NewAdmission() {
+
+  const router = useRouter();
+  const [loading, setLoading] = useState(true);
+  useEffect(()=>{TeacherCheckLogin(setLoading, router.replace, link="/login")},[]);
+
+
   const [open1, setOpen1] = React.useState(false);
   const [open2, setOpen2] = React.useState(false);
   const [open3, setOpen3] = React.useState(false);
@@ -204,6 +215,8 @@ export default function NewAdmission() {
   }
 
   return (
+    <>
+    <Loader show={loading} />
     <ScrollView
       style={{
         paddingLeft: 40,
@@ -662,5 +675,6 @@ export default function NewAdmission() {
         style={{ marginTop: 20, marginBottom: 40 }}
       />
     </ScrollView>
+    </>
   );
 }
