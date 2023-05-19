@@ -6,6 +6,7 @@ export default function Layout() {
     <Tabs
       screenOptions={{
         // swipeEnabled: true,
+        tabBarHideOnKeyboard: true,
         headerShown: false,
         // tabBarLabelStyle: { fontSize: 15, color: "white" },
         tabBarShowLabel: false,
@@ -45,15 +46,6 @@ export default function Layout() {
           // tabBarLabel: "New admission",
           tabBarIcon: () => (
             <MaterialIcons name="pending" size={30} color="white" />
-          ),
-        }}
-      />
-      <Tabs.Screen
-        name="conformation"
-        options={{
-          // tabBarLabel: "New admission",
-          tabBarIcon: () => (
-            <MaterialIcons name="verified" size={30} color="white" />
           ),
         }}
       />

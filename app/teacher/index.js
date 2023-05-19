@@ -24,7 +24,7 @@ export default function Admin() {
           source={admissionImg}
           text="Admission"
           onPress={() => {
-            router.push("/session/common/admission");
+            router.push("/teacher/admission");
           }}
         />
         {/* <TileCard source={admissionImg} text="Attendence" /> */}

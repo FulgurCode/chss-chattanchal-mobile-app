@@ -14,7 +14,7 @@ export default function Item(props) {
         }}
         onPress={() => {
           router.push({
-            pathname: "/session/common/admission/profile",
+            pathname: props.link,
             params: {
               ...props.data,
               ...props.data.qualifyingExamDetails,

@@ -1,9 +1,9 @@
 import { View, Text, ScrollView, Image } from "react-native";
 import { useSearchParams } from "expo-router";
-import styles from "../../../../styles/styles";
+import styles from "../../../styles/styles";
 import { useEffect, useState } from "react";
-import Axios from "../../../../stores/Axios";
-import profileImg from "../../../../imgs/profile.png";
+import Axios from "../../../stores/Axios";
+import profileImg from "../../../imgs/profile.png";
 
 export default function Profile() {
   const [img, setImg] = useState(profileImg);
@@ -11,7 +11,7 @@ export default function Profile() {
   const data = useSearchParams();
 
   function getImg() {
-    Axios.get(`teacher/get-student-photo?studentId=${data._id}`)
+    Axios.get(`admin/get-student-photo?studentId=${data._id}`)
       .then((res) => {
         setImg("data:img/jpeg;base64," + res.data);
       })

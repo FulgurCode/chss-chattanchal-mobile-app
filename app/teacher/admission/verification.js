@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import styles from "../../../../styles/styles";
-import Axios from "../../../../stores/Axios";
+import styles from "../../../styles/styles";
+import Axios from "../../../stores/Axios";
 import {
   SafeAreaView,
   Text,
@@ -13,7 +13,7 @@ import {
   ScrollView,
 } from "react-native";
 import { useRouter } from "expo-router";
-import verificationImg from "../../../../imgs/adminImages/item3.png";
+import verificationImg from "../../../imgs/adminImages/item3.png";
 
 export default function Verification() {
   const [data, setData] = useState([]);
@@ -273,7 +273,7 @@ export default function Verification() {
                         }}
                         onPress={() => {
                           router.push({
-                            pathname: "/session/common/admission/profile",
+                            pathname: "teacher/admission/profile",
                             params: {
                               ...item,
                               ...item.qualifyingExamDetails,
