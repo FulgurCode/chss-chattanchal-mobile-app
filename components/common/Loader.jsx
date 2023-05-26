@@ -1,6 +1,6 @@
 import {
   View,
-  Text,
+  // Text,
   Dimensions,
   StatusBar,
   ActivityIndicator,
@@ -16,11 +16,11 @@ export default function Loader(props) {
       {props.show ? (
         <View style={styles.container}>
           <ActivityIndicator
-            style={{ transform: [{ scaleX: 2 }, { scaleY: 2 }] }}
+            style={{ transform: [{ scaleX: 2 }, { scaleY: 2 }] , opacity: 1}}
             size={"large"}
             color={"#971AA3"}
           />
-          <Text style={{top: 25}}>Connecting to server...</Text>
+          {/* <Text style={{top: 25}}>Connecting to server...</Text> */}
         </View>
       ) : (
         ""

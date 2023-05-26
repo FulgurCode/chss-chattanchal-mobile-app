@@ -34,6 +34,9 @@ export default function Home() {
       <Link href="admin/admission">
         <Text>        </Text>/admin/admission/
       </Link>
+      <Link href="admin/admission/take-photo">
+        <Text>                </Text>/admin/admission/take-photo
+      </Link>
       <Link href="admin/admission/student-details">
         <Text>                </Text>/admin/admission/student-details
       </Link>

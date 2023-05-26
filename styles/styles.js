@@ -117,6 +117,8 @@ const styles = StyleSheet.create({
     height: 30,
     margin: 15
   }
+
+  
 });
 
 export default styles;
