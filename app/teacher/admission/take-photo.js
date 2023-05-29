@@ -16,7 +16,8 @@ import { useRef, useState, useEffect } from "react";
 
 import * as ImageManipulator from "expo-image-manipulator";
 
-import { MaterialCommunityIcons, Ionicons } from "@expo/vector-icons";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { Ionicons } from "@expo/vector-icons";
 
 import { useFocusEffect } from "@react-navigation/native";
 
@@ -196,7 +197,7 @@ export default function TakePhoto() {
         },
         { resize: { width: 320 } },
       ],
-      { compress: 1, format: "png", base64: true }
+      { compress: 0, format: "png", base64: true }
     );
 
     data = uri;
