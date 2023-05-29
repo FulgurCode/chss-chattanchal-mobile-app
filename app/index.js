@@ -34,9 +34,7 @@ export default function Home() {
       <Link href="admin/admission">
         <Text>        </Text>/admin/admission/
       </Link>
-      <Link href="admin/admission/take-photo">
-        <Text>                </Text>/admin/admission/take-photo
-      </Link>
+      
       <Link href="admin/admission/student-details">
         <Text>                </Text>/admin/admission/student-details
       </Link>
@@ -51,6 +49,9 @@ export default function Home() {
       </Link>
       <Link href="admin/admission/confirmation">
         <Text>                </Text>/admin/admission/confirmation
+      </Link>
+      <Link href="admin/admission/take-photo">
+        <Text>                </Text>/admin/admission/take-photo
       </Link>
 
       <Link href="/teacher">/teacher</Link>
@@ -74,6 +75,9 @@ export default function Home() {
       </Link>
       <Link href="teacher/admission/verification">
         <Text>                </Text>/teacher/admission/verification
+      </Link>
+      <Link href="teacher/admission/take-photo">
+        <Text>                </Text>/admin/admission/take-photo
       </Link>
 
       <Button title="Logout" onPress={Logout} />

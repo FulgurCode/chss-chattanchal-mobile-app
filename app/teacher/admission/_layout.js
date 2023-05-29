@@ -1,5 +1,5 @@
 import { Tabs } from "expo-router";
-import { Ionicons, MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
+import { Ionicons, MaterialCommunityIcons, MaterialIcons, FontAwesome } from "@expo/vector-icons";
 
 export default function Layout() {
   return (
@@ -46,6 +46,23 @@ export default function Layout() {
           // tabBarLabel: "New admission",
           tabBarIcon: () => (
             <MaterialIcons name="pending" size={30} color="white" />
+          ),
+        }}
+      />
+       {/* <Tabs.Screen
+        name="confirmation"
+        options={{
+          // tabBarLabel: "New admission",
+          tabBarIcon: () => (
+            <MaterialIcons name="verified" size={30} color="white" />
+          ),
+        }}
+      /> */}
+      <Tabs.Screen
+        name="take-photo"
+        options={{
+          tabBarIcon: () => (
+            <FontAwesome name="camera" size={27} color="white" />
           ),
         }}
       />

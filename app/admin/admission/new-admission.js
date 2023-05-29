@@ -14,21 +14,32 @@ import admissionImg from "../../../imgs/adminImages/item1.png";
 import DropDownPicker from "react-native-dropdown-picker";
 import Axois from "../../../stores/Axios";
 import Loader from "../../../components/common/Loader";
-import {AdminCheckLogin} from "../../../stores/CheckLogin";
+import { AdminCheckLogin } from "../../../stores/CheckLogin";
 import { useState, useEffect } from "react";
 import { useRouter } from "expo-router";
+import * as ImagePicker from "expo-image-picker";
+import * as ImageManipulator from "expo-image-manipulator";
+import { useFocusEffect } from "@react-navigation/native";
 
+import Camera from "../../../components/admin/admission/Camera";
 
 const TextInputComponent = ({ value, onChangeText, name, ...props }) => (
   <TextInput
     value={value}
-    onChangeText={(value) => onChangeText(name, value)} //... Bind the name here
+    onChangeText={(value) => onChangeText(name, value)}
     {...props}
   />
 );
 
 export default function NewAdmission() {
-  router = useRouter()
+  router = useRouter();
+
+  const [imageUri, setImageUri] = useState();
+
+  const [file, setFile] = React.useState(false);
+  const [camera, setCamera] = React.useState(false);
+  const [focus, setFocus] = React.useState(false);
+
   const [open1, setOpen1] = React.useState(false);
   const [open2, setOpen2] = React.useState(false);
   const [open3, setOpen3] = React.useState(false);
@@ -68,6 +79,15 @@ export default function NewAdmission() {
     },
   });
 
+  useFocusEffect(
+    React.useCallback(() => {
+      setFocus(true);
+      return () => {
+        setFocus(false);
+      };
+    }, [])
+  );
+
   function handleClick() {
     const regddmmyyyy =
       /^(0[1-9]|[12][0-9]|3[01])[- /.](0[1-9]|1[012])[- /.](19|20)\d\d$/;
@@ -89,9 +109,34 @@ export default function NewAdmission() {
           setIsLoading(true);
           setDisabled(true);
 
-          Axois
-            .post("/admin/new-admission", data)
-            .then(() => {
+          Axois.post("/admin/new-admission", data)
+            .then((response) => {
+              const formData = new FormData();
+              formData.append("file", {
+                uri: imageUri,
+                type: "image/png",
+                name: "file.png",
+              });
+
+              Axois.post(
+                `/admin/upload-student-photo?studentId=${response.data}`,
+                formData,{headers:{"Content-Type":"multipart/form-data"}}
+              ).catch((err) => {
+                if (err?.response?.status == 401) {
+                  Alert.alert("Status", err.response.data);
+                } else if (err?.response?.status == 500) {
+                  Alert.alert(
+                    "Status",
+                    err.response.data,
+                    "Internal server error"
+                  );
+                } else if (err?.response?.status === undefined) {
+                  Alert.alert("Status", "Server connection error");
+                } else {
+                  Alert.alert("Status", err.response.data);
+                }
+              });
+
               Alert.alert("Status", "new admission sucssesfull");
               setIsLoading(false);
               makeEmpty();
@@ -180,6 +225,7 @@ export default function NewAdmission() {
         school: "",
       },
     });
+    setImageUri()
   }
 
   function handleChange(name, value) {
@@ -210,473 +256,555 @@ export default function NewAdmission() {
   }
 
   const [loading, setLoading] = useState(true);
-  useEffect(()=>{AdminCheckLogin(setLoading, router.replace, link="/login")},[]);
+  useEffect(() => {
+    AdminCheckLogin(setLoading, router.replace, (link = "/login"));
+  }, []);
 
+  const showImagePicker = async () => {
+    // Ask the user for the permission to access the media library
+    const permissionResult =
+      await ImagePicker.requestMediaLibraryPermissionsAsync();
 
-  
+    if (permissionResult.granted === false) {
+      alert("You've refused to allow this appp to access your photos!");
+      return;
+    }
+
+    const result = await ImagePicker.launchImageLibraryAsync({
+      allowsEditing: true,
+      aspect: [1, 1],
+    });
+
+    if (!result.canceled) {
+      cropImage(result.assets[0]);
+    }
+  };
+
+  async function cropImage(imageData) {
+    const { uri } = await ImageManipulator.manipulateAsync(
+      imageData.uri,
+      [
+        {
+          crop: {
+            originX: 0,
+            originY: 0,
+            width: imageData.width,
+            height: imageData.width,
+          },
+        },
+        { resize: { width: 320 } },
+      ],
+      { compress: 1, format: "png" }
+    );
+
+    setImageUri(uri);
+  }
 
   return (
     <>
       <Loader show={loading} />
 
-    <ScrollView
-      style={{
-        paddingLeft: 40,
-        paddingRight: 40,
-        backgroundColor: "white",
-      }}
-    >
-      <View>
-        <View
-          style={{
-            flexDirection: "row",
-            alignItems: "center",
-            paddingTop: 50,
-          }}
-        >
-          <Image source={admissionImg} style={styles.newAdmissionImg} />
-          <Text
+      <ScrollView
+        style={{
+          paddingLeft: 40,
+          paddingRight: 40,
+          backgroundColor: "white",
+        }}
+      >
+        <View>
+          <View
             style={{
-              fontSize: 25,
-              fontWeight: 500,
-              borderColor: "#ccc",
-              borderRightWidth: 2,
-              paddingRight: 20,
+              flexDirection: "row",
+              alignItems: "center",
+              paddingTop: 50,
             }}
           >
-            New Admission
+            <Image source={admissionImg} style={styles.newAdmissionImg} />
+            <Text
+              style={{
+                fontSize: 25,
+                fontWeight: 500,
+                borderColor: "#ccc",
+                borderRightWidth: 2,
+                paddingRight: 20,
+              }}
+            >
+              New Admission
+            </Text>
+          </View>
+          <View
+            style={{
+              borderBottomWidth: 2,
+              borderColor: "#ccc",
+              marginBottom: 10,
+            }}
+          />
+          <Text style={{ color: "grey", fontSize: 17, paddingBottom: 50 }}>
+            Home &gt; Admission &gt;{" "}
+            <Text style={{ fontWeight: 500 }}>New Admission</Text>
           </Text>
         </View>
-        <View
+
+        <Text style={styles.newAdmissionHeading}>
+          Field marked with <Text style={styles.mandatory}>*</Text> are
+          mandatory.
+        </Text>
+
+        <View>
+          <Text style={styles.newAdmissionText}>
+            Admission Date<Text style={styles.mandatory}>*</Text>
+          </Text>
+          <TextInputComponent
+            style={styles.input}
+            name="admissionDate"
+            onChangeText={handleChange}
+            placeholder="dd-mm-yyyy"
+            maxLength={10}
+            value={data.admissionDate}
+          />
+          {/* <DateField /> */}
+        </View>
+        <View>
+          <Text style={styles.newAdmissionText}>
+            Application No.<Text style={styles.mandatory}>*</Text>
+          </Text>
+          <TextInputComponent
+            keyboardType="numeric"
+            style={styles.input}
+            name="applicationNo"
+            onChangeText={(name, value) => {
+              handleChange(name, parseInt(value.replace(/[^0-9]/g, "")));
+            }}
+            value={data.applicationNo.toString()}
+          />
+        </View>
+        <View style={styles.divider} />
+        <View>
+          <Text style={styles.newAdmissionText}>
+            Name of Student<Text style={styles.mandatory}>*</Text>
+          </Text>
+          <TextInputComponent
+            style={styles.input}
+            name="name"
+            onChangeText={handleChange}
+            value={data.name}
+          />
+        </View>
+        <View>
+          <Text style={styles.newAdmissionText}>
+            Aadhaar No.<Text style={styles.mandatory}>*</Text>
+          </Text>
+          <TextInputComponent
+            style={styles.input}
+            name="aadhaarNo"
+            onChangeText={handleChange}
+            maxLength={14}
+            value={data.aadhaarNo}
+          />
+        </View>
+        <View>
+          <Text style={styles.newAdmissionText}>
+            Phone No.<Text style={styles.mandatory}>*</Text>
+          </Text>
+          <TextInputComponent
+            keyboardType="numeric"
+            style={styles.input}
+            name="phone"
+            onChangeText={(name, value) => {
+              handleChange(name, parseInt(value.replace(/[^0-9]/g, "")));
+            }}
+            maxLength={10}
+            value={data.phone.toString()}
+          />
+        </View>
+        <View style={{ zIndex: 999 }}>
+          <Text style={styles.newAdmissionText}>
+            Gender<Text style={styles.mandatory}>*</Text>
+          </Text>
+          <DropDownPicker
+            open={open1}
+            value={data.gender}
+            items={[
+              { label: "Female", value: "female" },
+              { label: "Male", value: "male" },
+              { label: "Other", value: "other" },
+            ]}
+            setOpen={setOpen1}
+            placeholder="Select gender"
+            setValue={(value) => {
+              handleChange("gender", value());
+            }}
+            listMode="SCROLLVIEW"
+            style={{
+              backgroundColor: "#FAFAFC",
+              borderColor: "#dfdfdf",
+              borderRadius: 10,
+            }}
+            selectedItemContainerStyle={{
+              backgroundColor: "#f2f2f2",
+            }}
+            dropDownContainerStyle={{
+              borderColor: "#dfdfdf",
+            }}
+          />
+        </View>
+        <View style={styles.divider} />
+        <View>
+          <Text style={styles.newAdmissionText}>
+            Name of Parent/Guardian<Text style={styles.mandatory}>*</Text>
+          </Text>
+          <TextInputComponent
+            style={styles.input}
+            name="nameOfParent"
+            onChangeText={handleChange}
+            value={data.nameOfParent}
+          />
+        </View>
+        <View>
+          <Text style={styles.newAdmissionText}>
+            Occupation of Parent/Guardian<Text style={styles.mandatory}>*</Text>
+          </Text>
+          <TextInputComponent
+            style={styles.input}
+            name="occupationOfParent"
+            onChangeText={handleChange}
+            value={data.occupationOfParent}
+          />
+        </View>
+        <View>
+          <Text style={styles.newAdmissionText}>
+            Relationship of the student to the guardian
+            <Text style={styles.mandatory}>*</Text>
+          </Text>
+          <TextInputComponent
+            style={styles.input}
+            name="relationshipWithGuardian"
+            onChangeText={handleChange}
+            value={data.relationshipWithGuardian}
+          />
+        </View>
+        <View>
+          <Text style={styles.newAdmissionText}>
+            Address of Guardian<Text style={styles.mandatory}>*</Text>
+          </Text>
+          <TextInputComponent
+            style={styles.input}
+            name="addressOfGuardian"
+            onChangeText={handleChange}
+            value={data.addressOfGuardian}
+          />
+        </View>
+        <View>
+          <Text style={styles.newAdmissionText}>
+            Religion<Text style={styles.mandatory}>*</Text>
+          </Text>
+          <TextInputComponent
+            style={styles.input}
+            name="religion"
+            onChangeText={handleChange}
+            value={data.religion}
+          />
+        </View>
+        <View>
+          <Text style={styles.newAdmissionText}>
+            Caste<Text style={styles.mandatory}>*</Text>
+          </Text>
+          <TextInputComponent
+            style={styles.input}
+            name="caste"
+            onChangeText={handleChange}
+            value={data.caste}
+          />
+        </View>
+        <View>
+          <Text style={styles.newAdmissionText}>
+            Category<Text style={styles.mandatory}>*</Text>
+          </Text>
+          <TextInputComponent
+            style={styles.input}
+            name="category"
+            onChangeText={handleChange}
+            value={data.category}
+          />
+        </View>
+        <View>
+          <Text style={styles.newAdmissionText}>
+            If the student belongs to linguistic minority specify the language.
+          </Text>
+          <TextInputComponent
+            style={styles.input}
+            name="linguisticMinority"
+            onChangeText={handleChange}
+            value={data.linguisticMinority}
+          />
+        </View>
+        <View style={{ zIndex: 999 }}>
+          <Text style={styles.newAdmissionText}>
+            Does the student belongs to OBC
+            <Text style={styles.mandatory}>*</Text>
+          </Text>
+          <DropDownPicker
+            open={open2}
+            value={data.obc}
+            items={[
+              { label: "No", value: false, selected: true },
+              { label: "Yes", value: true },
+            ]}
+            setOpen={setOpen2}
+            setValue={(value) => {
+              handleChange("obc", value());
+            }}
+            listMode="SCROLLVIEW"
+            style={{
+              backgroundColor: "#FAFAFC",
+              borderColor: "#dfdfdf",
+              borderRadius: 10,
+            }}
+            selectedItemContainerStyle={{
+              backgroundColor: "#f2f2f2",
+            }}
+            dropDownContainerStyle={{
+              borderColor: "#dfdfdf",
+            }}
+          />
+        </View>
+        <View>
+          <Text style={styles.newAdmissionText}>
+            DOB<Text style={styles.mandatory}>*</Text>
+          </Text>
+          <TextInputComponent
+            style={styles.input}
+            name="dob"
+            onChangeText={handleChange}
+            placeholder="dd-mm-yyyy"
+            maxLength={10}
+            value={data.dob}
+          />
+        </View>
+
+        <View style={styles.divider} />
+        <View>
+          <Text style={styles.newAdmissionText}>
+            Class<Text style={styles.mandatory}>*</Text>
+          </Text>
+          <TextInputComponent
+            keyboardType="numeric"
+            style={styles.input}
+            name="class"
+            onChangeText={(name, value) => {
+              handleChange(name, parseInt(value.replace(/[^0-9]/g, "")));
+            }}
+            maxLength={2}
+            value={data.class.toString()}
+          />
+        </View>
+        <View>
+          <Text style={styles.newAdmissionText}>
+            Course<Text style={styles.mandatory}>*</Text>
+          </Text>
+          <TextInputComponent
+            style={styles.input}
+            name="course"
+            onChangeText={handleChange}
+            value={data.course}
+          />
+        </View>
+        <View>
+          <Text style={styles.newAdmissionText}>
+            Second language<Text style={styles.mandatory}>*</Text>
+          </Text>
+          <TextInputComponent
+            style={styles.input}
+            name="secondLanguage"
+            onChangeText={handleChange}
+            value={data.secondLanguage}
+          />
+        </View>
+        <View style={{ zIndex: 999 }}>
+          <Text style={styles.newAdmissionText}>
+            Student Status<Text style={styles.mandatory}>*</Text>
+          </Text>
+          <DropDownPicker
+            open={open3}
+            value={data.status}
+            items={[
+              { label: "Permanent", value: "permanent", selected: true },
+              { label: "Temporary", value: "temporary" },
+            ]}
+            setOpen={setOpen3}
+            setValue={(value) => {
+              handleChange("status", value());
+            }}
+            listMode="SCROLLVIEW"
+            style={{
+              backgroundColor: "#FAFAFC",
+              borderColor: "#dfdfdf",
+              borderRadius: 10,
+            }}
+            selectedItemContainerStyle={{
+              backgroundColor: "#f2f2f2",
+            }}
+            dropDownContainerStyle={{
+              borderColor: "#dfdfdf",
+            }}
+          />
+        </View>
+
+        <View style={styles.divider} />
+        <Text style={styles.newAdmissionHeading}>
+          Details of Qualifiying Examination
+        </Text>
+        <View>
+          <Text style={styles.newAdmissionText}>
+            Name of Board<Text style={styles.mandatory}>*</Text>
+          </Text>
+          <TextInputComponent
+            style={styles.input}
+            name="nameOfBoard"
+            onChangeText={handleChangeQualifyingExamDetails}
+            value={data.qualifyingExamDetails.nameOfBoard}
+          />
+        </View>
+        <View>
+          <Text style={styles.newAdmissionText}>
+            Register No.<Text style={styles.mandatory}>*</Text>
+          </Text>
+          <TextInputComponent
+            keyboardType="numeric"
+            style={styles.input}
+            name="registerNo"
+            onChangeText={(name, value) => {
+              handleChangeQualifyingExamDetails(
+                name,
+                parseInt(value.replace(/[^0-9]/g, ""))
+              );
+            }}
+            value={data.qualifyingExamDetails.registerNo.toString()}
+          />
+        </View>
+        <View>
+          <Text style={styles.newAdmissionText}>
+            Month & Year of passing<Text style={styles.mandatory}>*</Text>
+          </Text>
+          <TextInputComponent
+            style={styles.input}
+            name="passingTime"
+            onChangeText={handleChangeQualifyingExamDetails}
+            placeholder="mm-yyyy / month-yyyy"
+            value={data.qualifyingExamDetails.passingTime}
+          />
+        </View>
+
+        <View style={styles.divider} />
+        <Text style={styles.newAdmissionHeading}>
+          Details of Transfer certificate produced on Admission
+        </Text>
+
+        <View>
+          <Text style={styles.newAdmissionText}>
+            Number<Text style={styles.mandatory}>*</Text>
+          </Text>
+          <TextInputComponent
+            style={styles.input}
+            name="number"
+            onChangeText={handleChangeTcDetailsOnAdmission}
+            value={data.tcDetailsOnAdmission.number}
+          />
+        </View>
+        <View>
+          <Text style={styles.newAdmissionText}>
+            Date<Text style={styles.mandatory}>*</Text>
+          </Text>
+          <TextInputComponent
+            style={styles.input}
+            name="date"
+            onChangeText={handleChangeTcDetailsOnAdmission}
+            placeholder="dd-mm-yyyy"
+            maxLength={10}
+            value={data.tcDetailsOnAdmission.date}
+          />
+        </View>
+        <View>
+          <Text style={styles.newAdmissionText}>
+            Issued School/Institution<Text style={styles.mandatory}>*</Text>
+          </Text>
+          <TextInputComponent
+            style={styles.input}
+            name="school"
+            onChangeText={handleChangeTcDetailsOnAdmission}
+            value={data.tcDetailsOnAdmission.school}
+          />
+        </View>
+        <View style={styles.divider} />
+        <View style={{ alignItems: "center" }}>
+          {imageUri && (
+            <Image
+              style={{ margin: 20 }}
+              source={{ uri: imageUri }}
+              width={320}
+              height={320}
+            />
+          )}
+        </View>
+        <View style={{ gap: 10, paddingVertical: 10 }}>
+          <TouchableOpacity
+            onPress={showImagePicker}
+            style={{
+              ...styles.btn,
+            }}
+          >
+            <Text style={styles.btnText}>Choose Image</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            onPress={() => {
+              setCamera(true);
+            }}
+            style={{
+              ...styles.btn,
+            }}
+          >
+            <Text style={styles.btnText}>Take Photo</Text>
+          </TouchableOpacity>
+        </View>
+
+        <View style={styles.divider} />
+
+        <TouchableOpacity
+          onPress={disabled ? null : handleClick}
           style={{
-            borderBottomWidth: 2,
-            borderColor: "#ccc",
-            marginBottom: 10,
+            ...styles.btn,
+            backgroundColor: disabled ? "grey" : "#28B4AB",
+            marginTop: 30,
           }}
-        />
-        <Text style={{ color: "grey", fontSize: 17, paddingBottom: 50 }}>
-          Home &gt; Admission &gt;{" "}
-          <Text style={{ fontWeight: 500 }}>New Admission</Text>
-        </Text>
-      </View>
-
-      <Text style={styles.newAdmissionHeading}>
-        Field marked with <Text style={styles.mandatory}>*</Text> are mandatory.
-      </Text>
-
-      <View>
-        <Text style={styles.newAdmissionText}>
-          Admission Date<Text style={styles.mandatory}>*</Text>
-        </Text>
-        <TextInputComponent
-          style={styles.input}
-          name="admissionDate"
-          onChangeText={handleChange}
-          placeholder="dd-mm-yyyy"
-          maxLength={10}
-          value={data.admissionDate}
-        />
-        {/* <DateField /> */}
-      </View>
-      <View>
-        <Text style={styles.newAdmissionText}>
-          Application No.<Text style={styles.mandatory}>*</Text>
-        </Text>
-        <TextInputComponent
-          keyboardType="numeric"
-          style={styles.input}
-          name="applicationNo"
-          onChangeText={(name, value) => {
-            handleChange(name, parseInt(value.replace(/[^0-9]/g, "")));
-          }}
-          value={data.applicationNo.toString()}
-        />
-      </View>
-      <View style={styles.divider} />
-      <View>
-        <Text style={styles.newAdmissionText}>
-          Name of Student<Text style={styles.mandatory}>*</Text>
-        </Text>
-        <TextInputComponent
-          style={styles.input}
-          name="name"
-          onChangeText={handleChange}
-          value={data.name}
-        />
-      </View>
-      <View>
-        <Text style={styles.newAdmissionText}>
-          Aadhaar No.<Text style={styles.mandatory}>*</Text>
-        </Text>
-        <TextInputComponent
-          style={styles.input}
-          name="aadhaarNo"
-          onChangeText={handleChange}
-          maxLength={14}
-          value={data.aadhaarNo}
-        />
-      </View>
-      <View>
-        <Text style={styles.newAdmissionText}>
-          Phone No.<Text style={styles.mandatory}>*</Text>
-        </Text>
-        <TextInputComponent
-          keyboardType="numeric"
-          style={styles.input}
-          name="phone"
-          onChangeText={(name, value) => {
-            handleChange(name, parseInt(value.replace(/[^0-9]/g, "")));
-          }}
-          maxLength={10}
-          value={data.phone.toString()}
-        />
-      </View>
-      <View style={{ zIndex: 999 }}>
-        <Text style={styles.newAdmissionText}>
-          Gender<Text style={styles.mandatory}>*</Text>
-        </Text>
-        <DropDownPicker
-          open={open1}
-          value={data.gender}
-          items={[
-            { label: "Female", value: "female" },
-            { label: "Male", value: "male" },
-            { label: "Other", value: "other" },
-          ]}
-          setOpen={setOpen1}
-          placeholder="Select gender"
-          setValue={(value) => {
-            handleChange("gender", value());
-          }}
-          listMode="SCROLLVIEW"
+        >
+          <Text style={styles.btnText}>SUBMIT</Text>
+        </TouchableOpacity>
+        <Text
           style={{
-            backgroundColor: "#FAFAFC",
-            borderColor: "#dfdfdf",
-            borderRadius: 10,
+            color: "red",
+            alignSelf: "center",
+            marginTop: 20,
+            marginBottom: 20,
           }}
-          selectedItemContainerStyle={{
-            backgroundColor: "#f2f2f2",
-          }}
-          dropDownContainerStyle={{
-            borderColor: "#dfdfdf",
-          }}
-        />
-      </View>
-      <View style={styles.divider} />
-      <View>
-        <Text style={styles.newAdmissionText}>
-          Name of Parent/Guardian<Text style={styles.mandatory}>*</Text>
+        >
+          {error}
         </Text>
-        <TextInputComponent
-          style={styles.input}
-          name="nameOfParent"
-          onChangeText={handleChange}
-          value={data.nameOfParent}
-        />
-      </View>
-      <View>
-        <Text style={styles.newAdmissionText}>
-          Occupation of Parent/Guardian<Text style={styles.mandatory}>*</Text>
-        </Text>
-        <TextInputComponent
-          style={styles.input}
-          name="occupationOfParent"
-          onChangeText={handleChange}
-          value={data.occupationOfParent}
-        />
-      </View>
-      <View>
-        <Text style={styles.newAdmissionText}>
-          Relationship of the student to the guardian
-          <Text style={styles.mandatory}>*</Text>
-        </Text>
-        <TextInputComponent
-          style={styles.input}
-          name="relationshipWithGuardian"
-          onChangeText={handleChange}
-          value={data.relationshipWithGuardian}
-        />
-      </View>
-      <View>
-        <Text style={styles.newAdmissionText}>
-          Address of Guardian<Text style={styles.mandatory}>*</Text>
-        </Text>
-        <TextInputComponent
-          style={styles.input}
-          name="addressOfGuardian"
-          onChangeText={handleChange}
-          value={data.addressOfGuardian}
-        />
-      </View>
-      <View>
-        <Text style={styles.newAdmissionText}>
-          Religion<Text style={styles.mandatory}>*</Text>
-        </Text>
-        <TextInputComponent
-          style={styles.input}
-          name="religion"
-          onChangeText={handleChange}
-          value={data.religion}
-        />
-      </View>
-      <View>
-        <Text style={styles.newAdmissionText}>
-          Caste<Text style={styles.mandatory}>*</Text>
-        </Text>
-        <TextInputComponent
-          style={styles.input}
-          name="caste"
-          onChangeText={handleChange}
-          value={data.caste}
-        />
-      </View>
-      <View>
-        <Text style={styles.newAdmissionText}>
-          Category<Text style={styles.mandatory}>*</Text>
-        </Text>
-        <TextInputComponent
-          style={styles.input}
-          name="category"
-          onChangeText={handleChange}
-          value={data.category}
-        />
-      </View>
-      <View>
-        <Text style={styles.newAdmissionText}>
-          If the student belongs to linguistic minority specify the language.
-        </Text>
-        <TextInputComponent
-          style={styles.input}
-          name="linguisticMinority"
-          onChangeText={handleChange}
-          value={data.linguisticMinority}
-        />
-      </View>
-      <View style={{ zIndex: 999 }}>
-        <Text style={styles.newAdmissionText}>
-          Does the student belongs to OBC<Text style={styles.mandatory}>*</Text>
-        </Text>
-        <DropDownPicker
-          open={open2}
-          value={data.obc}
-          items={[
-            { label: "No", value: false, selected: true },
-            { label: "Yes", value: true },
-          ]}
-          setOpen={setOpen2}
-          setValue={(value) => {
-            handleChange("obc", value());
-          }}
-          listMode="SCROLLVIEW"
-          style={{
-            backgroundColor: "#FAFAFC",
-            borderColor: "#dfdfdf",
-            borderRadius: 10,
-          }}
-          selectedItemContainerStyle={{
-            backgroundColor: "#f2f2f2",
-          }}
-          dropDownContainerStyle={{
-            borderColor: "#dfdfdf",
-          }}
-        />
-      </View>
-      <View>
-        <Text style={styles.newAdmissionText}>
-          DOB<Text style={styles.mandatory}>*</Text>
-        </Text>
-        <TextInputComponent
-          style={styles.input}
-          name="dob"
-          onChangeText={handleChange}
-          placeholder="dd-mm-yyyy"
-          maxLength={10}
-          value={data.dob}
-        />
-      </View>
 
-      <View style={styles.divider} />
-      <View>
-        <Text style={styles.newAdmissionText}>
-          Class<Text style={styles.mandatory}>*</Text>
-        </Text>
-        <TextInputComponent
-          keyboardType="numeric"
-          style={styles.input}
-          name="class"
-          onChangeText={(name, value) => {
-            handleChange(name, parseInt(value.replace(/[^0-9]/g, "")));
-          }}
-          maxLength={2}
-          value={data.class.toString()}
+        <ActivityIndicator
+          animating={isLoading}
+          size="large"
+          color="#28B4AB"
+          style={{ marginTop: 20, marginBottom: 40 }}
         />
-      </View>
-      <View>
-        <Text style={styles.newAdmissionText}>
-          Course<Text style={styles.mandatory}>*</Text>
-        </Text>
-        <TextInputComponent
-          style={styles.input}
-          name="course"
-          onChangeText={handleChange}
-          value={data.course}
+      </ScrollView>
+      {camera && focus && (
+        <Camera
+          imageUri={imageUri}
+          setImageUri={setImageUri}
+          setCamera={setCamera}
         />
-      </View>
-      <View>
-        <Text style={styles.newAdmissionText}>
-          Second language<Text style={styles.mandatory}>*</Text>
-        </Text>
-        <TextInputComponent
-          style={styles.input}
-          name="secondLanguage"
-          onChangeText={handleChange}
-          value={data.secondLanguage}
-        />
-      </View>
-      <View style={{ zIndex: 999 }}>
-        <Text style={styles.newAdmissionText}>
-          Student Status<Text style={styles.mandatory}>*</Text>
-        </Text>
-        <DropDownPicker
-          open={open3}
-          value={data.status}
-          items={[
-            { label: "Permanent", value: "permanent", selected: true },
-            { label: "Temporary", value: "temporary" },
-          ]}
-          setOpen={setOpen3}
-          setValue={(value) => {
-            handleChange("status", value());
-          }}
-          listMode="SCROLLVIEW"
-          style={{
-            backgroundColor: "#FAFAFC",
-            borderColor: "#dfdfdf",
-            borderRadius: 10,
-          }}
-          selectedItemContainerStyle={{
-            backgroundColor: "#f2f2f2",
-          }}
-          dropDownContainerStyle={{
-            borderColor: "#dfdfdf",
-          }}
-        />
-      </View>
-
-      <View style={styles.divider} />
-      <Text style={styles.newAdmissionHeading}>
-        Details of Qualifiying Examination
-      </Text>
-      <View>
-        <Text style={styles.newAdmissionText}>
-          Name of Board<Text style={styles.mandatory}>*</Text>
-        </Text>
-        <TextInputComponent
-          style={styles.input}
-          name="nameOfBoard"
-          onChangeText={handleChangeQualifyingExamDetails}
-          value={data.qualifyingExamDetails.nameOfBoard}
-        />
-      </View>
-      <View>
-        <Text style={styles.newAdmissionText}>
-          Register No.<Text style={styles.mandatory}>*</Text>
-        </Text>
-        <TextInputComponent
-          keyboardType="numeric"
-          style={styles.input}
-          name="registerNo"
-          onChangeText={(name, value) => {
-            handleChangeQualifyingExamDetails(
-              name,
-              parseInt(value.replace(/[^0-9]/g, ""))
-            );
-          }}
-          value={data.qualifyingExamDetails.registerNo.toString()}
-        />
-      </View>
-      <View>
-        <Text style={styles.newAdmissionText}>
-          Month & Year of passing<Text style={styles.mandatory}>*</Text>
-        </Text>
-        <TextInputComponent
-          style={styles.input}
-          name="passingTime"
-          onChangeText={handleChangeQualifyingExamDetails}
-          placeholder="mm-yyyy / month-yyyy"
-          value={data.qualifyingExamDetails.passingTime}
-        />
-      </View>
-
-      <View style={styles.divider} />
-      <Text style={styles.newAdmissionHeading}>
-        Details of Transfer certificate produced on Admission
-      </Text>
-
-      <View>
-        <Text style={styles.newAdmissionText}>
-          Number<Text style={styles.mandatory}>*</Text>
-        </Text>
-        <TextInputComponent
-          style={styles.input}
-          name="number"
-          onChangeText={handleChangeTcDetailsOnAdmission}
-          value={data.tcDetailsOnAdmission.number}
-        />
-      </View>
-      <View>
-        <Text style={styles.newAdmissionText}>
-          Date<Text style={styles.mandatory}>*</Text>
-        </Text>
-        <TextInputComponent
-          style={styles.input}
-          name="date"
-          onChangeText={handleChangeTcDetailsOnAdmission}
-          placeholder="dd-mm-yyyy"
-          maxLength={10}
-          value={data.tcDetailsOnAdmission.date}
-        />
-      </View>
-      <View>
-        <Text style={styles.newAdmissionText}>
-          Issued School/Institution<Text style={styles.mandatory}>*</Text>
-        </Text>
-        <TextInputComponent
-          style={styles.input}
-          name="school"
-          onChangeText={handleChangeTcDetailsOnAdmission}
-          value={data.tcDetailsOnAdmission.school}
-        />
-      </View>
-      <View style={styles.divider} />
-
-      <TouchableOpacity
-        onPress={disabled ? null : handleClick}
-        style={{
-          ...styles.btn,
-          backgroundColor: disabled ? "grey" : "#28B4AB",
-        }}
-      >
-        <Text style={styles.btnText}>SUBMIT</Text>
-      </TouchableOpacity>
-      <Text
-        style={{
-          color: "red",
-          alignSelf: "center",
-          marginTop: 20,
-          marginBottom: 20,
-        }}
-      >
-        {error}
-      </Text>
-
-      <ActivityIndicator
-        animating={isLoading}
-        size="large"
-        color="#28B4AB"
-        style={{ marginTop: 20, marginBottom: 40 }}
-      />
-    </ScrollView>
+      )}
     </>
   );
 }
