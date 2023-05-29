@@ -21,12 +21,20 @@ import { Ionicons } from "@expo/vector-icons";
 
 import { useFocusEffect } from "@react-navigation/native";
 
+import Loader from "../../../components/common/Loader";
+import { TeacherCheckLogin } from "../../../stores/CheckLogin";
+import { useRouter } from "expo-router";
+
+
 let data;
 
 let Screen = Dimensions.get("window");
 const STATUS_BAR_HEIGHT = StatusBar.currentHeight || 24;
 
 export default function TakePhoto() {
+  const [loading, setLoading] = useState(true);
+
+
   const [type, setType] = useState(CameraType.back);
   const [imageData, setImageData] = useState();
   const [imgBase64, setImageBase64] = useState();
@@ -42,6 +50,8 @@ export default function TakePhoto() {
   const [error, setError] = useState();
 
   const cameraRef = useRef(null);
+
+  const router = useRouter();
 
   // Check Websocket connections
   if (webSocket) {
@@ -75,12 +85,18 @@ export default function TakePhoto() {
       setAppStateVisible(appState.current);
     });
 
+    // AdminCheckLogin(setLoading, router.replace, (link = "/login"));
+
     return () => {
       subscription.remove();
       if (webSocket) {
         webSocket.close();
       }
     };
+  }, []);
+
+  useEffect(() => {
+    TeacherCheckLogin(setLoading, router.replace, link = "/login");
   }, []);
 
   // connect to websocket when window is Active
@@ -216,6 +232,8 @@ export default function TakePhoto() {
 
   return (
     <>
+      <Loader show={loading} />
+
       {scanData && (
         <View
           style={{

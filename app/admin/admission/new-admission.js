@@ -36,7 +36,6 @@ export default function NewAdmission() {
 
   const [imageUri, setImageUri] = useState();
 
-  const [file, setFile] = React.useState(false);
   const [camera, setCamera] = React.useState(false);
   const [focus, setFocus] = React.useState(false);
 
