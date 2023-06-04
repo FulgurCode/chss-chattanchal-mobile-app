@@ -36,21 +36,35 @@ export default function StudentDetials() {
 
   const [data, setData] = React.useState([]);
 
-  function handleClick() {
-    setIsLoading(true);
-    Axois
-      .get(
-        `/teacher/get-students?search=${value}&&value=${search}`
+  function body(){
+
+    let searchValue
+
+    if (isNaN(parseInt(search))){
+      searchValue = search
+    } else{
+      searchValue = parseInt(search)
+    }
+
+    if (value === "name"){
+      return {}
+    } else {
+      return(
+        {
+          [value]: searchValue
+        }
       )
+    }
+  }
+
+  function handleClick() {
+    Axois.post(`teacher/get-students?name=${value === "name" ? search : ""}`, body())
       .then((res) => {
         setData(res.data);
-        setIsLoading(false);
         setError("");
       })
 
       .catch((err) => {
-        setIsLoading(false);
-
         if (err?.response?.status == 401) {
           setError("Not Logged In");
         } else if (err?.response?.status === undefined) {
@@ -58,7 +72,7 @@ export default function StudentDetials() {
         } else if (err?.response?.status == 500) {
           setError(err.response.data);
         } else if (err?.response?.status == 404) {
-          setError("404 Not found Error");
+          setError("404 Error");
         } else {
           setError(err.response.data);
         }
