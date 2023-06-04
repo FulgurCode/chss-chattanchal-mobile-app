@@ -38,21 +38,35 @@ export default function StudentDetials() {
 
   const [data, setData] = React.useState([]);
 
-  function handleClick() {
-    setIsLoading(true);
-    Axois
-      .get(
-        `/admin/get-students?search=${value}&&value=${search}`
+  function body(){
+
+    let searchValue
+
+    if (isNaN(parseInt(search))){
+      searchValue = search
+    } else{
+      searchValue = parseInt(search)
+    }
+
+    if (value === "name"){
+      return {}
+    } else {
+      return(
+        {
+          [value]: searchValue
+        }
       )
+    }
+  }
+
+  function handleClick() {
+    Axois.post(`admin/get-students?name=${value === "name" ? search : ""}`, body())
       .then((res) => {
         setData(res.data);
-        setIsLoading(false);
         setError("");
       })
 
       .catch((err) => {
-        setIsLoading(false);
-
         if (err?.response?.status == 401) {
           setError("Not Logged In");
         } else if (err?.response?.status === undefined) {
