@@ -1,7 +1,7 @@
 import React from "react";
 import styles from "../styles/styles";
 import { useState } from "react";
-import Axios from "../stores/Axios"
+import Axios from "../stores/Axios";
 import DropDownPicker from "react-native-dropdown-picker";
 import { Link, useRouter } from "expo-router";
 import {
@@ -34,15 +34,15 @@ export default function Login() {
   function handleClick() {
     setIsLoading(true);
     if (userType == "admin") {
-      Axios
-        .post("admin/login", {
-          username: userName,
-          password: password,
-        })
+      Axios.post("admin/login", {
+        username: userName,
+        password: password,
+      })
         .then((res) => {
-            router.replace("/admin");
-            setIsLoading(false);
-            setError("")
+          Logout("teacher");
+          router.replace("/admin");
+          setIsLoading(false);
+          setError("");
         })
         .catch((err) => {
           setIsLoading(false);
@@ -62,9 +62,10 @@ export default function Login() {
         password: password,
       })
         .then((res) => {
+          Logout("admin");
           router.replace("/teacher");
           setIsLoading(false);
-          setError("")
+          setError("");
         })
         .catch((err) => {
           setIsLoading(false);
@@ -80,6 +81,15 @@ export default function Login() {
     } else {
       setError("students login fuctionality is not added yet");
     }
+  }
+  function Logout(user) {
+    Axios.delete(`${user}/logout`)
+      .then((res) => {
+        
+      })
+      .catch((err) => {
+        
+      });
   }
 
   return (
@@ -122,7 +132,7 @@ export default function Login() {
       </View>
       <TextInput
         style={{ ...styles.input, borderColor: inputColor }}
-        placeholder={(userType == "admin") ? "Username" : "Email"}
+        placeholder={userType == "admin" ? "Username" : "Email"}
         value={userName}
         onChangeText={(text) => {
           setUserName(text);
@@ -142,8 +152,7 @@ export default function Login() {
         }}
       />
       <Link href="/login" style={styles.link}>
-      {/* <Link href="#" style={styles.link}> Replace with this when needed*/}
-      
+        {/* <Link href="#" style={styles.link}> Replace with this when needed*/}
         Forget password?
       </Link>
       <TouchableOpacity
@@ -153,11 +162,18 @@ export default function Login() {
         <Text style={styles.btnText}>LOGIN</Text>
       </TouchableOpacity>
 
-      {(userType == "teacher") ? <TouchableOpacity style={{alignItems: "center", position: "relative"}} onPress={()=>router.push("teacher/signup")}  >
-        <Text style={{ color: "grey", fontSize: 15, fontWeight: 500 }}>
-          SIGNUP
-        </Text>
-      </TouchableOpacity> : ""}
+      {userType == "teacher" ? (
+        <TouchableOpacity
+          style={{ alignItems: "center", position: "relative" }}
+          onPress={() => router.push("teacher/signup")}
+        >
+          <Text style={{ color: "grey", fontSize: 15, fontWeight: 500 }}>
+            SIGNUP
+          </Text>
+        </TouchableOpacity>
+      ) : (
+        ""
+      )}
 
       <Text style={styles.error}>{error}</Text>
       <ActivityIndicator size="small" animating={isLoading} color="#28B4AB" />
