@@ -2,10 +2,14 @@ import { Stack } from "expo-router";
 import { TouchableOpacity, View, Text } from "react-native";
 import { Ionicons, AntDesign } from "@expo/vector-icons";
 import { useRouter, usePathname } from "expo-router";
+import UserProfile from "../components/NavBar/UserProfile";
+import { useState } from "react";
 
 export default function Layout() {
   const router = useRouter();
   const pathname = usePathname();
+
+  const [show, setShow] = useState(false);
 
   return (
     <Stack
@@ -17,7 +21,9 @@ export default function Layout() {
         headerTitleStyle: { fontSize: 15, fontWeight: "200" },
         headerRight: () => (
           <View>
-            <TouchableOpacity onPress={() => alert("This is profile button")}>
+            <UserProfile show={show} setShow={setShow}/>
+            <TouchableOpacity onPress={() => setShow(true)}>
+            {/* <TouchableOpacity onPress={() => alert("This is profile button")}> */}
               <Ionicons name="person-circle-outline" size={30} color="white" />
             </TouchableOpacity>
           </View>
