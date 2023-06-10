@@ -22,7 +22,12 @@ export function TeacherCheckLogin(setIsLoading, router, href) {
   .then((res) => {
     setIsLoading(!res.data)
     if (res.data == false){
-      router(href)
+      router({
+        pathname: href,
+        params: {
+          user: "teacher"
+        },
+      });
     }
   })
   .catch((err) => {

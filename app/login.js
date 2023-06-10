@@ -3,7 +3,7 @@ import styles from "../styles/styles";
 import { useState } from "react";
 import Axios from "../stores/Axios";
 import DropDownPicker from "react-native-dropdown-picker";
-import { Link, useRouter } from "expo-router";
+import { Link, useRouter, useSearchParams } from "expo-router";
 import {
   Text,
   SafeAreaView,
@@ -16,6 +16,8 @@ import {
 export default function Login() {
   const router = useRouter();
 
+  const data = useSearchParams();
+
   const [open, setOpen] = useState(false);
   const [items, setItems] = useState([
     { label: "Admin", value: "admin" },
@@ -23,7 +25,7 @@ export default function Login() {
     { label: "Student", value: "student" },
   ]);
 
-  const [userType, setUserType] = useState("admin");
+  const [userType, setUserType] = useState(data.user || "admin");
   const [userName, setUserName] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
