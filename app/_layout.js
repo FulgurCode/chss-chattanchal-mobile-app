@@ -1,10 +1,12 @@
 import { Stack } from "expo-router";
 import { TouchableOpacity, View, Text } from "react-native";
 import { Ionicons, AntDesign } from "@expo/vector-icons";
-import { useRouter } from "expo-router";
+import { useRouter, usePathname } from "expo-router";
 
 export default function Layout() {
   const router = useRouter();
+  const pathname = usePathname();
+
   return (
     <Stack
       screenOptions={{
@@ -22,7 +24,16 @@ export default function Layout() {
         ),
         headerLeft: () => (
           <TouchableOpacity
-            onPress={() => router.push("/")}
+            onPress={() => {
+              if (pathname.split("/")[1] == "admin") {
+                router.push("/admin");
+              } else if (pathname.split("/")[1] == "teacher") {
+                router.push("/teacher");
+              }
+            }}
+            onLongPress={()=>{ // testing stage
+              router.push("/");
+            }}
             style={{
               flexDirection: "row",
               alignItems: "center",
@@ -39,7 +50,10 @@ export default function Layout() {
     >
       <Stack.Screen name="login" options={{ headerShown: false }} />
       <Stack.Screen name="teacher/signup" options={{ headerShown: false }} />
-      <Stack.Screen name="teacher/signup-otp" options={{ headerShown: false }} />
+      <Stack.Screen
+        name="teacher/signup-otp"
+        options={{ headerShown: false }}
+      />
     </Stack>
   );
 }
