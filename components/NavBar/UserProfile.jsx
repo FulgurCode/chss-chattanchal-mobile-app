@@ -5,28 +5,23 @@ import {
   View,
   Text,
   TouchableHighlight,
+  StyleSheet
 } from "react-native";
-import { StyleSheet } from "react-native";
 import Axios from "../../stores/Axios";
 
-import { usePathname, useRouter, useNavigation } from "expo-router";
+import { usePathname, useNavigation } from "expo-router";
 
 export default function UserProfile({ show, setShow }) {
-  const router = useRouter();
   const navigation = useNavigation();
   const pathname = usePathname().split("/")[1];
 
   function Logout() {
     Axios.delete(`${pathname}/logout`)
       .then((res) => {
-        // Alert.alert("logout ", res.data);
         setShow(false);
         navigation.popToTop();
       })
       .catch((err) => {
-        // if (err.res.data) {
-        //   Alert.alert("err: ", err.res.data);
-        // }
       });
   }
   return (
@@ -145,8 +140,6 @@ export default function UserProfile({ show, setShow }) {
 const styles = StyleSheet.create({
   container: {
     backgroundColor: "white",
-    // padding: 30,
-    // paddingHorizontal: 100,
     borderRadius: 10,
     elevation: 100,
     justifyContent: "center",
