@@ -9,17 +9,17 @@ import {
 } from "react-native";
 import Axios from "../../stores/Axios";
 
-import { usePathname, useNavigation } from "expo-router";
+import { usePathname, useRouter } from "expo-router";
 
 export default function UserProfile({ show, setShow }) {
-  const navigation = useNavigation();
+  const router = useRouter();
   const pathname = usePathname().split("/")[1];
 
   function Logout() {
     Axios.delete(`${pathname}/logout`)
       .then((res) => {
         setShow(false);
-        navigation.popToTop();
+        router.replace("/login")
       })
       .catch((err) => {
       });
@@ -103,10 +103,7 @@ export default function UserProfile({ show, setShow }) {
           </View>
           <View
             style={{
-              //   flexDirection: "coloum",
               justifyContent: "space-around",
-              //   borderTopColor: "#eee",
-              //   borderTopWidth: 1,
               minWidth: "100%",
             }}
           >
