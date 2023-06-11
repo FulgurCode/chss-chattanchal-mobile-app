@@ -1,17 +1,93 @@
-import { Link } from "expo-router";
+import {
+  Link,
+  useRouter,
+  useRootNavigationState,
+  useFocusEffect,
+} from "expo-router";
 import React, { useEffect, useState } from "react";
 import { Alert, Button, SafeAreaView, Text } from "react-native";
 import Axios from "../stores/Axios";
-import { AdminCheckLogin, TeacherCheckLogin } from "../stores/CheckLogin";
+
+import Loader from "../components/common/Loader";
 
 export default function Home() {
-  const [isAdminLoggedIn, setIsAdminLoggedIn] = useState([]);
-  const [isTeacherLoggedIn, setIsTeacherLoggedIn] = useState([]);
+  const [isAdminLoggedIn, setIsAdminLoggedIn] = useState();
+  const [isTeacherLoggedIn, setIsTeacherLoggedIn] = useState();
+
+  const router = useRouter();
+  const navigationState = useRootNavigationState();
+
+  const [focus, setFocus] = useState();
+
+  const [redirect, setRedirect] = useState(true);
+  // Change this to see the home screen
+
+  function CheckLogin() {
+    Axios.get("admin/checklogin")
+      .then((res) => {
+        if (res.data == true) {
+          setIsAdminLoggedIn(true);
+        } else {
+          setIsAdminLoggedIn(false);
+        }
+      })
+      .catch((err) => {
+        if (err.response == undefined) {
+          console.log(err);
+
+          setTimeout(() => CheckLogin(), 2000);
+        }
+      });
+
+    Axios.get("teacher/checklogin")
+      .then((res) => {
+        if (res.data == true) {
+          setIsTeacherLoggedIn(true);
+        } else {
+          setIsTeacherLoggedIn(false);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+        if (err.response == undefined) {
+          setTimeout(() => CheckLogin(), 2000);
+        }
+      });
+  }
+  CheckLogin();
+
+  useFocusEffect(
+    React.useCallback(() => {
+      setFocus(true);
+      return () => {
+        setFocus(false);
+      };
+    }, [])
+  );
 
   useEffect(() => {
-    AdminCheckLogin(setIsAdminLoggedIn, (_) => {}, "");
-    TeacherCheckLogin(setIsTeacherLoggedIn, (_) => {}, "");
-  });
+    if (redirect && focus) {
+      if (!navigationState?.key) return;
+      if (isAdminLoggedIn) {
+        router.replace("/admin");
+      } else if (isTeacherLoggedIn) {
+        router.replace("/teacher");
+      } else if (!isAdminLoggedIn && !isTeacherLoggedIn) {
+        if (isAdminLoggedIn != undefined && isTeacherLoggedIn != undefined) {
+          console.log(!isAdminLoggedIn && !isTeacherLoggedIn);
+
+          router.replace("/login");
+          console.log(isAdminLoggedIn, isTeacherLoggedIn);
+        }
+      }
+    }
+  }, [
+    navigationState?.key,
+    focus,
+    isAdminLoggedIn,
+    isTeacherLoggedIn,
+    redirect,
+  ]);
 
   function Logout() {
     Axios.delete("admin/logout")
@@ -36,64 +112,77 @@ export default function Home() {
   }
 
   return (
-    <SafeAreaView style={{ padding: 10, gap: 10 }}>
-      <Text style={{ fontWeight: "bold", padding: 10 }}>index page</Text>
-      <Link href="/login">/login</Link>
-      <Link href="/admin">/admin</Link>
-      <Link href="admin/admission">
-        <Text>        </Text>/admin/admission/
-      </Link>
+    <>
+      {redirect ? (
+        <Loader show={true} />
+      ) : (
+        <SafeAreaView style={{ padding: 10, gap: 10 }}>
+          <Text style={{ fontWeight: "bold", padding: 10 }}>index page</Text>
+          <Link href="/login">/login</Link>
+          <Link href="/admin">/admin</Link>
+          <Link href="admin/admission">
+            <Text> </Text>/admin/admission/
+          </Link>
 
-      <Link href="admin/admission/student-details">
-        <Text>        </Text>/admin/admission/student-details
-      </Link>
-      <Link href="admin/admission/new-admission">
-        <Text>        </Text>/admin/admission/new-admission
-      </Link>
-      <Link href="admin/admission/profile">
-        <Text>        </Text>/admin/admission/profile
-      </Link>
-      <Link href="admin/admission/verification">
-        <Text>        </Text>/admin/admission/verification
-      </Link>
-      <Link href="admin/admission/confirmation">
-        <Text>        </Text>/admin/admission/confirmation
-      </Link>
-      <Link href="admin/admission/take-photo">
-        <Text>        </Text>/admin/admission/take-photo
-      </Link>
+          <Link href="admin/admission/student-details">
+            <Text> </Text>/admin/admission/student-details
+          </Link>
+          <Link href="admin/admission/new-admission">
+            <Text> </Text>/admin/admission/new-admission
+          </Link>
+          <Link href="admin/admission/profile">
+            <Text> </Text>/admin/admission/profile
+          </Link>
+          <Link href="admin/admission/verification">
+            <Text> </Text>/admin/admission/verification
+          </Link>
+          <Link href="admin/admission/confirmation">
+            <Text> </Text>/admin/admission/confirmation
+          </Link>
+          <Link href="admin/admission/take-photo">
+            <Text> </Text>/admin/admission/take-photo
+          </Link>
 
-      <Link href="/teacher">/teacher</Link>
-      <Link href="/teacher/signup">
-        <Text>        </Text>/teacher/signup
-      </Link>
-      <Link href="/teacher/signup-otp">
-        <Text>        </Text>/teacher/signup-otp
-      </Link>
-      <Link href="teacher/admission/">
-        <Text>        </Text>/teacher/admission/
-      </Link>
-      <Link href="teacher/admission/student-details">
-        <Text>        </Text>/teacher/admission/student-details
-      </Link>
-      <Link href="teacher/admission/new-admission">
-        <Text>        </Text>/teacher/admission/new-admission
-      </Link>
-      <Link href="teacher/admission/profile">
-        <Text>        </Text>/teacher/admission/profile
-      </Link>
-      <Link href="teacher/admission/verification">
-        <Text>        </Text>/teacher/admission/verification
-      </Link>
-      <Link href="teacher/admission/take-photo">
-        <Text>        </Text>/admin/admission/take-photo
-      </Link>
+          <Link href="/teacher">/teacher</Link>
+          <Link href="/teacher/signup">
+            <Text> </Text>/teacher/signup
+          </Link>
+          <Link href="/teacher/signup-otp">
+            <Text> </Text>/teacher/signup-otp
+          </Link>
+          <Link href="teacher/admission/">
+            <Text> </Text>/teacher/admission/
+          </Link>
+          <Link href="teacher/admission/student-details">
+            <Text> </Text>/teacher/admission/student-details
+          </Link>
+          <Link href="teacher/admission/new-admission">
+            <Text> </Text>/teacher/admission/new-admission
+          </Link>
+          <Link href="teacher/admission/profile">
+            <Text> </Text>/teacher/admission/profile
+          </Link>
+          <Link href="teacher/admission/verification">
+            <Text> </Text>/teacher/admission/verification
+          </Link>
+          <Link href="teacher/admission/take-photo">
+            <Text> </Text>/admin/admission/take-photo
+          </Link>
 
-      <Button title="Logout" onPress={Logout} />
+          <Button title="Logout" onPress={Logout} />
 
-      <Text style={{ fontWeight: 500 }}>Logged users:</Text>
-      <Text>    Admin: {isAdminLoggedIn ? "false" : "true"}</Text>
-    <Text>    Teacher: {isTeacherLoggedIn ? "false" : "true"}</Text>
-    </SafeAreaView>
+          <Text style={{ fontWeight: 500 }}>Logged users:</Text>
+          <Text> Admin: {isAdminLoggedIn ? "false" : "true"}</Text>
+          <Text> Teacher: {isTeacherLoggedIn ? "false" : "true"}</Text>
+
+          <Button
+            title="Redirect"
+            onPress={() => {
+              setRedirect(true);
+            }}
+          />
+        </SafeAreaView>
+      )}
+    </>
   );
 }
