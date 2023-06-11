@@ -31,10 +31,11 @@ export default function Loader(props) {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "#fff",
+
+    backgroundColor: "white",
     position: "absolute",
     width: Screen.width,
-    height: Screen.height - STATUS_BAR_HEIGHT,
+    height: Screen.height - STATUS_BAR_HEIGHT - 55,
     justifyContent: "center",
     alignItems: "center",
     zIndex: 9999999,
