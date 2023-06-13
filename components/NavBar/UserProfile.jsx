@@ -5,7 +5,7 @@ import {
   View,
   Text,
   TouchableHighlight,
-  StyleSheet
+  StyleSheet,
 } from "react-native";
 import Axios from "../../stores/Axios";
 
@@ -19,10 +19,9 @@ export default function UserProfile({ show, setShow }) {
     Axios.delete(`${pathname}/logout`)
       .then((res) => {
         setShow(false);
-        router.replace("/login")
+        router.replace("/login");
       })
-      .catch((err) => {
-      });
+      .catch((err) => {});
   }
   return (
     <Modal
@@ -50,7 +49,11 @@ export default function UserProfile({ show, setShow }) {
         />
         <View style={styles.container}>
           <View
-            style={{ paddingVertical: 30, paddingHorizontal: 100, gap: 20 }}
+            style={{
+              paddingVertical: 30,
+              //  paddingHorizontal: 100,
+              gap: 20,
+            }}
           >
             <View
               style={{
@@ -62,7 +65,7 @@ export default function UserProfile({ show, setShow }) {
 
                 overflow: "hidden",
                 borderWidth: 1,
-                borderColor: "#ccc"
+                borderColor: "#ccc",
               }}
             >
               <View
@@ -70,7 +73,7 @@ export default function UserProfile({ show, setShow }) {
                   gap: 5,
                   justifyContent: "flex-end",
                   alignItems: "center",
-                  top: 40
+                  top: 40,
                 }}
               >
                 <View
