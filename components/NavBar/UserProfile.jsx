@@ -9,17 +9,30 @@ import {
 } from "react-native";
 import Axios from "../../stores/Axios";
 
-import { usePathname, useRouter } from "expo-router";
+import { usePathname, useRouter, useNavigation } from "expo-router";
+// import { Actions } from 'react-native-router-flux';
+import { CommonActions } from "@react-navigation/native";
+
+
 
 export default function UserProfile({ show, setShow }) {
   const router = useRouter();
+  const navigation = useNavigation();
   const pathname = usePathname().split("/")[1];
 
   function Logout() {
     Axios.delete(`${pathname}/logout`)
       .then((res) => {
         setShow(false);
-        router.replace("/login");
+        // navigation.popToTop();
+        // router.replace("/login");
+        // Actions.reset('index');
+        navigation.dispatch(
+          CommonActions.reset({
+            index: 1,
+            routes: [{name: "index"}]
+          })
+        )
       })
       .catch((err) => {});
   }

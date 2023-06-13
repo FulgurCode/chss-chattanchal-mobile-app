@@ -1,7 +1,6 @@
 import {
   Link,
   useRouter,
-  useRootNavigationState,
   useFocusEffect,
 } from "expo-router";
 import React, { useEffect, useState } from "react";
@@ -15,7 +14,6 @@ export default function Home() {
   const [isTeacherLoggedIn, setIsTeacherLoggedIn] = useState();
 
   const router = useRouter();
-  const navigationState = useRootNavigationState();
 
   const [focus, setFocus] = useState();
 
@@ -33,7 +31,7 @@ export default function Home() {
       })
       .catch((err) => {
         if (err.response == undefined) {
-          console.log(err);
+          // console.log(err);
 
           setTimeout(() => CheckLogin(), 2000);
         }
@@ -48,7 +46,7 @@ export default function Home() {
         }
       })
       .catch((err) => {
-        console.log(err);
+        // console.log(err);
         if (err.response == undefined) {
           setTimeout(() => CheckLogin(), 2000);
         }
@@ -67,22 +65,19 @@ export default function Home() {
 
   useEffect(() => {
     if (redirect && focus) {
-      if (!navigationState?.key) return;
+      
       if (isAdminLoggedIn) {
         router.replace("/admin");
       } else if (isTeacherLoggedIn) {
         router.replace("/teacher");
       } else if (!isAdminLoggedIn && !isTeacherLoggedIn) {
         if (isAdminLoggedIn != undefined && isTeacherLoggedIn != undefined) {
-          console.log(!isAdminLoggedIn && !isTeacherLoggedIn);
-
           router.replace("/login");
-          console.log(isAdminLoggedIn, isTeacherLoggedIn);
         }
       }
+
     }
   }, [
-    navigationState?.key,
     focus,
     isAdminLoggedIn,
     isTeacherLoggedIn,
