@@ -1,15 +1,17 @@
 import Axios from "./Axios";
 
+
 export function AdminCheckLogin(setIsLoading, router, href) {
   Axios.get("admin/checklogin")
     .then((res) => {
-      setIsLoading(!res.data)
+    setIsLoading(!res.data)
       if (res.data == false){
         router(href)
       }
     })
     .catch((err) => {
-      setIsLoading(true)
+    console.log("Admin Logged: ", err)
+    setIsLoading(true)
       if (err.response==undefined){
         setTimeout(() => AdminCheckLogin(setIsLoading, router, href), 5000);
       }
@@ -18,17 +20,22 @@ export function AdminCheckLogin(setIsLoading, router, href) {
 export function TeacherCheckLogin(setIsLoading, router, href) {
   Axios.get("teacher/checklogin")
   .then((res) => {
-    // console.log(res.data)
     setIsLoading(!res.data)
     if (res.data == false){
-      router(href)
+      router({
+        pathname: href,
+        params: {
+          user: "teacher"
+        },
+      });
     }
   })
   .catch((err) => {
-    // console.log(err)
+    console.log("Teacher Logged: ", err)
     setIsLoading(true)
     if (err.response==undefined){
       setTimeout(() => TeacherCheckLogin(setIsLoading, router, href), 5000);
     }
   });
 }
+
