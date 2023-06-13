@@ -5,7 +5,7 @@ import {
   useFocusEffect,
 } from "expo-router";
 import React, { useEffect, useState } from "react";
-import { Alert, Button, SafeAreaView, Text } from "react-native";
+import { Alert, Button, SafeAreaView, Text, StyleSheet } from "react-native";
 import Axios from "../stores/Axios";
 
 import Loader from "../components/common/Loader";
@@ -116,7 +116,12 @@ export default function Home() {
       {redirect ? (
         <Loader show={true} />
       ) : (
-        <SafeAreaView style={{ padding: 10, gap: 10 }}>
+        <SafeAreaView
+          style={{
+            padding: 10,
+            gap: 10,
+          }}
+        >
           <Text style={{ fontWeight: "bold", padding: 10 }}>index page</Text>
           <Link href="/login">/login</Link>
           <Link href="/admin">/admin</Link>
