@@ -226,9 +226,9 @@ export default function Profile() {
             <Text style={{ flex: 1 }}> {data.status}</Text>
           </View>
         )}
-        {data.number == undefined &&
-        data.date == undefined &&
-        data.school == undefined ? (
+        {data.tcNumber == undefined &&
+        data.tcDate == undefined &&
+        data.tcSchool == undefined ? (
           ""
         ) : (
           <Text style={{ ...styles.newAdmissionHeading, alignSelf: "center" }}>
@@ -236,61 +236,61 @@ export default function Profile() {
           </Text>
         )}
 
-        {data.number == undefined ? (
+        {data.tcNumber == undefined ? (
           ""
         ) : (
           <View style={{ flexDirection: "row", gap: 5 }}>
             <Text style={{ flex: 1 }}>Number:</Text>
-            <Text style={{ flex: 1 }}> {data.number}</Text>
+            <Text style={{ flex: 1 }}> {data.tcNumber}</Text>
           </View>
         )}
-        {data.date == undefined ? (
+        {data.tcDate == undefined ? (
           ""
         ) : (
           <View style={{ flexDirection: "row", gap: 5 }}>
             <Text style={{ flex: 1 }}>Date:</Text>
-            <Text style={{ flex: 1 }}> {data.date}</Text>
+            <Text style={{ flex: 1 }}> {data.tcDate}</Text>
           </View>
         )}
-        {data.school == undefined ? (
+        {data.tcSchool == undefined ? (
           ""
         ) : (
           <View style={{ flexDirection: "row", gap: 5 }}>
             <Text style={{ flex: 1 }}>School:</Text>
-            <Text style={{ flex: 1 }}> {data.school}</Text>
+            <Text style={{ flex: 1 }}> {data.tcSchool}</Text>
           </View>
         )}
-        {data.nameOfBoard == undefined &&
-        data.passingTime == undefined &&
-        data.registerNo == undefined ? (
+        {data.sslcNameOfBoard == undefined &&
+        data.sslcPassingTime == undefined &&
+        data.sslcRegisterNo == undefined ? (
           ""
         ) : (
           <Text style={{ ...styles.newAdmissionHeading, alignSelf: "center" }}>
             Details of Qualifiying Examination
           </Text>
         )}
-        {data.nameOfBoard == undefined ? (
+        {data.sslcNameOfBoard == undefined ? (
           ""
         ) : (
           <View style={{ flexDirection: "row", gap: 5 }}>
             <Text style={{ flex: 1 }}>Name of board:</Text>
-            <Text style={{ flex: 1 }}> {data.nameOfBoard}</Text>
+            <Text style={{ flex: 1 }}> {data.sslcNameOfBoard}</Text>
           </View>
         )}
-        {data.passingTime == undefined ? (
+        {data.sslcPassingTime == undefined ? (
           ""
         ) : (
           <View style={{ flexDirection: "row", gap: 5 }}>
             <Text style={{ flex: 1 }}>Passing time:</Text>
-            <Text style={{ flex: 1 }}> {data.passingTime}</Text>
+            <Text style={{ flex: 1 }}> {data.sslcPassingTime}</Text>
           </View>
         )}
-        {data.registerNo == undefined ? (
+        {data.sslcRegisterNo == undefined ? (
           ""
         ) : (
           <View style={{ flexDirection: "row", gap: 5 }}>
             <Text style={{ flex: 1 }}>Register No:</Text>
-            <Text style={{ flex: 1 }}> {data.registerNo}</Text>
+            <Text style={{ flex: 1 }}> {data.sslcRegisterNo}</Text>
           </View>
         )}
       </View>
