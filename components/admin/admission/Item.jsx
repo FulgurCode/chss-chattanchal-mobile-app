@@ -17,8 +17,6 @@ export default function Item(props) {
             pathname: props.link,
             params: {
               ...props.data,
-              ...props.data.qualifyingExamDetails,
-              ...props.data.tcDetailsOnAdmission,
             },
           });
         }}

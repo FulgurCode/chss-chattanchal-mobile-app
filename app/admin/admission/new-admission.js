@@ -66,16 +66,14 @@ export default function NewAdmission() {
     course: "",
     secondLanguage: "",
     status: "",
-    qualifyingExamDetails: {
-      nameOfBoard: "",
-      registerNo: "",
-      passingTime: "",
-    },
-    tcDetailsOnAdmission: {
-      number: "",
-      date: "",
-      school: "",
-    },
+
+    sslcNameOfBoard: "",
+    sslcRegisterNo: "",
+    sslcPassingTime: "",
+
+    tcNumber: "",
+    tcDate: "",
+    tcSchool: "",
   });
 
   useFocusEffect(
@@ -100,9 +98,9 @@ export default function NewAdmission() {
     if (
       regddmmyyyy.test(data.admissionDate) &&
       regddmmyyyy.test(data.dob) &&
-      regddmmyyyy.test(data.tcDetailsOnAdmission.date)
+      regddmmyyyy.test(data.tcDate)
     ) {
-      if (regmonthyyyy.test(data.qualifyingExamDetails.passingTime)) {
+      if (regmonthyyyy.test(data.sslcPassingTime)) {
         if (!isEmpty()) {
           setError("");
           setIsLoading(true);
@@ -178,16 +176,6 @@ export default function NewAdmission() {
         return true;
       }
     }
-    for (const key in data.tcDetailsOnAdmission) {
-      if (data.tcDetailsOnAdmission[key] === "") {
-        return true;
-      }
-    }
-    for (const key in data.qualifyingExamDetails) {
-      if (data.qualifyingExamDetails[key] === "") {
-        return true;
-      }
-    }
     return false;
   }
 
@@ -213,16 +201,14 @@ export default function NewAdmission() {
       course: "",
       secondLanguage: "",
       status: "",
-      qualifyingExamDetails: {
-        nameOfBoard: "",
-        registerNo: "",
-        passingTime: "",
-      },
-      tcDetailsOnAdmission: {
-        number: "",
-        date: "",
-        school: "",
-      },
+  
+      sslcNameOfBoard: "",
+      sslcRegisterNo: "",
+      sslcPassingTime: "",
+  
+      tcNumber: "",
+      tcDate: "",
+      tcSchool: "",
     });
     setImageUri()
   }
@@ -231,26 +217,6 @@ export default function NewAdmission() {
     setData((prevData) => ({
       ...prevData,
       [name]: value,
-    }));
-  }
-
-  function handleChangeQualifyingExamDetails(name, value) {
-    setData((prevData) => ({
-      ...prevData,
-      qualifyingExamDetails: {
-        ...prevData.qualifyingExamDetails,
-        [name]: value,
-      },
-    }));
-  }
-
-  function handleChangeTcDetailsOnAdmission(name, value) {
-    setData((prevData) => ({
-      ...prevData,
-      tcDetailsOnAdmission: {
-        ...prevData.tcDetailsOnAdmission,
-        [name]: value,
-      },
     }));
   }
 
@@ -659,9 +625,9 @@ export default function NewAdmission() {
           </Text>
           <TextInputComponent
             style={styles.input}
-            name="nameOfBoard"
-            onChangeText={handleChangeQualifyingExamDetails}
-            value={data.qualifyingExamDetails.nameOfBoard}
+            name="sslcNameOfBoard"
+            onChangeText={handleChange}
+            value={data.sslcNameOfBoard}
           />
         </View>
         <View>
@@ -671,14 +637,14 @@ export default function NewAdmission() {
           <TextInputComponent
             keyboardType="numeric"
             style={styles.input}
-            name="registerNo"
+            name="sslcRegisterNo"
             onChangeText={(name, value) => {
-              handleChangeQualifyingExamDetails(
+              handleChange(
                 name,
                 parseInt(value.replace(/[^0-9]/g, ""))
               );
             }}
-            value={data.qualifyingExamDetails.registerNo.toString()}
+            value={data.sslcRegisterNo.toString()}
           />
         </View>
         <View>
@@ -687,10 +653,10 @@ export default function NewAdmission() {
           </Text>
           <TextInputComponent
             style={styles.input}
-            name="passingTime"
-            onChangeText={handleChangeQualifyingExamDetails}
+            name="sslcPassingTime"
+            onChangeText={handleChange}
             placeholder="mm-yyyy / month-yyyy"
-            value={data.qualifyingExamDetails.passingTime}
+            value={data.sslcPassingTime}
           />
         </View>
 
@@ -705,9 +671,9 @@ export default function NewAdmission() {
           </Text>
           <TextInputComponent
             style={styles.input}
-            name="number"
-            onChangeText={handleChangeTcDetailsOnAdmission}
-            value={data.tcDetailsOnAdmission.number}
+            name="tcNumber"
+            onChangeText={handleChange}
+            value={data.tcNumber}
           />
         </View>
         <View>
@@ -716,11 +682,11 @@ export default function NewAdmission() {
           </Text>
           <TextInputComponent
             style={styles.input}
-            name="date"
-            onChangeText={handleChangeTcDetailsOnAdmission}
+            name="tcDate"
+            onChangeText={handleChange}
             placeholder="dd-mm-yyyy"
             maxLength={10}
-            value={data.tcDetailsOnAdmission.date}
+            value={data.tcDate}
           />
         </View>
         <View>
@@ -729,9 +695,9 @@ export default function NewAdmission() {
           </Text>
           <TextInputComponent
             style={styles.input}
-            name="school"
-            onChangeText={handleChangeTcDetailsOnAdmission}
-            value={data.tcDetailsOnAdmission.school}
+            name="tcSchool"
+            onChangeText={handleChange}
+            value={data.tcSchool}
           />
         </View>
         <View style={styles.divider} />

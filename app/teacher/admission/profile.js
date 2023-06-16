@@ -4,20 +4,20 @@ import styles from "../../../styles/styles";
 import { useEffect, useState } from "react";
 import Axios from "../../../stores/Axios";
 import profileImg from "../../../imgs/profile.png";
-
 import Loader from "../../../components/common/Loader";
 import {TeacherCheckLogin} from "../../../stores/CheckLogin";
-import {useRouter} from "expo-router"
+
+import { useRouter } from "expo-router";
+
 
 export default function Profile() {
-
-  const router = useRouter();
-  const [loading, setLoading] = useState(true);
-  useEffect(()=>{TeacherCheckLogin(setLoading, router.replace, link="/login")},[]);
-
   const [img, setImg] = useState(profileImg);
+  const [loading, setLoading] = useState(true);
+
 
   const data = useSearchParams();
+  const router = useRouter();
+  useEffect(()=>TeacherCheckLogin(setLoading, router.replace, "/login"), [])
 
   function getImg() {
     Axios.get(`teacher/get-student-photo?studentId=${data._id}`)
@@ -39,6 +39,7 @@ export default function Profile() {
   return (
     <>
     <Loader show={loading} />
+
     <ScrollView
       style={{
         flex: 1,
@@ -225,9 +226,9 @@ export default function Profile() {
             <Text style={{ flex: 1 }}> {data.status}</Text>
           </View>
         )}
-        {data.number == undefined &&
-        data.date == undefined &&
-        data.school == undefined ? (
+        {data.tcNumber == undefined &&
+        data.tcDate == undefined &&
+        data.tcSchool == undefined ? (
           ""
         ) : (
           <Text style={{ ...styles.newAdmissionHeading, alignSelf: "center" }}>
@@ -235,61 +236,61 @@ export default function Profile() {
           </Text>
         )}
 
-        {data.number == undefined ? (
+        {data.tcNumber == undefined ? (
           ""
         ) : (
           <View style={{ flexDirection: "row", gap: 5 }}>
             <Text style={{ flex: 1 }}>Number:</Text>
-            <Text style={{ flex: 1 }}> {data.number}</Text>
+            <Text style={{ flex: 1 }}> {data.tcNumber}</Text>
           </View>
         )}
-        {data.date == undefined ? (
+        {data.tcDate == undefined ? (
           ""
         ) : (
           <View style={{ flexDirection: "row", gap: 5 }}>
             <Text style={{ flex: 1 }}>Date:</Text>
-            <Text style={{ flex: 1 }}> {data.date}</Text>
+            <Text style={{ flex: 1 }}> {data.tcDate}</Text>
           </View>
         )}
-        {data.school == undefined ? (
+        {data.tcSchool == undefined ? (
           ""
         ) : (
           <View style={{ flexDirection: "row", gap: 5 }}>
             <Text style={{ flex: 1 }}>School:</Text>
-            <Text style={{ flex: 1 }}> {data.school}</Text>
+            <Text style={{ flex: 1 }}> {data.tcSchool}</Text>
           </View>
         )}
-        {data.nameOfBoard == undefined &&
-        data.passingTime == undefined &&
-        data.registerNo == undefined ? (
+        {data.sslcNameOfBoard == undefined &&
+        data.sslcPassingTime == undefined &&
+        data.sslcRegisterNo == undefined ? (
           ""
         ) : (
           <Text style={{ ...styles.newAdmissionHeading, alignSelf: "center" }}>
             Details of Qualifiying Examination
           </Text>
         )}
-        {data.nameOfBoard == undefined ? (
+        {data.sslcNameOfBoard == undefined ? (
           ""
         ) : (
           <View style={{ flexDirection: "row", gap: 5 }}>
             <Text style={{ flex: 1 }}>Name of board:</Text>
-            <Text style={{ flex: 1 }}> {data.nameOfBoard}</Text>
+            <Text style={{ flex: 1 }}> {data.sslcNameOfBoard}</Text>
           </View>
         )}
-        {data.passingTime == undefined ? (
+        {data.sslcPassingTime == undefined ? (
           ""
         ) : (
           <View style={{ flexDirection: "row", gap: 5 }}>
             <Text style={{ flex: 1 }}>Passing time:</Text>
-            <Text style={{ flex: 1 }}> {data.passingTime}</Text>
+            <Text style={{ flex: 1 }}> {data.sslcPassingTime}</Text>
           </View>
         )}
-        {data.registerNo == undefined ? (
+        {data.sslcRegisterNo == undefined ? (
           ""
         ) : (
           <View style={{ flexDirection: "row", gap: 5 }}>
             <Text style={{ flex: 1 }}>Register No:</Text>
-            <Text style={{ flex: 1 }}> {data.registerNo}</Text>
+            <Text style={{ flex: 1 }}> {data.sslcRegisterNo}</Text>
           </View>
         )}
       </View>

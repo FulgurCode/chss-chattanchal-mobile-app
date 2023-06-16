@@ -66,9 +66,8 @@ export default function Confirmation() {
       });
   }
 
-  const handleSearch = (e) => {
-    (e === undefined)? "" : setSearchQuery(e.target.value);
-
+  const handleSearch = (value) => {
+    setSearchQuery(value);
   };
 
   const handleSort = (column) => {
