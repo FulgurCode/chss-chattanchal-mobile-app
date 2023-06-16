@@ -69,7 +69,7 @@ export default function TakePhoto() {
       setFocus(true);
       if (webSocket) {
         setWebSocket(
-          new WebSocket("ws://192.168.162.147:9000/ws/admission-photo")
+          new WebSocket("wss:chattanchalhss.com/ws/admission-photo")
         );
       }
       return () => {
@@ -103,7 +103,7 @@ export default function TakePhoto() {
   useEffect(() => {
     if (appState.current == "active" && focus) {
       setWebSocket(
-        new WebSocket("ws://192.168.162.147:9000/ws/admission-photo")
+        new WebSocket("wss:chattanchalhss.com/ws/admission-photo")
       );
     }
     return () => {};
