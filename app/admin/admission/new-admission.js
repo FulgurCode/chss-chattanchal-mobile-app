@@ -39,9 +39,14 @@ export default function NewAdmission() {
   const [camera, setCamera] = React.useState(false);
   const [focus, setFocus] = React.useState(false);
 
+  // For drop down
   const [open1, setOpen1] = React.useState(false);
   const [open2, setOpen2] = React.useState(false);
   const [open3, setOpen3] = React.useState(false);
+  const [open4, setOpen4] = React.useState(false);
+  const [open5, setOpen5] = React.useState(false);
+  const [open6, setOpen6] = React.useState(false);
+
   const [disabled, setDisabled] = React.useState(false);
   const [isLoading, setIsLoading] = React.useState(false);
   const [error, setError] = React.useState("");
@@ -117,7 +122,8 @@ export default function NewAdmission() {
 
               Axois.post(
                 `/admin/upload-student-photo?studentId=${response.data}`,
-                formData,{headers:{"Content-Type":"multipart/form-data"}}
+                formData,
+                { headers: { "Content-Type": "multipart/form-data" } }
               ).catch((err) => {
                 if (err?.response?.status == 401) {
                   Alert.alert("Status", err.response.data);
@@ -201,16 +207,16 @@ export default function NewAdmission() {
       course: "",
       secondLanguage: "",
       status: "",
-  
+
       sslcNameOfBoard: "",
       sslcRegisterNo: "",
       sslcPassingTime: "",
-  
+
       tcNumber: "",
       tcDate: "",
       tcSchool: "",
     });
-    setImageUri()
+    setImageUri();
   }
 
   function handleChange(name, value) {
@@ -320,6 +326,7 @@ export default function NewAdmission() {
             Admission Date<Text style={styles.mandatory}>*</Text>
           </Text>
           <TextInputComponent
+            keyboardType="numeric"
             style={styles.input}
             name="admissionDate"
             onChangeText={handleChange}
@@ -360,11 +367,14 @@ export default function NewAdmission() {
             Aadhaar No.<Text style={styles.mandatory}>*</Text>
           </Text>
           <TextInputComponent
+            keyboardType="numeric"
             style={styles.input}
             name="aadhaarNo"
-            onChangeText={handleChange}
+            onChangeText={(name, value) => {
+              handleChange(name, parseInt(value.replace(/[^0-9]/g, "")));
+            }}
             maxLength={14}
-            value={data.aadhaarNo}
+            value={data.aadhaarNo.toString()}
           />
         </View>
         <View>
@@ -410,6 +420,8 @@ export default function NewAdmission() {
             }}
             dropDownContainerStyle={{
               borderColor: "#dfdfdf",
+              elevation: 4
+
             }}
           />
         </View>
@@ -530,6 +542,8 @@ export default function NewAdmission() {
             }}
             dropDownContainerStyle={{
               borderColor: "#dfdfdf",
+              elevation: 4
+
             }}
           />
         </View>
@@ -538,6 +552,7 @@ export default function NewAdmission() {
             DOB<Text style={styles.mandatory}>*</Text>
           </Text>
           <TextInputComponent
+            keyboardType="numeric"
             style={styles.input}
             name="dob"
             onChangeText={handleChange}
@@ -548,41 +563,115 @@ export default function NewAdmission() {
         </View>
 
         <View style={styles.divider} />
-        <View>
+        <View style={{ zIndex: 1002 }}>
           <Text style={styles.newAdmissionText}>
             Class<Text style={styles.mandatory}>*</Text>
           </Text>
-          <TextInputComponent
-            keyboardType="numeric"
-            style={styles.input}
-            name="class"
-            onChangeText={(name, value) => {
-              handleChange(name, parseInt(value.replace(/[^0-9]/g, "")));
+          <DropDownPicker
+            open={open3}
+            value={data.class}
+            items={[
+              { label: "8", value: 8 },
+              { label: "9", value: 9 },
+              { label: "10", value: 10 },
+              { label: "11", value: 11 },
+              { label: "12", value: 12 },
+            ]}
+            setOpen={setOpen3}
+            placeholder="Select class"
+            setValue={(value) => {
+              handleChange("class", value());
             }}
-            maxLength={2}
-            value={data.class.toString()}
+            listMode="SCROLLVIEW"
+            style={{
+              backgroundColor: "#FAFAFC",
+              borderColor: "#dfdfdf",
+              borderRadius: 10,
+            }}
+            selectedItemContainerStyle={{
+              backgroundColor: "#f2f2f2",
+            }}
+            dropDownContainerStyle={{
+              borderColor: "#dfdfdf",
+              elevation: 4
+
+            }}
           />
         </View>
-        <View>
+        <View style={{ zIndex: 1001 }}>
           <Text style={styles.newAdmissionText}>
             Course<Text style={styles.mandatory}>*</Text>
           </Text>
-          <TextInputComponent
-            style={styles.input}
-            name="course"
-            onChangeText={handleChange}
+          <DropDownPicker
+            open={open4}
             value={data.course}
+            items={[
+              {
+                label: "PCMB - Physics, Chemistry, Maths, Biology",
+                value: "PCMB",
+              },
+              {
+                label: "PCMC - Physics, Chemistry, Maths, Computer Science",
+                value: "PCMC",
+              },
+              {
+                label:
+                  "COMMERCE - Bussiness, Computer Applications, Economics, Accountancy",
+                value: "COMMERCE",
+              },
+            ]}
+            setOpen={setOpen4}
+            placeholder="Select course"
+            setValue={(value) => {
+              handleChange("course", value());
+            }}
+            listMode="SCROLLVIEW"
+            style={{
+              backgroundColor: "#FAFAFC",
+              borderColor: "#dfdfdf",
+              borderRadius: 10,
+            }}
+            selectedItemContainerStyle={{
+              backgroundColor: "#f2f2f2",
+            }}
+            dropDownContainerStyle={{
+              borderColor: "#dfdfdf",
+              elevation: 4
+
+            }}
           />
         </View>
-        <View>
+        <View style={{ zIndex: 1000 }}>
           <Text style={styles.newAdmissionText}>
             Second language<Text style={styles.mandatory}>*</Text>
           </Text>
-          <TextInputComponent
-            style={styles.input}
-            name="secondLanguage"
-            onChangeText={handleChange}
+          <DropDownPicker
+            open={open5}
             value={data.secondLanguage}
+            items={[
+              { label: "Malayalam", value: "Malayalam" },
+              { label: "Arabic", value: "Arabic" },
+              { label: "Hindi", value: "Hindi" },
+            ]}
+            setOpen={setOpen5}
+            placeholder="Select second language"
+            setValue={(value) => {
+              handleChange("secondLanguage", value());
+            }}
+            listMode="SCROLLVIEW"
+            style={{
+              backgroundColor: "#FAFAFC",
+              borderColor: "#dfdfdf",
+              borderRadius: 10,
+            }}
+            selectedItemContainerStyle={{
+              backgroundColor: "#f2f2f2",
+            }}
+            dropDownContainerStyle={{
+              borderColor: "#dfdfdf",
+              elevation: 4
+
+            }}
           />
         </View>
         <View style={{ zIndex: 999 }}>
@@ -590,13 +679,14 @@ export default function NewAdmission() {
             Student Status<Text style={styles.mandatory}>*</Text>
           </Text>
           <DropDownPicker
-            open={open3}
+            open={open6}
             value={data.status}
             items={[
               { label: "Permanent", value: "permanent", selected: true },
               { label: "Temporary", value: "temporary" },
             ]}
-            setOpen={setOpen3}
+            setOpen={setOpen6}
+            placeholder="Select status"
             setValue={(value) => {
               handleChange("status", value());
             }}
@@ -611,6 +701,8 @@ export default function NewAdmission() {
             }}
             dropDownContainerStyle={{
               borderColor: "#dfdfdf",
+              elevation: 4
+
             }}
           />
         </View>
@@ -639,10 +731,7 @@ export default function NewAdmission() {
             style={styles.input}
             name="sslcRegisterNo"
             onChangeText={(name, value) => {
-              handleChange(
-                name,
-                parseInt(value.replace(/[^0-9]/g, ""))
-              );
+              handleChange(name, parseInt(value.replace(/[^0-9]/g, "")));
             }}
             value={data.sslcRegisterNo.toString()}
           />
@@ -652,6 +741,8 @@ export default function NewAdmission() {
             Month & Year of passing<Text style={styles.mandatory}>*</Text>
           </Text>
           <TextInputComponent
+            maxLength={7}
+            keyboardType="numeric"
             style={styles.input}
             name="sslcPassingTime"
             onChangeText={handleChange}
@@ -670,9 +761,12 @@ export default function NewAdmission() {
             Number<Text style={styles.mandatory}>*</Text>
           </Text>
           <TextInputComponent
+            keyboardType="numeric"
             style={styles.input}
             name="tcNumber"
-            onChangeText={handleChange}
+            onChangeText={(name, value) => {
+              handleChange(name, value);
+            }}
             value={data.tcNumber}
           />
         </View>
@@ -681,6 +775,7 @@ export default function NewAdmission() {
             Date<Text style={styles.mandatory}>*</Text>
           </Text>
           <TextInputComponent
+            keyboardType="numeric"
             style={styles.input}
             name="tcDate"
             onChangeText={handleChange}
