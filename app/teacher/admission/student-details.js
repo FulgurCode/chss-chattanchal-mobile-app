@@ -191,7 +191,6 @@ export default function StudentDetials() {
           borderWidth: 1,
           marginTop: 10,
           borderRadius: 10,
-          // padding: 10,
           backgroundColor: "#FAFAFC",
           marginBottom: 50,
         }}

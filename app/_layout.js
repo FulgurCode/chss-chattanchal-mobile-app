@@ -43,7 +43,6 @@ export default function Layout() {
               }
             }}
             onLongPress={() => {
-              // testing stage
               router.push("/");
             }}
             style={{

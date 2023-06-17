@@ -5,13 +5,10 @@ export default function Layout() {
   return (
     <Tabs
       screenOptions={{
-        // swipeEnabled: true,
         tabBarHideOnKeyboard: true,
         headerShown: false,
-        // tabBarLabelStyle: { fontSize: 15, color: "white" },
         tabBarShowLabel: false,
         tabBarStyle: {
-          // paddingBottom: 10,
           height: 50,
           backgroundColor: "#6A2C70",
         },
@@ -21,7 +18,6 @@ export default function Layout() {
       <Tabs.Screen
         name="student-details"
         options={{
-          // tabBarLabel: "Student details",
           tabBarIcon: () => (
             <MaterialCommunityIcons
               name="account-details"
@@ -34,7 +30,6 @@ export default function Layout() {
       <Tabs.Screen
         name="new-admission"
         options={{
-          // tabBarLabel: "New admission",
           tabBarIcon: () => (
             <Ionicons name="person-add" size={30} color="white" />
           ),
@@ -43,7 +38,6 @@ export default function Layout() {
       <Tabs.Screen
         name="verification"
         options={{
-          // tabBarLabel: "New admission",
           tabBarIcon: () => (
             <MaterialIcons name="pending" size={30} color="white" />
           ),
@@ -52,7 +46,6 @@ export default function Layout() {
       <Tabs.Screen
         name="confirmation"
         options={{
-          // tabBarLabel: "New admission",
           tabBarIcon: () => (
             <MaterialIcons name="verified" size={30} color="white" />
           ),

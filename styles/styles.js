@@ -88,8 +88,6 @@ const styles = StyleSheet.create({
     marginBottom: 50
   },
   table: {
-    // borderWidth: 1,
-    // borderColor: "red",
     borderRadius: 10,
     overflow: "hidden"
 
@@ -104,9 +102,7 @@ const styles = StyleSheet.create({
   tableBody:{
     borderWidth: 1,
     borderColor: "#ccc",
-    borderBottomWidth: 0
-    
-    // padding: 10
+    borderBottomWidth: 0,
   },
   tableRow:{
     flexDirection: "row"

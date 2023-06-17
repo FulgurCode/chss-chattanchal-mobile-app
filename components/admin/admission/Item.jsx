@@ -9,7 +9,6 @@ export default function Item(props) {
         style={{
           flexDirection: "row",
           alignItems: "center",
-          //   padding: 10,
           gap: 5,
         }}
         onPress={() => {

@@ -207,7 +207,6 @@ export default function Verification() {
             <TextInput
               style={{ ...styles.input, marginBottom: 20 }}
               placeholder="Search Name/Adm No"
-              // value={searchQuery}
               onChangeText={handleSearch}
             />
           </View>

@@ -10,7 +10,6 @@ export function AdminCheckLogin(setIsLoading, router, href) {
       }
     })
     .catch((err) => {
-    console.log("Admin Logged: ", err)
     setIsLoading(true)
       if (err.response==undefined){
         setTimeout(() => AdminCheckLogin(setIsLoading, router, href), 5000);
@@ -31,7 +30,6 @@ export function TeacherCheckLogin(setIsLoading, router, href) {
     }
   })
   .catch((err) => {
-    console.log("Teacher Logged: ", err)
     setIsLoading(true)
     if (err.response==undefined){
       setTimeout(() => TeacherCheckLogin(setIsLoading, router, href), 5000);

@@ -116,9 +116,6 @@ export default function Login() {
           setValue={setUserType}
           setItems={setItems}
           placeholder="Select user type"
-          // onChangeValue={(value) => {
-          //   console.log(value);
-          // }}
           style={{
             backgroundColor: "#FAFAFC",
             borderColor: "#dfdfdf",

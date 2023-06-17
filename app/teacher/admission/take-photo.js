@@ -53,10 +53,11 @@ export default function TakePhoto() {
 
   const router = useRouter();
 
+
   // Check Websocket connections
   if (webSocket) {
     webSocket.onerror = (event) => {
-      setError("Server connection error ", event);
+      setError("Server connection error");
     };
     webSocket.onopen = (event) => {
       setError();
@@ -69,7 +70,7 @@ export default function TakePhoto() {
       setFocus(true);
       if (webSocket) {
         setWebSocket(
-          new WebSocket("ws://192.168.162.147:9000/ws/admission-photo")
+          new WebSocket("wss://chattanchalhss.com/ws/admission-photo")
         );
       }
       return () => {
@@ -84,8 +85,6 @@ export default function TakePhoto() {
       appState.current = nextAppState;
       setAppStateVisible(appState.current);
     });
-
-    // AdminCheckLogin(setLoading, router.replace, (link = "/login"));
 
     return () => {
       subscription.remove();
@@ -103,7 +102,7 @@ export default function TakePhoto() {
   useEffect(() => {
     if (appState.current == "active" && focus) {
       setWebSocket(
-        new WebSocket("ws://192.168.162.147:9000/ws/admission-photo")
+        new WebSocket("wss://chattanchalhss.com/ws/admission-photo")
       );
     }
     return () => {};
@@ -336,7 +335,6 @@ export default function TakePhoto() {
         </View>
         {scanData &&
           (!imageData ? (
-            // <View style={{paddingTop: "25%",}}>
             <View
               style={{
                 alignItems: "center",

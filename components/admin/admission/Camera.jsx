@@ -67,7 +67,6 @@ export default function CameraScreen({ imageUri, setImageUri, setCamera }) {
         setType(CameraType.back);
       } catch (e) {
         setError(e);
-        console.log(e);
       }
     }
   };
@@ -94,8 +93,6 @@ export default function CameraScreen({ imageUri, setImageUri, setCamera }) {
       { compress: 0, format: "png", base64: true }
     );
 
-    // data = uri;
-    // setImageBase64(base64);
     setImageUri(uri);
     setProcessing(false);
   }
@@ -208,7 +205,6 @@ export default function CameraScreen({ imageUri, setImageUri, setCamera }) {
                 width: 320,
                 maxHeight: 320,
               }}
-              // type={type}
             ></Image>
           </View>
           <View
