@@ -1,8 +1,4 @@
-import {
-  Link,
-  useRouter,
-  useFocusEffect,
-} from "expo-router";
+import { Link, useRouter, useFocusEffect } from "expo-router";
 import React, { useEffect, useState } from "react";
 import { Alert, Button, SafeAreaView, Text, StyleSheet } from "react-native";
 import Axios from "../stores/Axios";
@@ -31,8 +27,6 @@ export default function Home() {
       })
       .catch((err) => {
         if (err.response == undefined) {
-          // console.log(err);
-
           setTimeout(() => CheckLogin(), 2000);
         }
       });
@@ -46,7 +40,6 @@ export default function Home() {
         }
       })
       .catch((err) => {
-        // console.log(err);
         if (err.response == undefined) {
           setTimeout(() => CheckLogin(), 2000);
         }
@@ -65,7 +58,6 @@ export default function Home() {
 
   useEffect(() => {
     if (redirect && focus) {
-      
       if (isAdminLoggedIn) {
         router.replace("/admin");
       } else if (isTeacherLoggedIn) {
@@ -75,14 +67,8 @@ export default function Home() {
           router.replace("/login");
         }
       }
-
     }
-  }, [
-    focus,
-    isAdminLoggedIn,
-    isTeacherLoggedIn,
-    redirect,
-  ]);
+  }, [focus, isAdminLoggedIn, isTeacherLoggedIn, redirect]);
 
   function Logout() {
     Axios.delete("admin/logout")
@@ -109,7 +95,9 @@ export default function Home() {
   return (
     <>
       {redirect ? (
-        <Loader show={true} />
+        <SafeAreaView style={{backgroundColor: "white", flex: 1}}>
+          <Loader show={true} />
+        </SafeAreaView>
       ) : (
         <SafeAreaView
           style={{

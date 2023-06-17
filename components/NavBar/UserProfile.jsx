@@ -10,7 +10,6 @@ import {
 import Axios from "../../stores/Axios";
 
 import { usePathname, useRouter, useNavigation } from "expo-router";
-// import { Actions } from 'react-native-router-flux';
 import { CommonActions } from "@react-navigation/native";
 
 
@@ -24,9 +23,6 @@ export default function UserProfile({ show, setShow }) {
     Axios.delete(`${pathname}/logout`)
       .then((res) => {
         setShow(false);
-        // navigation.popToTop();
-        // router.replace("/login");
-        // Actions.reset('index');
         navigation.dispatch(
           CommonActions.reset({
             index: 1,
@@ -64,7 +60,6 @@ export default function UserProfile({ show, setShow }) {
           <View
             style={{
               paddingVertical: 30,
-              //  paddingHorizontal: 100,
               gap: 20,
             }}
           >

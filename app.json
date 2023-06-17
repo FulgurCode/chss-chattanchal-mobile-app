@@ -6,7 +6,6 @@
     },
     "name": "chss-chattanchal-mobile-app",
     "slug": "chss-chattanchal-mobile-app",
-
     "plugins": [
       [
         "expo-barcode-scanner",
@@ -20,7 +19,14 @@
           "cameraPermission": "Allow $(PRODUCT_NAME) to access your camera."
         }
       ]
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "a63f791c-79a3-4907-b87e-cdf4646df12b"
+      }
+    },
+    "android": {
+      "package": "com.bblender70.chsschattanchalmobileapp"
+    }
   }
 }
-

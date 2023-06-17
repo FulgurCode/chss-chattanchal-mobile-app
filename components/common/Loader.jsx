@@ -1,6 +1,5 @@
 import {
   View,
-  // Text,
   Dimensions,
   StatusBar,
   ActivityIndicator,
@@ -35,7 +34,6 @@ const styles = StyleSheet.create({
     position: "absolute",
     width: Screen.width,
     height: Screen.height - STATUS_BAR_HEIGHT - 55,
-    // opacity: 0.5,
     justifyContent: "center",
     alignItems: "center",
     zIndex: 9999999,
