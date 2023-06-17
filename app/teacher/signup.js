@@ -74,7 +74,7 @@ export default function Login() {
         placeholder="Email"
         value={email}
         onChangeText={(text) => {
-          setEmail(text);
+          setEmail(text.trim());
           setError();
           setInputColor("#dfdfdf");
         }}
@@ -85,7 +85,7 @@ export default function Login() {
         value={password}
         secureTextEntry={true}
         onChangeText={(text) => {
-          setPassword(text);
+          setPassword(text.trim());
           setError();
           setInputColor("#dfdfdf");
         }}
