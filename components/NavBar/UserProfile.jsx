@@ -11,6 +11,7 @@ import Axios from "../../stores/Axios";
 
 import { usePathname, useRouter, useNavigation } from "expo-router";
 import { CommonActions } from "@react-navigation/native";
+import * as WebBrowser from 'expo-web-browser';
 
 
 
@@ -118,6 +119,16 @@ export default function UserProfile({ show, setShow }) {
               minWidth: "100%",
             }}
           >
+            <TouchableHighlight
+              underlayColor="#eee"
+              style={styles.button}
+              onPress={async ()=>{
+                let result = await WebBrowser.openBrowserAsync('https://chattanchalhss.com/login');
+                setShow(false);
+              }}
+            >
+              <Text style={{ alignSelf: "center" }}>Change Password</Text>
+            </TouchableHighlight>
             <TouchableHighlight
               underlayColor="#eee"
               style={styles.button}
