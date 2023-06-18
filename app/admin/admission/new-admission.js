@@ -46,6 +46,7 @@ export default function NewAdmission() {
   const [open4, setOpen4] = React.useState(false);
   const [open5, setOpen5] = React.useState(false);
   const [open6, setOpen6] = React.useState(false);
+  const [open7, setOpen7] = React.useState(false);
 
   const [disabled, setDisabled] = React.useState(false);
   const [isLoading, setIsLoading] = React.useState(false);
@@ -67,10 +68,14 @@ export default function NewAdmission() {
     linguisticMinority: "",
     obc: false,
     dob: "",
-    class: "",
+    class: 11,
     course: "",
     secondLanguage: "",
     status: "",
+
+    rank: "",
+    wgpa: "",
+    admissionCategory: "",
 
     sslcNameOfBoard: "",
     sslcRegisterNo: "",
@@ -110,8 +115,8 @@ export default function NewAdmission() {
           setError("");
           setIsLoading(true);
           setDisabled(true);
-
           Axois.post("/admin/new-admission", data)
+          
             .then((response) => {
               const formData = new FormData();
               formData.append("file", {
@@ -203,10 +208,14 @@ export default function NewAdmission() {
       linguisticMinority: "",
       obc: false,
       dob: "",
-      class: "",
+      class: 11,
       course: "",
       secondLanguage: "",
       status: "",
+
+      rank: "",
+      wgpa: "",
+      admissionCategory: "",
 
       sslcNameOfBoard: "",
       sslcRegisterNo: "",
@@ -334,7 +343,6 @@ export default function NewAdmission() {
             maxLength={10}
             value={data.admissionDate}
           />
-          {/* <DateField /> */}
         </View>
         <View>
           <Text style={styles.newAdmissionText}>
@@ -420,8 +428,7 @@ export default function NewAdmission() {
             }}
             dropDownContainerStyle={{
               borderColor: "#dfdfdf",
-              elevation: 4
-
+              elevation: 4,
             }}
           />
         </View>
@@ -542,8 +549,7 @@ export default function NewAdmission() {
             }}
             dropDownContainerStyle={{
               borderColor: "#dfdfdf",
-              elevation: 4
-
+              elevation: 4,
             }}
           />
         </View>
@@ -563,7 +569,7 @@ export default function NewAdmission() {
         </View>
 
         <View style={styles.divider} />
-        <View style={{ zIndex: 1002 }}>
+        <View style={{ zIndex: open3 ? 1000 : 1 }}>
           <Text style={styles.newAdmissionText}>
             Class<Text style={styles.mandatory}>*</Text>
           </Text>
@@ -593,12 +599,11 @@ export default function NewAdmission() {
             }}
             dropDownContainerStyle={{
               borderColor: "#dfdfdf",
-              elevation: 4
-
+              elevation: 4,
             }}
           />
         </View>
-        <View style={{ zIndex: 1001 }}>
+        <View style={{ zIndex: open4 ? 1000 : 1 }}>
           <Text style={styles.newAdmissionText}>
             Course<Text style={styles.mandatory}>*</Text>
           </Text>
@@ -636,12 +641,11 @@ export default function NewAdmission() {
             }}
             dropDownContainerStyle={{
               borderColor: "#dfdfdf",
-              elevation: 4
-
+              elevation: 4,
             }}
           />
         </View>
-        <View style={{ zIndex: 1000 }}>
+        <View style={{ zIndex: open5 ? 1000 : 1 }}>
           <Text style={styles.newAdmissionText}>
             Second language<Text style={styles.mandatory}>*</Text>
           </Text>
@@ -669,12 +673,11 @@ export default function NewAdmission() {
             }}
             dropDownContainerStyle={{
               borderColor: "#dfdfdf",
-              elevation: 4
-
+              elevation: 4,
             }}
           />
         </View>
-        <View style={{ zIndex: 999 }}>
+        <View style={{ zIndex: open6 ? 1000 : 1 }}>
           <Text style={styles.newAdmissionText}>
             Student Status<Text style={styles.mandatory}>*</Text>
           </Text>
@@ -701,13 +704,77 @@ export default function NewAdmission() {
             }}
             dropDownContainerStyle={{
               borderColor: "#dfdfdf",
-              elevation: 4
-
+              elevation: 4,
             }}
           />
         </View>
 
         <View style={styles.divider} />
+
+        <View>
+          <Text style={styles.newAdmissionText}>
+            WGPA<Text style={styles.mandatory}>*</Text>
+          </Text>
+          <TextInputComponent
+            keyboardType="numeric"
+            style={styles.input}
+            name="wgpa"
+            onChangeText={(name, value) => {
+              handleChange(name, parseInt(value.replace(/[^0-9]/g, "")));
+            }}
+            value={data.wgpa.toString()}
+          />
+        </View>
+        <View>
+          <Text style={styles.newAdmissionText}>
+            Rank<Text style={styles.mandatory}>*</Text>
+          </Text>
+          <TextInputComponent
+            keyboardType="numeric"
+            style={styles.input}
+            name="rank"
+            onChangeText={(name, value) => {
+              handleChange(name, parseInt(value.replace(/[^0-9]/g, "")));
+            }}
+            value={data.rank.toString()}
+          />
+        </View>
+        <View style={{ zIndex: open7 ? 1000 : 1 }}>
+          <Text style={styles.newAdmissionText}>
+            Admission category<Text style={styles.mandatory}>*</Text>
+          </Text>
+          <DropDownPicker
+            open={open7}
+            value={data.admissionCategory}
+            items={[
+              { label: "Merit", value: "Merit" },
+              { label: "Sports", value: "Sports" },
+              { label: "IED", value: "IED" },
+              { label: "Management", value: "Management" },
+            ]}
+            setOpen={setOpen7}
+            placeholder="Select category"
+            setValue={(value) => {
+              handleChange("admissionCategory", value());
+            }}
+            listMode="SCROLLVIEW"
+            style={{
+              backgroundColor: "#FAFAFC",
+              borderColor: "#dfdfdf",
+              borderRadius: 10,
+            }}
+            selectedItemContainerStyle={{
+              backgroundColor: "#f2f2f2",
+            }}
+            dropDownContainerStyle={{
+              borderColor: "#dfdfdf",
+              elevation: 4,
+            }}
+          />
+        </View>
+
+        <View style={styles.divider} />
+
         <Text style={styles.newAdmissionHeading}>
           Details of Qualifiying Examination
         </Text>
@@ -747,7 +814,7 @@ export default function NewAdmission() {
             name="sslcPassingTime"
             onChangeText={handleChange}
             placeholder="mm-yyyy / month-yyyy"
-            value={data.sslcPassingTime}
+            value={data.sslcPassingTime.toString()}
           />
         </View>
 
@@ -765,9 +832,9 @@ export default function NewAdmission() {
             style={styles.input}
             name="tcNumber"
             onChangeText={(name, value) => {
-              handleChange(name, value);
+              handleChange(name, parseInt(value.replace(/[^0-9]/g, "")));
             }}
-            value={data.tcNumber}
+            value={data.tcNumber.toString()}
           />
         </View>
         <View>
