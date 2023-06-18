@@ -1,7 +1,33 @@
 import { Tabs } from "expo-router";
-import { Ionicons, MaterialCommunityIcons, MaterialIcons, FontAwesome } from "@expo/vector-icons";
+import {
+  Ionicons,
+  MaterialCommunityIcons,
+  MaterialIcons,
+  FontAwesome,
+} from "@expo/vector-icons";
+import Axios from "../../../stores/Axios";
+import { useState, useEffect } from "react";
 
 export default function Layout() {
+  const [verification, setVerification] = useState(false);
+  const [details, setDetails] = useState(false);
+
+  function CheckDuty() {
+    Axios.get(`/teacher/get-all-duty`)
+      .then((response) => {
+        response.data.map((object) => {
+          if (object.duty == "add-details") {
+            setDetails(true);
+          }
+          if (object.duty == "verification") {
+            setVerification(true);
+          }
+        });
+      })
+      .catch((error) => {});
+  }
+  useEffect(() => CheckDuty(), []);
+
   return (
     <Tabs
       screenOptions={{
@@ -11,6 +37,7 @@ export default function Layout() {
         tabBarStyle: {
           height: 50,
           backgroundColor: "#6A2C70",
+          borderTopWidth: 0,
         },
         tabBarActiveBackgroundColor: "#461d4a",
       }}
@@ -29,19 +56,27 @@ export default function Layout() {
       />
       <Tabs.Screen
         name="new-admission"
-        options={{
-          tabBarIcon: () => (
-            <Ionicons name="person-add" size={30} color="white" />
-          ),
-        }}
+        options={
+          details
+            ? {
+                tabBarIcon: () => (
+                  <Ionicons name="person-add" size={30} color="white" />
+                ),
+              }
+            : { href: null }
+        }
       />
       <Tabs.Screen
         name="verification"
-        options={{
-          tabBarIcon: () => (
-            <MaterialIcons name="pending" size={30} color="white" />
-          ),
-        }}
+        options={
+          verification
+            ? {
+                tabBarIcon: () => (
+                  <MaterialIcons name="pending" size={30} color="white" />
+                ),
+              }
+            : { href: null }
+        }
       />
       <Tabs.Screen
         name="take-photo"
