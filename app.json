@@ -1,5 +1,11 @@
 {
   "expo": {
+    "splash": {
+      "backgroundColor": "#ffffff",
+      "image": "./imgs/icons/splash.png",
+      "resizeMode" : "contain"
+    },
+    "icon": "./imgs/icons/icon.png",
     "scheme": "acme",
     "web": {
       "bundler": "metro"
@@ -26,7 +32,11 @@
       }
     },
     "android": {
-      "package": "com.bblender70.chsschattanchalmobileapp"
+      "package": "com.bblender70.chsschattanchalmobileapp",
+      "adaptiveIcon": {
+        "foregroundImage":"./imgs/icons/adaptive-icon.png",
+        "backgroundColor":"#ffffff"
+      }
     }
   }
 }
