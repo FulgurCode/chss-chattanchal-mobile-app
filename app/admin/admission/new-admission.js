@@ -73,8 +73,8 @@ export default function NewAdmission() {
     secondLanguage: "",
     status: "",
 
-    rank: "",
-    wgpa: "",
+    rank: NaN,
+    wgpa: NaN,
     admissionCategory: "",
 
     sslcNameOfBoard: "",
@@ -181,7 +181,7 @@ export default function NewAdmission() {
 
   function isEmpty() {
     for (const key in data) {
-      if (key === "linguisticMinority") {
+      if (key === "linguisticMinority" || key === "wgpa" || key === "rank") {
         continue;
       } else if (data[key] === "") {
         return true;
@@ -213,8 +213,8 @@ export default function NewAdmission() {
       secondLanguage: "",
       status: "",
 
-      rank: "",
-      wgpa: "",
+      rank: NaN,
+      wgpa: NaN,
       admissionCategory: "",
 
       sslcNameOfBoard: "",
@@ -713,7 +713,7 @@ export default function NewAdmission() {
 
         <View>
           <Text style={styles.newAdmissionText}>
-            WGPA<Text style={styles.mandatory}>*</Text>
+            WGPA
           </Text>
           <TextInputComponent
             keyboardType="numeric"
@@ -722,12 +722,12 @@ export default function NewAdmission() {
             onChangeText={(name, value) => {
               handleChange(name, parseInt(value.replace(/[^0-9]/g, "")));
             }}
-            value={data.wgpa.toString()}
+            value={ isNaN(data.wgpa) ? "" : data.wgpa.toString()}
           />
         </View>
         <View>
           <Text style={styles.newAdmissionText}>
-            Rank<Text style={styles.mandatory}>*</Text>
+            Rank
           </Text>
           <TextInputComponent
             keyboardType="numeric"
@@ -736,7 +736,7 @@ export default function NewAdmission() {
             onChangeText={(name, value) => {
               handleChange(name, parseInt(value.replace(/[^0-9]/g, "")));
             }}
-            value={data.rank.toString()}
+            value={isNaN(data.rank) ? "" :data.rank.toString()}
           />
         </View>
         <View style={{ zIndex: open7 ? 1000 : 1 }}>
