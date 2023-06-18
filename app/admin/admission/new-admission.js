@@ -47,6 +47,7 @@ export default function NewAdmission() {
   const [open5, setOpen5] = React.useState(false);
   const [open6, setOpen6] = React.useState(false);
   const [open7, setOpen7] = React.useState(false);
+  const [open8, setOpen8] = React.useState(false);
 
   const [disabled, setDisabled] = React.useState(false);
   const [isLoading, setIsLoading] = React.useState(false);
@@ -500,15 +501,40 @@ export default function NewAdmission() {
             value={data.caste}
           />
         </View>
-        <View>
+        <View style={{zIndex: open8 ? 1000 : 1}}>
           <Text style={styles.newAdmissionText}>
             Category<Text style={styles.mandatory}>*</Text>
           </Text>
-          <TextInputComponent
-            style={styles.input}
-            name="category"
-            onChangeText={handleChange}
+          <DropDownPicker
+            open={open8}
             value={data.category}
+            placeholder="Select a category"
+            items={[
+              { label: "general", value: "general",},
+              { label: "HinOBC", value: "HinOBC" },
+              { label: "ChristOBC", value: "ChristOBC" },
+              { label: "OEC", value: "OEC" },
+              { label: "muslim", value: "muslim" },
+              { label: "SC", value: "SC" },
+              { label: "ST", value: "ST" },
+            ]}
+            setOpen={setOpen8}
+            setValue={(value) => {
+              handleChange("category", value());
+            }}
+            listMode="SCROLLVIEW"
+            style={{
+              backgroundColor: "#FAFAFC",
+              borderColor: "#dfdfdf",
+              borderRadius: 10,
+            }}
+            selectedItemContainerStyle={{
+              backgroundColor: "#f2f2f2",
+            }}
+            dropDownContainerStyle={{
+              borderColor: "#dfdfdf",
+              elevation: 4,
+            }}
           />
         </View>
         <View>
