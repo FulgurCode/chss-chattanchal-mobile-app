@@ -3,14 +3,14 @@
     "splash": {
       "backgroundColor": "#ffffff",
       "image": "./imgs/icons/splash.png",
-      "resizeMode" : "contain"
+      "resizeMode": "contain"
     },
     "icon": "./imgs/icons/icon.png",
     "scheme": "acme",
     "web": {
       "bundler": "metro"
     },
-    "name": "chss-chattanchal-mobile-app",
+    "name": "CHSS Mobile",
     "slug": "chss-chattanchal-mobile-app",
     "plugins": [
       [
@@ -28,15 +28,19 @@
     ],
     "extra": {
       "eas": {
-        "projectId": "a63f791c-79a3-4907-b87e-cdf4646df12b"
+        "projectId": "e22dcded-621c-4abf-acd3-b4c226224ec6"
       }
     },
     "android": {
-      "package": "com.bblender70.chsschattanchalmobileapp",
+      "package": "com.fulgurcode.chsschattanchalmobileapp",
       "adaptiveIcon": {
-        "foregroundImage":"./imgs/icons/adaptive-icon.png",
-        "backgroundColor":"#ffffff"
-      }
+        "foregroundImage": "./imgs/icons/adaptive-icon.png",
+        "backgroundColor": "#ffffff"
+      },
+      "permissions": [
+        "android.permission.CAMERA",
+        "android.permission.RECORD_AUDIO"
+      ]
     }
   }
 }
