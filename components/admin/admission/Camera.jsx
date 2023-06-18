@@ -90,7 +90,7 @@ export default function CameraScreen({ imageUri, setImageUri, setCamera }) {
         },
         { resize: { width: 320 } },
       ],
-      { compress: 0, format: "png", base64: true }
+      { compress: 1, format: "jpeg", base64: true }
     );
 
     setImageUri(uri);

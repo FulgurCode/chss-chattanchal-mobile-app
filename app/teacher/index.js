@@ -36,7 +36,6 @@ export default function Admin() {
             router.push("/teacher/admission");
           }}
         />
-        {/* <TileCard source={admissionImg} text="Attendence" /> */}
       </View>
     </SafeAreaView>
     </>
