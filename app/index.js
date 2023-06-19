@@ -13,7 +13,7 @@ export default function Home() {
 
   const [focus, setFocus] = useState();
 
-  const [redirect, setRedirect] = useState(true);
+  const [redirect, setRedirect] = useState(false);
   // Change this to see the home screen
 
   function CheckLogin() {
@@ -130,6 +130,9 @@ export default function Home() {
           <Link href="admin/admission/take-photo">
             <Text> </Text>/admin/admission/take-photo
           </Link>
+          <Link href="admin/admission/edit-students">
+            <Text> </Text>/admin/admission/edit-students
+          </Link>
 
           <Link href="/teacher">/teacher</Link>
           <Link href="/teacher/signup">
@@ -154,7 +157,7 @@ export default function Home() {
             <Text> </Text>/teacher/admission/verification
           </Link>
           <Link href="teacher/admission/take-photo">
-            <Text> </Text>/admin/admission/take-photo
+            <Text> </Text>/teacher/admission/take-photo
           </Link>
 
           <Button title="Logout" onPress={Logout} />

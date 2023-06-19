@@ -1,4 +1,4 @@
-import { View, Text, ScrollView, Image } from "react-native";
+import { View, Text, ScrollView, Image, TouchableOpacity } from "react-native";
 import { useSearchParams } from "expo-router";
 import styles from "../../../styles/styles";
 import { useEffect, useState } from "react";
@@ -320,6 +320,25 @@ export default function Profile() {
               <Text style={{ flex: 1 }}> {data.sslcRegisterNo}</Text>
             </View>
           )}
+
+          <TouchableOpacity
+            style={{
+              backgroundColor: "lightblue",
+              borderRadius: 5,
+              padding: 10,
+              alignItems: "center",
+            }}
+            onPress={() => {
+              router.push({
+                pathname: "/admin/admission/edit-students",
+                params: {
+                  _id : data._id,
+                },
+              });
+            }}
+          >
+            <Text style={{ fontWeight: 500 }}>Edit Student</Text>
+          </TouchableOpacity>
         </View>
       </ScrollView>
     </>
