@@ -1,4 +1,4 @@
-import { View, Text, ScrollView, Image } from "react-native";
+import { View, Text, ScrollView, Image, TouchableOpacity } from "react-native";
 import { useSearchParams } from "expo-router";
 import styles from "../../../styles/styles";
 import { useEffect, useState } from "react";
@@ -12,10 +12,12 @@ import { useRouter } from "expo-router";
 export default function Profile() {
   const [img, setImg] = useState(profileImg);
   const [loading, setLoading] = useState(true);
+  const [detailsPermission, setDetailsPerimission] = useState(false);
 
   const data = useSearchParams();
   const router = useRouter();
   useEffect(() => TeacherCheckLogin(setLoading, router.replace, "/login"), []);
+  useEffect(CheckDuty, [loading]);
 
   function getImg() {
     Axios.get(`teacher/get-student-photo?studentId=${data._id}`)
@@ -29,6 +31,14 @@ export default function Profile() {
           setImg(profileImg);
         }
       });
+  }
+
+  function CheckDuty() {
+    Axios.get("/teacher/have-duty?duty=add-details")
+      .then((res) => {
+        setDetailsPerimission(res.data);
+      })
+      .catch((err) => {});
   }
 
   useEffect(getImg, [data]);
@@ -319,6 +329,26 @@ export default function Profile() {
               <Text style={{ flex: 1 }}>Register No:</Text>
               <Text style={{ flex: 1 }}> {data.sslcRegisterNo}</Text>
             </View>
+          )}
+          {detailsPermission && (
+            <TouchableOpacity
+              style={{
+                backgroundColor: "lightblue",
+                borderRadius: 5,
+                padding: 10,
+                alignItems: "center",
+              }}
+              onPress={() => {
+                router.push({
+                  pathname: "/teacher/admission/edit-students",
+                  params: {
+                    _id: data._id,
+                  },
+                });
+              }}
+            >
+              <Text style={{ fontWeight: 500 }}>Edit Student</Text>
+            </TouchableOpacity>
           )}
         </View>
       </ScrollView>

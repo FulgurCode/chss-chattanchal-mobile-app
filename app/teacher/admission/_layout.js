@@ -92,6 +92,12 @@ export default function Layout() {
           href: null,
         }}
       />
+      <Tabs.Screen
+        name="edit-students"
+        options={{
+          href: null,
+        }}
+      />
     </Tabs>
   );
 }
