@@ -125,49 +125,15 @@ export default function EditStudents() {
   }
 
   function handleClick() {
-    const regddmmyyyy =
-      /^(0[1-9]|[12][0-9]|3[01])[- /.](0[1-9]|1[012])[- /.](19|20)\d\d$/;
-    const regmonthyyyy =
-      /^(january|jan|01|february|feb|02|march|mar|03|april|apr|04|may|05|june|jun|06|july|jul|07|august|aug|08|september|sep|09|october|oct|10|november|nov|11|december|dec|12)-(\d{4})$/i;
-
     if (data.linguisticMinority === "") {
       delete data.linguisticMinority;
     }
 
-    if (
-      regddmmyyyy.test(data.admissionDate) &&
-      regddmmyyyy.test(data.dob) &&
-      regddmmyyyy.test(data.tcDate)
-    ) {
-      if (regmonthyyyy.test(data.sslcPassingTime)) {
+
         if (!isEmpty()) {
           setError("");
           setIsLoading(true);
           setDisabled(true);
-
-        //   Axios.put(`admin/edit-student?studentId=${id}`, data)
-        // .then(() => {
-        //   if (filePhoto) {
-        //     const formData = new FormData();
-        //     formData.append("file", filePhoto);
-
-        //     Axios.post(
-        //       `admin/upload-student-photo?studentId=${id}`,
-        //       formData
-        //     ).catch((err) => {
-        //       if (err.response.status == 413) {
-        //         alert("File size is too large");
-        //       }
-        //     });
-        //   }
-
-        //   setPopup(!popup);
-        //   setData(dataTemplete);
-        //   setFilePhotoURL("");
-        //   setGlobal(true);
-        //   history.back();
-        // })
-        // .catch((err) => {});
 
           Axois.put(`admin/edit-student?studentId=${params._id}`, data)
           
@@ -228,12 +194,6 @@ export default function EditStudents() {
         } else {
           setError("Check all field for empty data");
         }
-      } else {
-        setError("Check Date field of Month and year of passing");
-      }
-    } else {
-      setError("Check Date field of Admission date, Dob , or Date");
-    }
   }
 
   function isEmpty() {
@@ -916,10 +876,11 @@ export default function EditStudents() {
             keyboardType="numeric"
             style={styles.input}
             name="tcNumber"
-            onChangeText={(name, value) => {
-              handleChange(name, parseInt(value.replace(/[^0-9]/g, "")));
-            }}
-            value={data.tcNumber?.toString()}
+            // onChangeText={(name, value) => {
+            //   handleChange(name, parseInt(value.replace(/[^0-9]/g, "")));
+            // }}
+            onChangeText={handleChange}
+            value={data.tcNumber}
           />
         </View>
         <View>

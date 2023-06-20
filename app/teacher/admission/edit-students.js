@@ -21,7 +21,6 @@ import * as ImagePicker from "expo-image-picker";
 import * as ImageManipulator from "expo-image-manipulator";
 import { useFocusEffect } from "@react-navigation/native";
 import { useSearchParams } from "expo-router";
-import { useNavigation } from "expo-router";
 
 import Camera from "../../../components/admin/admission/Camera";
 
@@ -99,6 +98,9 @@ export default function EditStudents() {
       };
     }, [])
   );
+    
+    useEffect(getData, [focus])
+
 
   function getData() {
     Axois.get(`teacher/get-student?studentId=${params._id}`)
@@ -120,24 +122,16 @@ export default function EditStudents() {
       })
 
       .catch((err) => {});
+
+      console.log("run")
   }
 
   function handleClick() {
-    const regddmmyyyy =
-      /^(0[1-9]|[12][0-9]|3[01])[- /.](0[1-9]|1[012])[- /.](19|20)\d\d$/;
-    const regmonthyyyy =
-      /^(january|jan|01|february|feb|02|march|mar|03|april|apr|04|may|05|june|jun|06|july|jul|07|august|aug|08|september|sep|09|october|oct|10|november|nov|11|december|dec|12)-(\d{4})$/i;
-
     if (data.linguisticMinority === "") {
       delete data.linguisticMinority;
     }
 
-    if (
-      regddmmyyyy.test(data.admissionDate) &&
-      regddmmyyyy.test(data.dob) &&
-      regddmmyyyy.test(data.tcDate)
-    ) {
-      if (regmonthyyyy.test(data.sslcPassingTime)) {
+
         if (!isEmpty()) {
           setError("");
           setIsLoading(true);
@@ -175,8 +169,13 @@ export default function EditStudents() {
 
               Alert.alert("Status", "new admission sucssesfull");
               setIsLoading(false);
-              makeEmpty();
               setDisabled(false);
+              router.push({
+                pathname: "teacher/admission/profile",
+                params: {
+                  _id: params._id
+                },
+              });
             })
             .catch((err) => {
               setIsLoading(false);
@@ -201,12 +200,6 @@ export default function EditStudents() {
         } else {
           setError("Check all field for empty data");
         }
-      } else {
-        setError("Check Date field of Month and year of passing");
-      }
-    } else {
-      setError("Check Date field of Admission date, Dob , or Date");
-    }
   }
 
   function isEmpty() {
@@ -269,7 +262,6 @@ export default function EditStudents() {
   useEffect(() => {
     TeacherCheckLogin(setLoading, router.replace, (link = "/login"));
 
-    getData();
   }, []);
 
   const showImagePicker = async () => {
@@ -314,7 +306,6 @@ export default function EditStudents() {
 
   return (
     <>
-      {focus && getData()}
       <Loader show={loading} />
 
       <ScrollView
@@ -900,13 +891,11 @@ export default function EditStudents() {
             Number<Text style={styles.mandatory}>*</Text>
           </Text>
           <TextInputComponent
-            keyboardType="numeric"
+            // keyboardType="numeric"
             style={styles.input}
             name="tcNumber"
-            onChangeText={(name, value) => {
-              handleChange(name, parseInt(value.replace(/[^0-9]/g, "")));
-            }}
-            value={data.tcNumber?.toString()}
+            onChangeText={handleChange}
+            value={data.tcNumber}
           />
         </View>
         <View>

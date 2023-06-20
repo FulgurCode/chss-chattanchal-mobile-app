@@ -857,10 +857,8 @@ export default function NewAdmission() {
             keyboardType="numeric"
             style={styles.input}
             name="tcNumber"
-            onChangeText={(name, value) => {
-              handleChange(name, parseInt(value.replace(/[^0-9]/g, "")));
-            }}
-            value={data.tcNumber.toString()}
+            onChangeText={handleChange}
+            value={data.tcNumber}
           />
         </View>
         <View>

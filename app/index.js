@@ -13,7 +13,7 @@ export default function Home() {
 
   const [focus, setFocus] = useState();
 
-  const [redirect, setRedirect] = useState(false);
+  const [redirect, setRedirect] = useState(true);
   // Change this to see the home screen
 
   function CheckLogin() {
