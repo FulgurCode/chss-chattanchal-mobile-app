@@ -98,9 +98,12 @@ export default function EditStudents() {
       };
     }, [])
   );
-    
-    useEffect(getData, [focus])
 
+  useFocusEffect(
+    React.useCallback(() => {
+      getData();
+    }, [])
+  );
 
   function getData() {
     Axois.get(`teacher/get-student?studentId=${params._id}`)
@@ -114,6 +117,7 @@ export default function EditStudents() {
       })
       .catch((err) => {
         setError(err.res.data);
+        throw Error;
       });
 
     Axois.get(`teacher/get-student-photo?studentId=${params._id}`)
@@ -123,7 +127,7 @@ export default function EditStudents() {
 
       .catch((err) => {});
 
-      console.log("run")
+    console.log("run");
   }
 
   function handleClick() {
@@ -131,75 +135,61 @@ export default function EditStudents() {
       delete data.linguisticMinority;
     }
 
+    if (!isEmpty()) {
+      setError("");
+      setIsLoading(true);
+      setDisabled(true);
 
-        if (!isEmpty()) {
-          setError("");
-          setIsLoading(true);
-          setDisabled(true);
+      Axois.put(`teacher/edit-student?studentId=${params._id}`, data)
 
-          Axois.put(`teacher/edit-student?studentId=${params._id}`, data)
+        .then((response) => {
+          const formData = new FormData();
+          formData.append("file", {
+            uri: imageUri,
+            type: "image/png",
+            name: "file.png",
+          });
 
-            .then((response) => {
-              const formData = new FormData();
-              formData.append("file", {
-                uri: imageUri,
-                type: "image/png",
-                name: "file.png",
-              });
+          Axois.post(
+            `teacher/upload-student-photo?studentId=${params._id}`,
+            formData,
+            { headers: { "Content-Type": "multipart/form-data" } }
+          ).catch((err) => {
+            if (err?.response?.status == 401) {
+              Alert.alert("Status", err.response.data);
+            } else if (err?.response?.status == 500) {
+              Alert.alert("Status", err.response.data, "Internal server error");
+            } else if (err?.response?.status === undefined) {
+              Alert.alert("Status", "Server connection error");
+            } else {
+              Alert.alert("Status", err.response.data);
+            }
+          });
 
-              Axois.post(
-                `teacher/upload-student-photo?studentId=${params._id}`,
-                formData,
-                { headers: { "Content-Type": "multipart/form-data" } }
-              ).catch((err) => {
-                if (err?.response?.status == 401) {
-                  Alert.alert("Status", err.response.data);
-                } else if (err?.response?.status == 500) {
-                  Alert.alert(
-                    "Status",
-                    err.response.data,
-                    "Internal server error"
-                  );
-                } else if (err?.response?.status === undefined) {
-                  Alert.alert("Status", "Server connection error");
-                } else {
-                  Alert.alert("Status", err.response.data);
-                }
-              });
+          Alert.alert("Status", "new admission sucssesfull");
+          setIsLoading(false);
+          setDisabled(false);
+          router.back()
+        })
+        .catch((err) => {
+          setIsLoading(false);
+          setDisabled(false);
 
-              Alert.alert("Status", "new admission sucssesfull");
-              setIsLoading(false);
-              setDisabled(false);
-              router.push({
-                pathname: "teacher/admission/profile",
-                params: {
-                  _id: params._id
-                },
-              });
-            })
-            .catch((err) => {
-              setIsLoading(false);
-              setDisabled(false);
+          console.log(`teacher/edit-student?studentId=${params._id}`);
 
-              console.log(`teacher/edit-student?studentId=${params._id}`);
-
-              if (err?.response?.status == 401) {
-                Alert.alert("Status", err.response.data);
-              } else if (err?.response?.status == 500) {
-                Alert.alert(
-                  "Status",
-                  err.response.data,
-                  "Internal server error"
-                );
-              } else if (err?.response?.status === undefined) {
-                Alert.alert("Status", "Server connection error");
-              } else {
-                Alert.alert("Status", err.response.data);
-              }
-            });
-        } else {
-          setError("Check all field for empty data");
-        }
+          if (err?.response?.status == 401) {
+            Alert.alert("Status", err.response.data);
+          } else if (err?.response?.status == 500) {
+            Alert.alert("Status", err.response.data, "Internal server error");
+          } else if (err?.response?.status === undefined) {
+            Alert.alert("Status", "Server connection error");
+          } else {
+            Alert.alert("Status", err.response.data);
+          }
+        });
+    } else {
+      setError("Check all field for empty data");
+    }
   }
 
   function isEmpty() {
@@ -261,7 +251,6 @@ export default function EditStudents() {
   const [loading, setLoading] = useState(true);
   useEffect(() => {
     TeacherCheckLogin(setLoading, router.replace, (link = "/login"));
-
   }, []);
 
   const showImagePicker = async () => {
@@ -434,7 +423,7 @@ export default function EditStudents() {
           <DropDownPicker
             disabled={data.import == true}
             disabledStyle={{
-              opacity: 0.5
+              opacity: 0.5,
             }}
             open={open1}
             value={data.gender}
@@ -538,7 +527,7 @@ export default function EditStudents() {
           <DropDownPicker
             disabled={data.import == true}
             disabledStyle={{
-              opacity: 0.5
+              opacity: 0.5,
             }}
             open={open8}
             value={data.category}
@@ -805,7 +794,7 @@ export default function EditStudents() {
           <DropDownPicker
             disabled={data.import == true}
             disabledStyle={{
-              opacity: 0.5
+              opacity: 0.5,
             }}
             open={open7}
             value={data.admissionCategory}

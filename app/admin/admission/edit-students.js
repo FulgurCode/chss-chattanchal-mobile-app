@@ -21,7 +21,6 @@ import * as ImagePicker from "expo-image-picker";
 import * as ImageManipulator from "expo-image-manipulator";
 import { useFocusEffect } from "@react-navigation/native"
 import { useSearchParams } from "expo-router";
-import {useNavigation} from "expo-router"
 
 import Camera from "../../../components/admin/admission/Camera";
 
@@ -35,7 +34,6 @@ const TextInputComponent = ({ value, onChangeText, name, ...props }) => (
 
 export default function EditStudents() {
   router = useRouter();
-  navigation = useNavigation();
 
   const params = useSearchParams();
 
@@ -100,8 +98,14 @@ export default function EditStudents() {
       };
     }, [])
   );
+  useFocusEffect(
+    React.useCallback(() => {
+      getData();
+    }, [])
+  );
 
   function getData() {
+    console.log("run")
     Axois.get(`admin/get-student?studentId=${params._id}`)
       .then((res) => {
 
@@ -168,8 +172,9 @@ export default function EditStudents() {
 
               Alert.alert("Status", "new admission sucssesfull");
               setIsLoading(false);
-              makeEmpty();
+              // makeEmpty();
               setDisabled(false);
+              router.back()
             })
             .catch((err) => {
               setIsLoading(false);
@@ -255,9 +260,9 @@ export default function EditStudents() {
   const [loading, setLoading] = useState(true);
   useEffect(() => {
     AdminCheckLogin(setLoading, router.replace, (link = "/login"));
-
-    getData();
   }, []);
+
+
 
   const showImagePicker = async () => {
     // Ask the user for the permission to access the media library
@@ -301,7 +306,6 @@ export default function EditStudents() {
 
   return (
     <>
-    {focus && getData()}
       <Loader show={loading} />
 
       <ScrollView
