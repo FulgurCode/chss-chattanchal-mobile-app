@@ -16,18 +16,23 @@ import { CommonActions } from "@react-navigation/native";
 import * as WebBrowser from "expo-web-browser";
 
 export default function UserProfile({ show, setShow }) {
-  const { styles } = useContext(Context);
+  const { styles, setIsAdminLoggedIn, setIsTeacherLoggedIn } = useContext(Context);
   const navigation = useNavigation();
   const pathname = usePathname().split("/")[1];
 
   function Logout() {
     Axios.delete(`${pathname}/logout`)
       .then((res) => {
+        if(pathname=="admin"){
+          setIsAdminLoggedIn(false)
+        }else if (pathname=="teacher"){
+          setIsTeacherLoggedIn(false)
+        }
         setShow(false);
         navigation.dispatch(
           CommonActions.reset({
             index: 1,
-            routes: [{ name: "index" }],
+            routes: [{ name: "login" }],
           })
         );
       })

@@ -1,5 +1,6 @@
 import { Camera, CameraType } from "expo-camera";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useContext } from "react";
+import { Context } from "../../../stores/Context";
 import {
   StyleSheet,
   Text,
@@ -8,6 +9,7 @@ import {
   Dimensions,
   StatusBar,
   Image,
+  Modal
 } from "react-native";
 import { MaterialCommunityIcons, Ionicons, FontAwesome5 } from "@expo/vector-icons";
 
@@ -17,12 +19,13 @@ import * as ImageManipulator from "expo-image-manipulator";
 let Screen = Dimensions.get("window");
 const STATUS_BAR_HEIGHT = StatusBar.currentHeight || 24;
 
-export default function CameraScreen({ imageUri, setImageUri, setCamera }) {
+export default function CameraScreen(props) {
   const [type, setType] = useState(CameraType.back);
   const [flash, setFlash] = useState(Camera.Constants.FlashMode.off);
   const [hasPermission, setHasPermission] = Camera.useCameraPermissions();
   const [error, setError] = useState("");
   const [processing, setProcessing] = useState(false);
+  const {styles} = useContext(Context)
 
   const [imageData, setImageData] = useState();
 
@@ -93,18 +96,18 @@ export default function CameraScreen({ imageUri, setImageUri, setCamera }) {
       { compress: 1, format: "jpeg", base64: true }
     );
 
-    setImageUri(uri);
+    props.setImageUri(uri);
     setProcessing(false);
   }
 
   return (
-    <>
+    <Modal {...props}>
       {!imageData ? (
         <View
           style={{
             position: "absolute",
             flex: 1,
-            backgroundColor: "white",
+            backgroundColor: styles.common.backgroundColor,
             zIndex: 5,
             width: "100%",
             height: "100%",
@@ -165,8 +168,8 @@ export default function CameraScreen({ imageUri, setImageUri, setCamera }) {
             <TouchableOpacity
               onPress={takePicture}
               style={{
-                backgroundColor: "#ddd",
-                borderColor: "#bbb",
+                backgroundColor: styles.common.inputBackground,
+                borderColor: styles.common.borderColor,
                 borderWidth: 5,
                 width: 80,
                 minHeight: 80,
@@ -180,7 +183,7 @@ export default function CameraScreen({ imageUri, setImageUri, setCamera }) {
           style={{
             position: "absolute",
             flex: 1,
-            backgroundColor: "white",
+            backgroundColor: styles.common.backgroundColor,
             zIndex: 5,
             width: "100%",
             height: "100%",
@@ -198,14 +201,15 @@ export default function CameraScreen({ imageUri, setImageUri, setCamera }) {
               alignItems: "center",
             }}
           >
+            <View style={{borderRadius: 20, overflow: "hidden"}}>
             <Image
-              source={{ uri: imageUri }}
+              source={{ uri: props.imageUri }}
               style={{
                 flex: 1,
                 width: 320,
                 maxHeight: 320,
               }}
-            ></Image>
+            ></Image></View>
           </View>
           <View
             style={{
@@ -222,7 +226,7 @@ export default function CameraScreen({ imageUri, setImageUri, setCamera }) {
               style={{
                 width: Screen.width / 5,
                 height: Screen.width / 5,
-                backgroundColor: "#ccc",
+                backgroundColor: styles.common.inputBackground,
                 borderRadius: 1000,
                 justifyContent: "center",
                 alignItems: "center",
@@ -235,17 +239,16 @@ export default function CameraScreen({ imageUri, setImageUri, setCamera }) {
               />
             </TouchableOpacity>
             <TouchableOpacity
-              onPress={()=>{setCamera(false)}}
+              onPress={()=>{props.setCamera(false); setImageData()}}
               style={{
                 width: Screen.width / 5,
                 height: Screen.width / 5,
-                backgroundColor: "#ccc",
+                backgroundColor: styles.common.inputBackground,
                 borderRadius: 1000,
                 justifyContent: "center",
                 paddingLeft: 26,
               }}
             >
-              {/* <Ionicons name="send" size={35} color="#555" /> */}
               <FontAwesome5 name="check" size={35} color="#555" />
               {/* <ActivityIndicator
                 animating={sending}
@@ -264,7 +267,7 @@ export default function CameraScreen({ imageUri, setImageUri, setCamera }) {
           </Text>
         </View>
       )}
-    </>
+    </Modal>
   );
 }
 

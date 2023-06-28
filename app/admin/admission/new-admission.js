@@ -8,6 +8,7 @@ import {
   ScrollView,
   TouchableOpacity,
   ActivityIndicator,
+  StatusBar,
 } from "react-native";
 import admissionImg from "../../../imgs/adminImages/item1.png";
 import Hero from "../../../components/common/Hero";
@@ -33,7 +34,7 @@ const TextInputComponent = ({ value, onChangeText, name, ...props }) => (
 export default function NewAdmission() {
   router = useRouter();
 
-  const [imageUri, setImageUri] = useState();
+  const [imageUri, setImageUri] = useState(undefined);
   const { styles, isAdminLoggedIn } = useContext(Context);
 
   if (!isAdminLoggedIn) {
@@ -42,6 +43,12 @@ export default function NewAdmission() {
 
   const [camera, setCamera] = React.useState(false);
   const [focus, setFocus] = React.useState(false);
+
+  if (camera) {
+    StatusBar.setBackgroundColor("#000");
+  } else {
+    StatusBar.setBackgroundColor(styles.common.primaryColor);
+  }
 
   // For drop down
   const [open1, setOpen1] = React.useState(false);
@@ -239,7 +246,6 @@ export default function NewAdmission() {
       [name]: value,
     }));
   }
-
 
   const showImagePicker = async () => {
     // Ask the user for the permission to access the media library
@@ -764,10 +770,20 @@ export default function NewAdmission() {
           />
         </View>
         <View style={styles.divider} />
-        <View style={{ alignItems: "center" }}>
+        <View
+          style={{
+            alignItems: "center",
+            borderRadius: 20,
+            overflow: "hidden",
+            maxHeight: 320,
+            maxWidth: 320,
+            alignSelf: "center",
+            margin: 10
+          }}
+        >
           {imageUri && (
             <Image
-              style={{ margin: 20 }}
+              // style={{ margin: 20 }}
               source={{ uri: imageUri }}
               width={320}
               height={320}
@@ -802,7 +818,7 @@ export default function NewAdmission() {
           onPress={disabled ? null : handleClick}
           style={{
             ...styles.btn,
-            backgroundColor: disabled ? "grey" : styles.common.primaryColor,
+            backgroundColor: disabled ? "grey" : styles.common.secondaryColor,
             marginTop: 30,
           }}
         >
@@ -826,13 +842,18 @@ export default function NewAdmission() {
           style={{ marginTop: 20, marginBottom: 40 }}
         />
       </ScrollView>
-      {camera && focus && (
-        <Camera
-          imageUri={imageUri}
-          setImageUri={setImageUri}
-          setCamera={setCamera}
-        />
-      )}
+      {/* {camera && focus && ( */}
+      <Camera
+        animationType="slide"
+        imageUri={imageUri}
+        setImageUri={setImageUri}
+        setCamera={setCamera}
+        visible={camera}
+        onRequestClose={() => {
+          setCamera(false);
+        }}
+      />
+      {/* )} */}
     </>
   );
 }

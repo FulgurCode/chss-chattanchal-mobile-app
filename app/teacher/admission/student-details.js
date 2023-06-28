@@ -159,7 +159,7 @@ export default function StudentDetials() {
           <FlatList
             data={data}
             renderItem={({ item }) => (
-              <Item data={item} link={"teacher/admission/profile"} />
+              <Item data={item} link={"/profile"} user="teacher"/>
             )}
             keyExtractor={(item) => item._id}
             ItemSeparatorComponent={

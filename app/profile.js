@@ -1,26 +1,22 @@
 import { View, Text, ScrollView, Image } from "react-native";
 import { useSearchParams } from "expo-router";
 import { useEffect, useState, useContext } from "react";
-import { Context } from "../../../stores/Context";
-import Axios from "../../../stores/Axios";
-import profileImg from "../../../imgs/profile.png";
-import Loader from "../../../components/common/Loader";
-import { AdminCheckLogin } from "../../../stores/CheckLogin";
+import { Context } from "../stores/Context";
+import Axios from "../stores/Axios";
+import profileImg from "../imgs/profile.png";
 
 import { useRouter } from "expo-router";
 
 export default function Profile() {
   const [img, setImg] = useState(profileImg);
-  const [loading, setLoading] = useState(true);
 
   const { styles } = useContext(Context);
 
   const data = useSearchParams();
   const router = useRouter();
-  useEffect(() => AdminCheckLogin(setLoading, router.replace, "/login"), []);
 
   function getImg() {
-    Axios.get(`admin/get-student-photo?studentId=${data._id}`)
+    Axios.get(`${data.user}/get-student-photo?studentId=${data._id}`)
       .then((res) => {
         setImg("data:img/jpeg;base64," + res.data);
       })
@@ -37,8 +33,6 @@ export default function Profile() {
 
   return (
     <>
-      <Loader show={loading} />
-
       <ScrollView
         style={{
           backgroundColor: styles.common.backgroundColor,
@@ -66,7 +60,7 @@ export default function Profile() {
           <View style={{ justifyContent: "center", alignItems: "center" }}>
             <Image
               source={typeof img == "number" ? img : { uri: img, scale: 1 }}
-              style={{ height: 160, width: 160 , borderRadius: 10}}
+              style={{ height: 160, width: 160, borderRadius: 10 }}
             />
           </View>
           <View style={{ flexDirection: "row", gap: 5 }}>

@@ -19,6 +19,7 @@ export default function Item(props) {
             pathname: props.link,
             params: {
               ...props.data,
+              user: props.user,
             },
           });
         }}

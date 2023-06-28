@@ -270,11 +270,12 @@ export default function Verification() {
                         }}
                         onPress={() => {
                           router.push({
-                            pathname: "/admin/admission/profile",
+                            pathname: "/profile",
                             params: {
                               ...item,
                               ...item.qualifyingExamDetails,
                               ...item.tcDetailsOnAdmission,
+                              user: "admin",
                             },
                           });
                         }}
