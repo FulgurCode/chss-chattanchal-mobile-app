@@ -13,8 +13,6 @@ import admissionImg from "../../../imgs/adminImages/item1.png";
 import Hero from "../../../components/common/Hero";
 import DropDownPickerComponent from "../../../components/common/DropDown";
 import Axois from "../../../stores/Axios";
-import Loader from "../../../components/common/Loader";
-import { AdminCheckLogin } from "../../../stores/CheckLogin";
 import { useState, useEffect, useContext } from "react";
 import { useRouter } from "expo-router";
 import * as ImagePicker from "expo-image-picker";
@@ -36,7 +34,11 @@ export default function NewAdmission() {
   router = useRouter();
 
   const [imageUri, setImageUri] = useState();
-  const { styles } = useContext(Context);
+  const { styles, isAdminLoggedIn } = useContext(Context);
+
+  if (!isAdminLoggedIn) {
+    router.replace("/login");
+  }
 
   const [camera, setCamera] = React.useState(false);
   const [focus, setFocus] = React.useState(false);
@@ -238,10 +240,6 @@ export default function NewAdmission() {
     }));
   }
 
-  const [loading, setLoading] = useState(true);
-  useEffect(() => {
-    AdminCheckLogin(setLoading, router.replace, (link = "/login"));
-  }, []);
 
   const showImagePicker = async () => {
     // Ask the user for the permission to access the media library
@@ -285,8 +283,6 @@ export default function NewAdmission() {
 
   return (
     <>
-      <Loader show={loading} />
-
       <ScrollView
         style={{
           backgroundColor: styles.common.backgroundColor,
@@ -294,7 +290,7 @@ export default function NewAdmission() {
           paddingRight: 40,
         }}
       >
-        <Hero img={admissionImg}/>
+        <Hero img={admissionImg} />
 
         <Text style={styles.newAdmissionHeading}>
           Field marked with <Text style={styles.mandatory}>*</Text> are

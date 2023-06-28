@@ -13,8 +13,6 @@ import {
 import DropDownPickerComponent from "../../../components/common/DropDown";
 import Axois from "../../../stores/Axios";
 import Item from "../../../components/admin/admission/Item";
-import Loader from "../../../components/common/Loader";
-import { AdminCheckLogin } from "../../../stores/CheckLogin";
 import { useRouter } from "expo-router";
 
 import { useState, useEffect, useContext } from "react";
@@ -22,15 +20,15 @@ import { Context } from "../../../stores/Context";
 
 export default function StudentDetials() {
   const router = useRouter();
-  const { styles } = useContext(Context);
+  const { styles, isAdminLoggedIn } = useContext(Context);
 
-  const [loading, setLoading] = useState(true);
-  useEffect(() => {
-    AdminCheckLogin(setLoading, router.replace, (link = "/login"));
-  }, []);
+  if (!isAdminLoggedIn) {
+    router.replace("/login");
+  }
 
-  const [isLoading, setIsLoading] = React.useState(false);
   const [error, setError] = React.useState("");
+  const [isLoading, setIsLoading] = React.useState(false);
+  
 
   const [open, setOpen] = React.useState(false);
 
@@ -84,8 +82,6 @@ export default function StudentDetials() {
 
   return (
     <>
-      <Loader show={loading} />
-
       <ScrollView
         style={{
           backgroundColor: styles.common.backgroundColor,
@@ -93,7 +89,7 @@ export default function StudentDetials() {
           paddingRight: 40,
         }}
       >
-        <Hero text={"Student Details"} img={studentDetailsImg}/>
+        <Hero text={"Student Details"} img={studentDetailsImg} />
 
         <View style={{ gap: 20 }}>
           <View style={{ zIndex: 999 }}>
@@ -163,7 +159,12 @@ export default function StudentDetials() {
             )}
             keyExtractor={(item) => item._id}
             ItemSeparatorComponent={
-              <View style={{ backgroundColor: styles.common.borderColor, height: 1 }} />
+              <View
+                style={{
+                  backgroundColor: styles.common.borderColor,
+                  height: 1,
+                }}
+              />
             }
             ListEmptyComponent={
               <Text style={{ alignSelf: "center", color: "grey", padding: 30 }}>
@@ -171,15 +172,19 @@ export default function StudentDetials() {
               </Text>
             }
             ListHeaderComponent={
-                    
-              <View style={{ flexDirection: "row", backgroundColor: styles.common.primaryColor }}>
+              <View
+                style={{
+                  flexDirection: "row",
+                  backgroundColor: styles.common.primaryColor,
+                }}
+              >
                 <Text
                   style={{
                     padding: 10,
                     paddingTop: 15,
                     flex: 2,
                     borderTopLeftRadius: 8,
-                    color: "white"
+                    color: "white",
                   }}
                 >
                   Name
@@ -190,7 +195,7 @@ export default function StudentDetials() {
                     paddingTop: 15,
                     flex: 1,
                     textAlign: "center",
-                    color: "white"
+                    color: "white",
                   }}
                 >
                   Adm No
@@ -202,7 +207,7 @@ export default function StudentDetials() {
                     flex: 1,
                     textAlign: "center",
                     borderTopRightRadius: 8,
-                    color: "white"
+                    color: "white",
                   }}
                 >
                   Class

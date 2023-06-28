@@ -14,18 +14,17 @@ import {
 import { useRouter } from "expo-router";
 import verificationImg from "../../../imgs/adminImages/item3.png";
 import Hero from "../../../components/common/Hero";
-import Loader from "../../../components/common/Loader";
-import { AdminCheckLogin } from "../../../stores/CheckLogin";
 
 import { Context } from "../../../stores/Context";
 
 export default function Verification() {
-  const [loading, setLoading] = useState(true);
-  useEffect(() => {
-    AdminCheckLogin(setLoading, router.replace, (link = "/login"));
-  }, []);
+  const { styles, isAdminLoggedIn } = useContext(Context);
+  const router = useRouter();
 
-  const { styles } = useContext(Context);
+
+  if (!isAdminLoggedIn) {
+    router.replace("/login");
+  }
 
   const [data, setData] = useState([]);
   const [error, setError] = useState("");
@@ -36,7 +35,6 @@ export default function Verification() {
 
   const [refreshing, setRefreshing] = useState(false);
 
-  const router = useRouter();
 
   const handleRefresh = () => {
     loadData();
@@ -148,7 +146,6 @@ export default function Verification() {
         flex: 1,
       }}
     >
-      <Loader show={loading} />
       <ScrollView
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
@@ -196,7 +193,6 @@ export default function Verification() {
                     flex: 1,
                     alignItems: "center",
                     justifyContent: "center",
-                    
                   }}
                 >
                   <Text style={{ color: "white" }}>
@@ -250,7 +246,7 @@ export default function Verification() {
                     style={{
                       padding: 20,
                       color: "grey",
-                      backgroundColor: styles.common.inputBackground
+                      backgroundColor: styles.common.inputBackground,
                     }}
                   >
                     No data found

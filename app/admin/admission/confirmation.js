@@ -14,13 +14,15 @@ import {
 import { useRouter } from "expo-router";
 import verificationImg from "../../../imgs/adminImages/item3.png";
 import Hero from "../../../components/common/Hero";
-import Loader from "../../../components/common/Loader";
-import { AdminCheckLogin } from "../../../stores/CheckLogin";
 
 import { Context } from "../../../stores/Context";
 
 export default function Confirmation() {
-  const { styles } = useContext(Context);
+  const { styles, isAdminLoggedIn } = useContext(Context);
+  const router = useRouter();
+  if (!isAdminLoggedIn) {
+    router.replace("/login");
+  }
 
   const [data, setData] = useState([]);
   const [error, setError] = useState("");
@@ -30,13 +32,6 @@ export default function Confirmation() {
   const [sortOrder, setSortOrder] = useState("asc");
 
   const [refreshing, setRefreshing] = useState(false);
-
-  const router = useRouter();
-
-  const [loading, setLoading] = useState(true);
-  useEffect(() => {
-    AdminCheckLogin(setLoading, router.replace, (link = "/login"));
-  }, []);
 
   const handleRefresh = () => {
     loadData();
@@ -148,7 +143,6 @@ export default function Confirmation() {
         flex: 1,
       }}
     >
-      <Loader show={loading} />
       <ScrollView
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />

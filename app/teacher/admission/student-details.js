@@ -4,7 +4,6 @@ import {
   ScrollView,
   Text,
   View,
-  Image,
   TextInput,
   TouchableOpacity,
   FlatList,
@@ -16,20 +15,22 @@ import Item from "../../../components/admin/admission/Item";
 
 import { useState, useEffect, useContext } from "react";
 import { Context } from "../../../stores/Context";
-import Loader from "../../../components/common/Loader";
-import { TeacherCheckLogin } from "../../../stores/CheckLogin";
 import { useRouter } from "expo-router";
 
 import Hero from "../../../components/common/Hero";
 
 export default function StudentDetials() {
-  const { styles } = useContext(Context);
-
+  const { styles, isTeacherLoggedIn } = useContext(Context);
   const router = useRouter();
-  const [loading, setLoading] = useState(true);
-  useEffect(() => {
-    TeacherCheckLogin(setLoading, router.replace, (link = "/login"));
-  }, []);
+
+  if (!isTeacherLoggedIn) {
+    router.replace({
+      pathname: "/login",
+      params: {
+        user: "teacher"
+      },
+    });
+  }
 
   const [isLoading, setIsLoading] = React.useState(false);
   const [error, setError] = React.useState("");
@@ -86,7 +87,6 @@ export default function StudentDetials() {
 
   return (
     <>
-      <Loader show={loading} />
       <ScrollView
         style={{
           paddingLeft: 40,

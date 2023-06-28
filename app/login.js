@@ -15,7 +15,8 @@ import {
 
 export default function Login() {
   const router = useRouter();
-  const { styles } = useContext(Context);
+  const { styles, setIsAdminLoggedIn, setIsTeacherLoggedIn } =
+    useContext(Context);
 
   const data = useSearchParams();
 
@@ -34,9 +35,9 @@ export default function Login() {
   const [inputColor, setInputColor] = useState(styles.common.borderColor);
   const [isLoading, setIsLoading] = useState(false);
 
-  useEffect(()=>{
-    setInputColor(styles.common.borderColor)
-  }, [styles])
+  useEffect(() => {
+    setInputColor(styles.common.borderColor);
+  }, [styles]);
 
   function handleClick() {
     setIsLoading(true);
@@ -46,6 +47,7 @@ export default function Login() {
         password: password,
       })
         .then((res) => {
+          setIsAdminLoggedIn(true)
           Logout("teacher");
           router.replace("/admin");
           setIsLoading(false);
@@ -69,6 +71,7 @@ export default function Login() {
         password: password,
       })
         .then((res) => {
+          setIsTeacherLoggedIn(true)
           Logout("admin");
           router.replace("/teacher");
           setIsLoading(false);
@@ -91,7 +94,13 @@ export default function Login() {
   }
   function Logout(user) {
     Axios.delete(`${user}/logout`)
-      .then((res) => {})
+      .then((res) => {
+        if (user == "teacher") {
+          setIsTeacherLoggedIn(false);
+        } else if (user == "admin") {
+          setIsAdminLoggedIn(false);
+        }
+      })
       .catch((err) => {});
   }
 

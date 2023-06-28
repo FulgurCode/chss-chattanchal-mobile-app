@@ -12,8 +12,6 @@ import {
 import admissionImg from "../../../imgs/adminImages/item1.png";
 import DropDownPickerComponent from "../../../components/common/DropDown";
 import Axois from "../../../stores/Axios";
-import Loader from "../../../components/common/Loader";
-import { TeacherCheckLogin } from "../../../stores/CheckLogin";
 import { useState, useEffect , useContext} from "react";
 import { Context } from "../../../stores/Context";
 import { useRouter } from "expo-router";
@@ -35,7 +33,16 @@ const TextInputComponent = ({ value, onChangeText, name, ...props }) => (
 export default function NewAdmission() {
   router = useRouter();
 
-  const {styles} = useContext(Context)
+  const {styles, isTeacherLoggedIn} = useContext(Context)
+
+  if (!isTeacherLoggedIn){
+    router.replace({
+      pathname: "/login",
+      params: {
+        user: "teacher"
+      },
+    })
+  }
 
   const [imageUri, setImageUri] = useState();
 
@@ -239,10 +246,6 @@ export default function NewAdmission() {
     }));
   }
 
-  const [loading, setLoading] = useState(true);
-  useEffect(() => {
-    TeacherCheckLogin(setLoading, router.replace, (link = "/login"));
-  }, []);
 
   const showImagePicker = async () => {
     // Ask the user for the permission to access the media library
@@ -286,7 +289,6 @@ export default function NewAdmission() {
 
   return (
     <>
-      <Loader show={loading} />
 
       <ScrollView
         style={{

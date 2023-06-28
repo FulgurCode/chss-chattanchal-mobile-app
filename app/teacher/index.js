@@ -6,14 +6,22 @@ import { useRouter } from "expo-router";
 import admissionImg from "../../imgs/adminImages/item1.png";
 
 import { useState, useContext } from "react";
-
 import { Context } from "../../stores/Context";
 
 import TakePhoto from "../admin/take-photo";
 
 export default function Admin() {
   const router = useRouter();
-  const { styles } = useContext(Context);
+  const { styles, isTeacherLoggedIn } = useContext(Context);
+
+  if (!isTeacherLoggedIn){
+    router.replace({
+      pathname: "/login",
+      params: {
+        user: "teacher"
+      },
+    })
+  }
 
   const [showCamera, setShowCamera] = useState(false);
 

@@ -6,7 +6,6 @@ import {
   SafeAreaView,
   Text,
   View,
-  Image,
   TextInput,
   TouchableOpacity,
   Alert,
@@ -16,18 +15,11 @@ import {
 import { useRouter } from "expo-router";
 import verificationImg from "../../../imgs/adminImages/item3.png";
 
-import Loader from "../../../components/common/Loader";
-import { TeacherCheckLogin } from "../../../stores/CheckLogin";
-
 export default function Verification() {
-  const [loading, setLoading] = useState(true);
-  useEffect(() => {
-    TeacherCheckLogin(setLoading, router.replace, (link = "/login"));
-  }, []);
-
+  
   const [data, setData] = useState([]);
   const [error, setError] = useState("");
-  const { styles } = useContext(Context);
+  const { styles, isTeacherLoggedIn } = useContext(Context);
 
   const [searchQuery, setSearchQuery] = useState("");
   const [sortColumn, setSortColumn] = useState("name");
@@ -36,6 +28,15 @@ export default function Verification() {
   const [refreshing, setRefreshing] = useState(false);
 
   const router = useRouter();
+
+  if (!isTeacherLoggedIn){
+    router.replace({
+      pathname: "/login",
+      params: {
+        user: "teacher"
+      },
+    })
+  }
 
   const handleRefresh = () => {
     loadData();
@@ -142,7 +143,6 @@ export default function Verification() {
 
   return (
     <>
-      <Loader show={loading} />
       <SafeAreaView
         style={{
           backgroundColor: styles.common.backgroundColor,
