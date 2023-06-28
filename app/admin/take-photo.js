@@ -9,6 +9,7 @@ import {
   ActivityIndicator,
   AppState,
   Alert,
+  Modal,
 } from "react-native";
 import { BarCodeScanner } from "expo-barcode-scanner";
 import { Camera, CameraType } from "expo-camera";
@@ -20,19 +21,16 @@ import { MaterialCommunityIcons, Ionicons } from "@expo/vector-icons";
 
 import { useFocusEffect } from "@react-navigation/native";
 
-import Loader from "../../../components/common/Loader";
-import { AdminCheckLogin } from "../../../stores/CheckLogin";
+import Loader from "../../components/common/Loader";
+import { AdminCheckLogin } from "../../stores/CheckLogin";
 import { useRouter } from "expo-router";
-
 
 let data;
 
 let Screen = Dimensions.get("window");
-const STATUS_BAR_HEIGHT = StatusBar.currentHeight || 24;
 
-export default function TakePhoto() {
+export default function TakePhoto(props) {
   const [loading, setLoading] = useState(true);
-
 
   const [type, setType] = useState(CameraType.back);
   const [imageData, setImageData] = useState();
@@ -84,7 +82,6 @@ export default function TakePhoto() {
       setAppStateVisible(appState.current);
     });
 
-
     return () => {
       subscription.remove();
       if (webSocket) {
@@ -93,15 +90,15 @@ export default function TakePhoto() {
     };
   }, []);
 
-  useEffect(() => {
-    AdminCheckLogin(setLoading, router.replace, (link = "/login"));
-  }, []);
+  // useEffect(() => {
+  //   AdminCheckLogin(setLoading, router.replace, (link = "/login"));
+  // }, []);
 
   // connect to websocket when window is Active
   useEffect(() => {
     if (appState.current == "active" && focus) {
       setWebSocket(
-          new WebSocket("wss://chattanchalhss.com/ws/admission-photo")
+        new WebSocket("wss://chattanchalhss.com/ws/admission-photo")
       );
     }
     return () => {};
@@ -132,9 +129,9 @@ export default function TakePhoto() {
     const data = {
       targetId: scanData,
       name: "image",
-      data: imgBase64
+      data: imgBase64,
     };
-    
+
     await webSocket.send(JSON.stringify(data));
     setSending(false);
 
@@ -144,6 +141,7 @@ export default function TakePhoto() {
         onPress: () => {
           setScanData(undefined);
           setImageData(null);
+          props.setVisible(false);
         },
       },
     ]);
@@ -229,8 +227,8 @@ export default function TakePhoto() {
   }
 
   return (
-    <>
-      <Loader show={loading} />
+    <Modal {...props}>
+      {/* <Loader show={loading} /> */}
 
       {scanData && (
         <View
@@ -287,10 +285,10 @@ export default function TakePhoto() {
                   width: scanData ? Screen.width : Screen.width + 50,
                   maxHeight: scanData
                     ? (Screen.width / 3) * 4
-                    : (Screen.width / 9) * 16 + 50,
+                    : (Screen.width / 9) * 16 + 150,
                   minHeight: scanData
                     ? (Screen.width / 3) * 4
-                    : (Screen.width / 9) * 16 + 50,
+                    : (Screen.width / 9) * 16 + 150,
                 }}
                 type={type}
                 ref={cameraRef}
@@ -440,12 +438,13 @@ export default function TakePhoto() {
             <View
               style={{
                 width: Screen.width,
-                height: Screen.height - STATUS_BAR_HEIGHT - 63,
+                height: Screen.height,
                 position: "absolute",
                 flex: 1,
                 zIndex: 2,
                 justifyContent: "center",
                 alignItems: "center",
+                // backgroundColor: "red"
               }}
             >
               <View
@@ -457,6 +456,16 @@ export default function TakePhoto() {
                   borderRadius: 30,
                 }}
               ></View>
+              <TouchableOpacity
+                style={{
+                  width: 100,
+                  height: 100,
+                  backgroundColor: "#0009",
+                  borderRadius: 1000,
+                  position: "absolute",
+                }}
+                onPress={()=>{props.setVisible(false)}}
+              ></TouchableOpacity>
             </View>
 
             <View
@@ -486,6 +495,6 @@ export default function TakePhoto() {
           </>
         )}
       </View>
-    </>
+    </Modal>
   );
 }

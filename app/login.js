@@ -1,8 +1,8 @@
-import React from "react";
-import styles from "../styles/styles";
+import React, { useEffect, useContext } from "react";
+import { Context } from "../stores/Context";
 import { useState } from "react";
 import Axios from "../stores/Axios";
-import DropDownPicker from "react-native-dropdown-picker";
+import DropDownPickerComponent from "../components/common/DropDown";
 import { Link, useRouter, useSearchParams } from "expo-router";
 import {
   Text,
@@ -15,6 +15,7 @@ import {
 
 export default function Login() {
   const router = useRouter();
+  const { styles } = useContext(Context);
 
   const data = useSearchParams();
 
@@ -30,8 +31,12 @@ export default function Login() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
-  const [inputColor, setInputColor] = useState("#dfdfdf");
+  const [inputColor, setInputColor] = useState(styles.common.borderColor);
   const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(()=>{
+    setInputColor(styles.common.borderColor)
+  }, [styles])
 
   function handleClick() {
     setIsLoading(true);
@@ -86,29 +91,25 @@ export default function Login() {
   }
   function Logout(user) {
     Axios.delete(`${user}/logout`)
-      .then((res) => {
-        
-      })
-      .catch((err) => {
-        
-      });
+      .then((res) => {})
+      .catch((err) => {});
   }
 
   return (
     <SafeAreaView
       style={{
+        backgroundColor: styles.common.backgroundColor,
         flex: 1,
         justifyContent: "center",
         minHeight: 500,
         padding: 40,
-        backgroundColor: "white",
         gap: 20,
       }}
     >
       <Text style={styles.loginHeaderMain}>CHSS CHATTANCHAL</Text>
       {/* <Text style={styles.loginHeader}>Start Login</Text> */}
       <View style={{ zIndex: 999 }}>
-        <DropDownPicker
+        <DropDownPickerComponent
           open={open}
           value={userType}
           items={items}
@@ -116,38 +117,29 @@ export default function Login() {
           setValue={setUserType}
           setItems={setItems}
           placeholder="Select user type"
-          style={{
-            backgroundColor: "#FAFAFC",
-            borderColor: "#dfdfdf",
-            borderRadius: 10,
-          }}
-          selectedItemContainerStyle={{
-            backgroundColor: "#f2f2f2",
-          }}
-          dropDownContainerStyle={{
-            borderColor: "#dfdfdf",
-          }}
         />
       </View>
       <TextInput
         style={{ ...styles.input, borderColor: inputColor }}
         placeholder={userType == "admin" ? "Username" : "Email"}
+        placeholderTextColor={styles.components.textInput.placeHolder.color}
         value={userName}
         onChangeText={(text) => {
           setUserName(text.trim());
           setError();
-          setInputColor("#dfdfdf");
+          setInputColor(styles.common.borderColor);
         }}
       />
       <TextInput
         style={{ ...styles.input, borderColor: inputColor }}
         placeholder="Password"
+        placeholderTextColor={styles.components.textInput.placeHolder.color}
         value={password}
         secureTextEntry={true}
         onChangeText={(text) => {
           setPassword(text.trim());
           setError();
-          setInputColor("#dfdfdf");
+          setInputColor(styles.common.borderColor);
         }}
       />
       <Link href="/login" style={styles.link}>

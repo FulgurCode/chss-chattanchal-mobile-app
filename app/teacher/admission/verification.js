@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from "react";
-import styles from "../../../styles/styles";
+import React, { useEffect, useState, useContext } from "react";
+import { Context } from "../../../stores/Context";
+import Hero from "../../../components/common/Hero";
 import Axios from "../../../stores/Axios";
 import {
   SafeAreaView,
@@ -16,15 +17,17 @@ import { useRouter } from "expo-router";
 import verificationImg from "../../../imgs/adminImages/item3.png";
 
 import Loader from "../../../components/common/Loader";
-import {TeacherCheckLogin} from "../../../stores/CheckLogin";
+import { TeacherCheckLogin } from "../../../stores/CheckLogin";
 
 export default function Verification() {
-
   const [loading, setLoading] = useState(true);
-  useEffect(()=>{TeacherCheckLogin(setLoading, router.replace, link="/login")},[]);
+  useEffect(() => {
+    TeacherCheckLogin(setLoading, router.replace, (link = "/login"));
+  }, []);
 
   const [data, setData] = useState([]);
   const [error, setError] = useState("");
+  const { styles } = useContext(Context);
 
   const [searchQuery, setSearchQuery] = useState("");
   const [sortColumn, setSortColumn] = useState("name");
@@ -139,234 +142,242 @@ export default function Verification() {
 
   return (
     <>
-    <Loader show={loading} />
-    <SafeAreaView
-      style={{
-        backgroundColor: "white",
-        flex: 1,
-      }}
-    >
-      <ScrollView
-        refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
-        }
+      <Loader show={loading} />
+      <SafeAreaView
         style={{
-          paddingLeft: 40,
-          paddingRight: 40,
+          backgroundColor: styles.common.backgroundColor,
+          flex: 1,
         }}
       >
-        <View>
-          <View
-            style={{
-              flexDirection: "row",
-              alignItems: "center",
-              paddingTop: 50,
-            }}
-          >
-            <Image source={verificationImg} style={styles.verificationImg} />
-            <Text
+        <ScrollView
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
+          }
+          style={{
+            paddingLeft: 40,
+            paddingRight: 40,
+          }}
+        >
+          <Hero img={verificationImg} />
+
+          <View>
+            <View
               style={{
-                fontSize: 25,
-                fontWeight: 500,
-                borderColor: "#ccc",
-                borderRightWidth: 2,
-                paddingRight: 20,
+                flexDirection: "column",
+                justifyContent: "space-between",
               }}
             >
-              Verification
-            </Text>
-          </View>
-          <View
-            style={{
-              borderBottomWidth: 2,
-              borderColor: "#ccc",
-              marginBottom: 10,
-            }}
-          />
-          <Text style={{ color: "grey", fontSize: 17, paddingBottom: 50 }}>
-            Home &gt; Admission &gt;{" "}
-            <Text style={{ fontWeight: 500 }}>Verification</Text>
-          </Text>
-        </View>
+              <Text
+                style={{
+                  textAlign: "center",
+                  color: "red",
+                  left: 0,
+                  minWidth: 0,
+                  marginBottom: 15,
+                }}
+              >
+                {error}
+              </Text>
+              <TextInput
+                style={{ ...styles.input, marginBottom: 20 }}
+                placeholder="Search Name/Adm No"
+                placeholderTextColor={styles.common.color}
+                onChangeText={handleSearch}
+              />
+            </View>
 
-        <View>
-          <View
-            style={{ flexDirection: "column", justifyContent: "space-between" }}
-          >
-            <Text
-              style={{
-                textAlign: "center",
-                color: "red",
-                left: 0,
-                minWidth: 0,
-                marginBottom: 15,
-              }}
-            >
-              {error}
-            </Text>
-            <TextInput
-              style={{ ...styles.input, marginBottom: 20 }}
-              placeholder="Search Name/Adm No"
-              onChangeText={handleSearch}
-            />
-          </View>
-
-          <View style={styles.tableBox}>
-            {/* Replace the <table> and related elements with equivalent components */}
-            <View style={styles.table}>
-              <View style={styles.tableHeader}>
-                <TouchableOpacity
-                  onPress={() => handleSort("name")}
-                  style={{ flex: 1, alignItems: "center" }}
-                >
-                  <Text style={{ color: "white" }}>
-                    Name {getSortIndicator("name")}
-                  </Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  onPress={() => handleSort("class")}
-                  style={{ flex: 1, alignItems: "center" }}
-                >
-                  <Text style={{ color: "white" }}>
-                    Class {getSortIndicator("class")}
-                  </Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  onPress={() => handleSort("admissionNo")}
-                  style={{ flex: 1, alignItems: "center" }}
-                >
-                  <Text style={{ color: "white" }}>
-                    Adm No. {getSortIndicator("admissionNo")}
-                  </Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  onPress={() => handleSort("dob")}
-                  style={{ flex: 1, alignItems: "center" }}
-                >
-                  <Text style={{ color: "white" }}>
-                    D.O.B {getSortIndicator("dob")}
-                  </Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={{ width: 60 }}>
-                  <Text></Text>
-                </TouchableOpacity>
-              </View>
-
-              <View style={styles.tableBody}>
-                {sortedData.length === 0 ? (
-                  <Text
+            <View style={styles.tableBox}>
+              {/* Replace the <table> and related elements with equivalent components */}
+              <View style={styles.table}>
+                <View style={styles.tableHeader}>
+                  <TouchableOpacity
+                    onPress={() => handleSort("name")}
                     style={{
-                      padding: 20,
-                      borderBottomWidth: 1,
-                      borderColor: "#ddd",
+                      flex: 1,
+                      alignItems: "center",
+                      justifyContent: "center",
                     }}
                   >
-                    No data found
-                  </Text>
-                ) : (
-                  sortedData.map((item) => (
-                    <View
-                      key={item._id}
+                    <Text style={{ color: "white" }}>
+                      Name {getSortIndicator("name")}
+                    </Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    onPress={() => handleSort("class")}
+                    style={{
+                      flex: 1,
+                      alignItems: "center",
+                      justifyContent: "center",
+                    }}
+                  >
+                    <Text style={{ color: "white" }}>
+                      Class {getSortIndicator("class")}
+                    </Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    onPress={() => handleSort("admissionNo")}
+                    style={{
+                      flex: 1,
+                      alignItems: "center",
+                      justifyContent: "center",
+                    }}
+                  >
+                    <Text style={{ color: "white" }}>
+                      Adm No. {getSortIndicator("admissionNo")}
+                    </Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    onPress={() => handleSort("dob")}
+                    style={{
+                      flex: 1,
+                      alignItems: "center",
+                      justifyContent: "center",
+                    }}
+                  >
+                    <Text style={{ color: "white" }}>
+                      D.O.B {getSortIndicator("dob")}
+                    </Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity style={{ width: 60 }}>
+                    <Text></Text>
+                  </TouchableOpacity>
+                </View>
+
+                <View style={styles.tableBody}>
+                  {sortedData.length === 0 ? (
+                    <Text
                       style={{
-                        ...styles.tableRow,
-                        borderBottomWidth: 1,
-                        borderColor: "#ddd",
+                        padding: 20,
+                        color: "grey",
+                        backgroundColor: styles.common.inputBackground,
                       }}
                     >
-                      <TouchableOpacity
-                        style={{
-                          display: "flex",
-                          flexDirection: "row",
-                          flex: 1,
-                        }}
-                        onPress={() => {
-                          router.push({
-                            pathname: "teacher/admission/profile",
-                            params: {
-                              ...item,
-                              ...item.qualifyingExamDetails,
-                              ...item.tcDetailsOnAdmission,
-                            },
-                          });
-                        }}
-                      >
-                        <View
-                          style={{
-                            flex: 1,
-                            backgroundColor: "#eee",
-                            justifyContent: "center",
-                          }}
-                        >
-                          <Text style={{ textAlign: "center" }}>
-                            {item.name}
-                          </Text>
-                        </View>
-                        <View style={{ flex: 1, justifyContent: "center" }}>
-                          <Text style={{ textAlign: "center" }}>
-                            {item.class}
-                          </Text>
-                        </View>
-                        <View
-                          style={{
-                            flex: 1,
-                            backgroundColor: "#eee",
-                            justifyContent: "center",
-                          }}
-                        >
-                          <Text style={{ textAlign: "center" }}>
-                            {item.admissionNo}
-                          </Text>
-                        </View>
-                        <View
-                          style={{
-                            flex: 1,
-                            justifyContent: "center",
-                            padding: 10,
-                          }}
-                        >
-                          <Text style={{ textAlign: "center" }}>
-                            {item.dob}
-                          </Text>
-                        </View>
-                      </TouchableOpacity>
+                      No data found
+                    </Text>
+                  ) : (
+                    sortedData.map((item) => (
                       <View
+                        key={item._id}
                         style={{
-                          minWidth: 50,
-                          justifyContent: "center",
-                          paddingRight: 5,
+                          ...styles.tableRow,
+                          borderTopWidth: 1,
+                          borderColor: styles.common.borderColor,
+                          backgroundColor: styles.common.inputBackground,
                         }}
                       >
                         <TouchableOpacity
                           style={{
+                            display: "flex",
+                            flexDirection: "row",
                             flex: 1,
-                            backgroundColor: "rgb(46, 194, 24)",
-                            justifyContent: "center",
-                            borderRadius: 50,
-                            maxWidth: 50,
-                            maxHeight: 25,
                           }}
-                          onPress={() => verifyStudent(item._id)}
+                          onPress={() => {
+                            router.push({
+                              pathname: "/admin/admission/profile",
+                              params: {
+                                ...item,
+                                ...item.qualifyingExamDetails,
+                                ...item.tcDetailsOnAdmission,
+                              },
+                            });
+                          }}
                         >
-                          <Text
+                          <View
                             style={{
-                              textAlign: "center",
-                              color: "white",
-                              fontSize: 13,
+                              flex: 1,
+                              // backgroundColor: styles.common.inputBackground,
+                              justifyContent: "center",
                             }}
                           >
-                            Verify
-                          </Text>
+                            <Text
+                              style={{
+                                textAlign: "center",
+                                color: styles.common.color,
+                              }}
+                            >
+                              {item.name}
+                            </Text>
+                          </View>
+                          <View style={{ flex: 1, justifyContent: "center" }}>
+                            <Text
+                              style={{
+                                textAlign: "center",
+                                color: styles.common.color,
+                              }}
+                            >
+                              {item.class}
+                            </Text>
+                          </View>
+                          <View
+                            style={{
+                              flex: 1,
+                              justifyContent: "center",
+                            }}
+                          >
+                            <Text
+                              style={{
+                                textAlign: "center",
+                                color: styles.common.color,
+                              }}
+                            >
+                              {item.admissionNo}
+                            </Text>
+                          </View>
+                          <View
+                            style={{
+                              flex: 1,
+                              justifyContent: "center",
+                              padding: 10,
+                            }}
+                          >
+                            <Text
+                              style={{
+                                textAlign: "center",
+                                color: styles.common.color,
+                              }}
+                            >
+                              {item.dob}
+                            </Text>
+                          </View>
                         </TouchableOpacity>
+                        <View
+                          style={{
+                            minWidth: 50,
+                            justifyContent: "center",
+                            paddingRight: 5,
+                          }}
+                        >
+                          <TouchableOpacity
+                            style={{
+                              flex: 1,
+                              backgroundColor: "rgb(46, 194, 24)",
+                              justifyContent: "center",
+                              borderRadius: 50,
+                              maxWidth: 50,
+                              maxHeight: 25,
+                            }}
+                            onPress={() => verifyStudent(item._id)}
+                          >
+                            <Text
+                              style={{
+                                textAlign: "center",
+                                color: "white",
+                                fontSize: 13,
+                              }}
+                            >
+                              Verify
+                            </Text>
+                          </TouchableOpacity>
+                        </View>
                       </View>
-                    </View>
-                  ))
-                )}
+                    ))
+                  )}
+                </View>
               </View>
             </View>
           </View>
-        </View>
-      </ScrollView>
-    </SafeAreaView>
+        </ScrollView>
+      </SafeAreaView>
     </>
   );
 }

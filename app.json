@@ -32,6 +32,8 @@
       }
     },
     "android": {
+      "userInterfaceStyle": "automatic",
+
       "package": "com.fulgurcode.chsschattanchalmobileapp",
       "adaptiveIcon": {
         "foregroundImage": "./imgs/icons/adaptive-icon.png",
@@ -41,6 +43,11 @@
         "android.permission.CAMERA",
         "android.permission.RECORD_AUDIO"
       ]
+    },
+
+    "userInterfaceStyle": "automatic",
+    "ios": {
+      "userInterfaceStyle": "automatic"
     }
   }
 }

@@ -1,7 +1,7 @@
 import { View, Text, ScrollView, Image } from "react-native";
 import { useSearchParams } from "expo-router";
-import styles from "../../../styles/styles";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
+import { Context } from "../../../stores/Context";
 import Axios from "../../../stores/Axios";
 import profileImg from "../../../imgs/profile.png";
 import Loader from "../../../components/common/Loader";
@@ -12,6 +12,8 @@ import { useRouter } from "expo-router";
 export default function Profile() {
   const [img, setImg] = useState(profileImg);
   const [loading, setLoading] = useState(true);
+
+  const { styles } = useContext(Context);
 
   const data = useSearchParams();
   const router = useRouter();
@@ -39,8 +41,8 @@ export default function Profile() {
 
       <ScrollView
         style={{
+          backgroundColor: styles.common.backgroundColor,
           flex: 1,
-          backgroundColor: "white",
         }}
         contentContainerStyle={{
           alignItems: "center",
@@ -48,14 +50,14 @@ export default function Profile() {
       >
         <View
           style={{
-            backgroundColor: "#FAFAFC",
+            backgroundColor: styles.common.inputBackground,
             flex: 1,
             width: 350,
             gap: 15,
             marginTop: 50,
             marginBottom: 50,
 
-            borderColor: "#ccc",
+            borderColor: styles.common.borderColor,
             borderWidth: 1,
             borderRadius: 10,
             padding: 20,
@@ -64,163 +66,263 @@ export default function Profile() {
           <View style={{ justifyContent: "center", alignItems: "center" }}>
             <Image
               source={typeof img == "number" ? img : { uri: img, scale: 1 }}
-              style={{ height: 160, width: 160 }}
+              style={{ height: 160, width: 160 , borderRadius: 10}}
             />
           </View>
           <View style={{ flexDirection: "row", gap: 5 }}>
-            <Text style={{ flex: 1, fontWeight: 800 }}>Name:</Text>
-            <Text style={{ flex: 1, fontWeight: 800 }}> {data.name}</Text>
+            <Text
+              style={{ flex: 1, fontWeight: 800, color: styles.common.color }}
+            >
+              Name:
+            </Text>
+            <Text
+              style={{ flex: 1, fontWeight: 800, color: styles.common.color }}
+            >
+              {" "}
+              {data.name}
+            </Text>
           </View>
           {data.class == undefined ? (
             ""
           ) : (
             <View style={{ flexDirection: "row", gap: 5 }}>
-              <Text style={{ flex: 1 }}>Class:</Text>
-              <Text style={{ flex: 1 }}> {data.class}</Text>
+              <Text style={{ flex: 1, color: styles.common.color }}>
+                Class:
+              </Text>
+              <Text style={{ flex: 1, color: styles.common.color }}>
+                {" "}
+                {data.class}
+              </Text>
             </View>
           )}
           {data.aadhaarNo == undefined ? (
             ""
           ) : (
             <View style={{ flexDirection: "row", gap: 5 }}>
-              <Text style={{ flex: 1 }}>Aadhaar No:</Text>
-              <Text style={{ flex: 1 }}> {data.aadhaarNo}</Text>
+              <Text style={{ flex: 1, color: styles.common.color }}>
+                Aadhaar No:
+              </Text>
+              <Text style={{ flex: 1, color: styles.common.color }}>
+                {" "}
+                {data.aadhaarNo}
+              </Text>
             </View>
           )}
           {data.admissionDate == undefined ? (
             ""
           ) : (
             <View style={{ flexDirection: "row", gap: 5 }}>
-              <Text style={{ flex: 1 }}>Admission Date:</Text>
-              <Text style={{ flex: 1 }}> {data.admissionDate}</Text>
+              <Text style={{ flex: 1, color: styles.common.color }}>
+                Admission Date:
+              </Text>
+              <Text style={{ flex: 1, color: styles.common.color }}>
+                {" "}
+                {data.admissionDate}
+              </Text>
             </View>
           )}
           {data.admissionNo == undefined ? (
             ""
           ) : (
             <View style={{ flexDirection: "row", gap: 5 }}>
-              <Text style={{ flex: 1 }}>Admission No:</Text>
-              <Text style={{ flex: 1 }}> {data.admissionNo}</Text>
+              <Text style={{ flex: 1, color: styles.common.color }}>
+                Admission No:
+              </Text>
+              <Text style={{ flex: 1, color: styles.common.color }}>
+                {" "}
+                {data.admissionNo}
+              </Text>
             </View>
           )}
           {data.applicationNo == undefined ? (
             ""
           ) : (
             <View style={{ flexDirection: "row", gap: 5 }}>
-              <Text style={{ flex: 1 }}>Application No:</Text>
-              <Text style={{ flex: 1 }}> {data.applicationNo}</Text>
+              <Text style={{ flex: 1, color: styles.common.color }}>
+                Application No:
+              </Text>
+              <Text style={{ flex: 1, color: styles.common.color }}>
+                {" "}
+                {data.applicationNo}
+              </Text>
             </View>
           )}
           {data.caste == undefined ? (
             ""
           ) : (
             <View style={{ flexDirection: "row", gap: 5 }}>
-              <Text style={{ flex: 1 }}>Caste:</Text>
-              <Text style={{ flex: 1 }}> {data.caste}</Text>
+              <Text style={{ flex: 1, color: styles.common.color }}>
+                Caste:
+              </Text>
+              <Text style={{ flex: 1, color: styles.common.color }}>
+                {" "}
+                {data.caste}
+              </Text>
             </View>
           )}
           {data.category == undefined ? (
             ""
           ) : (
             <View style={{ flexDirection: "row", gap: 5 }}>
-              <Text style={{ flex: 1 }}>Category:</Text>
-              <Text style={{ flex: 1 }}> {data.category}</Text>
+              <Text style={{ flex: 1, color: styles.common.color }}>
+                Category:
+              </Text>
+              <Text style={{ flex: 1, color: styles.common.color }}>
+                {" "}
+                {data.category}
+              </Text>
             </View>
           )}
           {data.course == undefined ? (
             ""
           ) : (
             <View style={{ flexDirection: "row", gap: 5 }}>
-              <Text style={{ flex: 1 }}>Course:</Text>
-              <Text style={{ flex: 1 }}> {data.course}</Text>
+              <Text style={{ flex: 1, color: styles.common.color }}>
+                Course:
+              </Text>
+              <Text style={{ flex: 1, color: styles.common.color }}>
+                {" "}
+                {data.course}
+              </Text>
             </View>
           )}
           {data.dob == undefined ? (
             ""
           ) : (
             <View style={{ flexDirection: "row", gap: 5 }}>
-              <Text style={{ flex: 1 }}>Dob:</Text>
-              <Text style={{ flex: 1 }}> {data.dob}</Text>
+              <Text style={{ flex: 1, color: styles.common.color }}>Dob:</Text>
+              <Text style={{ flex: 1, color: styles.common.color }}>
+                {" "}
+                {data.dob}
+              </Text>
             </View>
           )}
           {data.gender == undefined ? (
             ""
           ) : (
             <View style={{ flexDirection: "row", gap: 5 }}>
-              <Text style={{ flex: 1 }}>Gender:</Text>
-              <Text style={{ flex: 1 }}> {data.gender}</Text>
+              <Text style={{ flex: 1, color: styles.common.color }}>
+                Gender:
+              </Text>
+              <Text style={{ flex: 1, color: styles.common.color }}>
+                {" "}
+                {data.gender}
+              </Text>
             </View>
           )}
           {data.nameOfParent == undefined ? (
             ""
           ) : (
             <View style={{ flexDirection: "row", gap: 5 }}>
-              <Text style={{ flex: 1 }}>Name of Parent:</Text>
-              <Text style={{ flex: 1 }}> {data.nameOfParent}</Text>
+              <Text style={{ flex: 1, color: styles.common.color }}>
+                Name of Parent:
+              </Text>
+              <Text style={{ flex: 1, color: styles.common.color }}>
+                {" "}
+                {data.nameOfParent}
+              </Text>
             </View>
           )}
           {data.occupationOfParent == undefined ? (
             ""
           ) : (
             <View style={{ flexDirection: "row", gap: 5 }}>
-              <Text style={{ flex: 1 }}>Occupation of parent:</Text>
-              <Text style={{ flex: 1 }}> {data.occupationOfParent}</Text>
+              <Text style={{ flex: 1, color: styles.common.color }}>
+                Occupation of parent:
+              </Text>
+              <Text style={{ flex: 1, color: styles.common.color }}>
+                {" "}
+                {data.occupationOfParent}
+              </Text>
             </View>
           )}
           {data.phone == undefined ? (
             ""
           ) : (
             <View style={{ flexDirection: "row", gap: 5 }}>
-              <Text style={{ flex: 1 }}>Phone:</Text>
-              <Text style={{ flex: 1 }}> {data.phone}</Text>
+              <Text style={{ flex: 1, color: styles.common.color }}>
+                Phone:
+              </Text>
+              <Text style={{ flex: 1, color: styles.common.color }}>
+                {" "}
+                {data.phone}
+              </Text>
             </View>
           )}
           {data.linguisticMinority == undefined ? (
             ""
           ) : (
             <View style={{ flexDirection: "row", gap: 5 }}>
-              <Text style={{ flex: 1 }}>Linguistic Minority:</Text>
-              <Text style={{ flex: 1 }}> {data.linguisticMinority}</Text>
+              <Text style={{ flex: 1, color: styles.common.color }}>
+                Linguistic Minority:
+              </Text>
+              <Text style={{ flex: 1, color: styles.common.color }}>
+                {" "}
+                {data.linguisticMinority}
+              </Text>
             </View>
           )}
           {data.obc == undefined ? (
             ""
           ) : (
             <View style={{ flexDirection: "row", gap: 5 }}>
-              <Text style={{ flex: 1 }}>OBC:</Text>
-              <Text style={{ flex: 1 }}> {data.obc}</Text>
+              <Text style={{ flex: 1, color: styles.common.color }}>OBC:</Text>
+              <Text style={{ flex: 1, color: styles.common.color }}>
+                {" "}
+                {data.obc}
+              </Text>
             </View>
           )}
           {data.relationshipWithGuardian == undefined ? (
             ""
           ) : (
             <View style={{ flexDirection: "row", gap: 5 }}>
-              <Text style={{ flex: 1 }}>Relationship with guardian:</Text>
-              <Text style={{ flex: 1 }}> {data.relationshipWithGuardian}</Text>
+              <Text style={{ flex: 1, color: styles.common.color }}>
+                Relationship with guardian:
+              </Text>
+              <Text style={{ flex: 1, color: styles.common.color }}>
+                {" "}
+                {data.relationshipWithGuardian}
+              </Text>
             </View>
           )}
           {data.religion == undefined ? (
             ""
           ) : (
             <View style={{ flexDirection: "row", gap: 5 }}>
-              <Text style={{ flex: 1 }}>Religion:</Text>
-              <Text style={{ flex: 1 }}> {data.religion}</Text>
+              <Text style={{ flex: 1, color: styles.common.color }}>
+                Religion:
+              </Text>
+              <Text style={{ flex: 1, color: styles.common.color }}>
+                {" "}
+                {data.religion}
+              </Text>
             </View>
           )}
           {data.secondLanguage == undefined ? (
             ""
           ) : (
             <View style={{ flexDirection: "row", gap: 5 }}>
-              <Text style={{ flex: 1 }}>Second language:</Text>
-              <Text style={{ flex: 1 }}> {data.secondLanguage}</Text>
+              <Text style={{ flex: 1, color: styles.common.color }}>
+                Second language:
+              </Text>
+              <Text style={{ flex: 1, color: styles.common.color }}>
+                {" "}
+                {data.secondLanguage}
+              </Text>
             </View>
           )}
           {data.status == undefined ? (
             ""
           ) : (
             <View style={{ flexDirection: "row", gap: 5 }}>
-              <Text style={{ flex: 1 }}>Status:</Text>
-              <Text style={{ flex: 1 }}> {data.status}</Text>
+              <Text style={{ flex: 1, color: styles.common.color }}>
+                Status:
+              </Text>
+              <Text style={{ flex: 1, color: styles.common.color }}>
+                {" "}
+                {data.status}
+              </Text>
             </View>
           )}
 
@@ -228,24 +330,35 @@ export default function Profile() {
             ""
           ) : (
             <View style={{ flexDirection: "row", gap: 5 }}>
-              <Text style={{ flex: 1 }}>Rank:</Text>
-              <Text style={{ flex: 1 }}> {data.rank}</Text>
+              <Text style={{ flex: 1, color: styles.common.color }}>Rank:</Text>
+              <Text style={{ flex: 1, color: styles.common.color }}>
+                {" "}
+                {data.rank}
+              </Text>
             </View>
           )}
           {data.wgpa == undefined ? (
             ""
           ) : (
             <View style={{ flexDirection: "row", gap: 5 }}>
-              <Text style={{ flex: 1 }}>WGPA:</Text>
-              <Text style={{ flex: 1 }}> {data.wgpa}</Text>
+              <Text style={{ flex: 1, color: styles.common.color }}>WGPA:</Text>
+              <Text style={{ flex: 1, color: styles.common.color }}>
+                {" "}
+                {data.wgpa}
+              </Text>
             </View>
           )}
           {data.admissionCategory == undefined ? (
             ""
           ) : (
             <View style={{ flexDirection: "row", gap: 5 }}>
-              <Text style={{ flex: 1 }}>Admission category:</Text>
-              <Text style={{ flex: 1 }}> {data.admissionCategory}</Text>
+              <Text style={{ flex: 1, color: styles.common.color }}>
+                Admission category:
+              </Text>
+              <Text style={{ flex: 1, color: styles.common.color }}>
+                {" "}
+                {data.admissionCategory}
+              </Text>
             </View>
           )}
 
@@ -265,24 +378,37 @@ export default function Profile() {
             ""
           ) : (
             <View style={{ flexDirection: "row", gap: 5 }}>
-              <Text style={{ flex: 1 }}>Number:</Text>
-              <Text style={{ flex: 1 }}> {data.tcNumber}</Text>
+              <Text style={{ flex: 1, color: styles.common.color }}>
+                Number:
+              </Text>
+              <Text style={{ flex: 1, color: styles.common.color }}>
+                {" "}
+                {data.tcNumber}
+              </Text>
             </View>
           )}
           {data.tcDate == undefined ? (
             ""
           ) : (
             <View style={{ flexDirection: "row", gap: 5 }}>
-              <Text style={{ flex: 1 }}>Date:</Text>
-              <Text style={{ flex: 1 }}> {data.tcDate}</Text>
+              <Text style={{ flex: 1, color: styles.common.color }}>Date:</Text>
+              <Text style={{ flex: 1, color: styles.common.color }}>
+                {" "}
+                {data.tcDate}
+              </Text>
             </View>
           )}
           {data.tcSchool == undefined ? (
             ""
           ) : (
             <View style={{ flexDirection: "row", gap: 5 }}>
-              <Text style={{ flex: 1 }}>School:</Text>
-              <Text style={{ flex: 1 }}> {data.tcSchool}</Text>
+              <Text style={{ flex: 1, color: styles.common.color }}>
+                School:
+              </Text>
+              <Text style={{ flex: 1, color: styles.common.color }}>
+                {" "}
+                {data.tcSchool}
+              </Text>
             </View>
           )}
           {data.sslcNameOfBoard == undefined &&
@@ -300,24 +426,39 @@ export default function Profile() {
             ""
           ) : (
             <View style={{ flexDirection: "row", gap: 5 }}>
-              <Text style={{ flex: 1 }}>Name of board:</Text>
-              <Text style={{ flex: 1 }}> {data.sslcNameOfBoard}</Text>
+              <Text style={{ flex: 1, color: styles.common.color }}>
+                Name of board:
+              </Text>
+              <Text style={{ flex: 1, color: styles.common.color }}>
+                {" "}
+                {data.sslcNameOfBoard}
+              </Text>
             </View>
           )}
           {data.sslcPassingTime == undefined ? (
             ""
           ) : (
             <View style={{ flexDirection: "row", gap: 5 }}>
-              <Text style={{ flex: 1 }}>Passing time:</Text>
-              <Text style={{ flex: 1 }}> {data.sslcPassingTime}</Text>
+              <Text style={{ flex: 1, color: styles.common.color }}>
+                Passing time:
+              </Text>
+              <Text style={{ flex: 1, color: styles.common.color }}>
+                {" "}
+                {data.sslcPassingTime}
+              </Text>
             </View>
           )}
           {data.sslcRegisterNo == undefined ? (
             ""
           ) : (
             <View style={{ flexDirection: "row", gap: 5 }}>
-              <Text style={{ flex: 1 }}>Register No:</Text>
-              <Text style={{ flex: 1 }}> {data.sslcRegisterNo}</Text>
+              <Text style={{ flex: 1, color: styles.common.color }}>
+                Register No:
+              </Text>
+              <Text style={{ flex: 1, color: styles.common.color }}>
+                {" "}
+                {data.sslcRegisterNo}
+              </Text>
             </View>
           )}
         </View>

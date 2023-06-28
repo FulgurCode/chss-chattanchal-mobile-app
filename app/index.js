@@ -1,6 +1,6 @@
 import { Link, useRouter, useFocusEffect } from "expo-router";
 import React, { useEffect, useState } from "react";
-import { Alert, Button, SafeAreaView, Text, StyleSheet } from "react-native";
+import { Alert, Button, SafeAreaView, Text, StatusBar } from "react-native";
 import Axios from "../stores/Axios";
 
 import Loader from "../components/common/Loader";
@@ -15,6 +15,10 @@ export default function Home() {
 
   const [redirect, setRedirect] = useState(true);
   // Change this to see the home screen
+
+  if (!redirect){
+    StatusBar.setBackgroundColor("red")
+  }
 
   function CheckLogin() {
     Axios.get("admin/checklogin")

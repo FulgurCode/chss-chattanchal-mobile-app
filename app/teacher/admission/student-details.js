@@ -10,21 +10,26 @@ import {
   FlatList,
   ActivityIndicator,
 } from "react-native";
-import styles from "../../../styles/styles";
-import DropDownPicker from "react-native-dropdown-picker";
+import DropDownPickerComponent from "../../../components/common/DropDown";
 import Axois from "../../../stores/Axios";
 import Item from "../../../components/admin/admission/Item";
 
-import {useState, useEffect} from "react"
+import { useState, useEffect, useContext } from "react";
+import { Context } from "../../../stores/Context";
 import Loader from "../../../components/common/Loader";
-import {TeacherCheckLogin} from "../../../stores/CheckLogin";
-import {useRouter} from "expo-router"
+import { TeacherCheckLogin } from "../../../stores/CheckLogin";
+import { useRouter } from "expo-router";
+
+import Hero from "../../../components/common/Hero";
 
 export default function StudentDetials() {
+  const { styles } = useContext(Context);
 
   const router = useRouter();
   const [loading, setLoading] = useState(true);
-  useEffect(()=>{TeacherCheckLogin(setLoading, router.replace, link="/login")},[]);
+  useEffect(() => {
+    TeacherCheckLogin(setLoading, router.replace, (link = "/login"));
+  }, []);
 
   const [isLoading, setIsLoading] = React.useState(false);
   const [error, setError] = React.useState("");
@@ -36,29 +41,29 @@ export default function StudentDetials() {
 
   const [data, setData] = React.useState([]);
 
-  function body(){
+  function body() {
+    let searchValue;
 
-    let searchValue
-
-    if (isNaN(parseInt(search))){
-      searchValue = search
-    } else{
-      searchValue = parseInt(search)
+    if (isNaN(parseInt(search))) {
+      searchValue = search;
+    } else {
+      searchValue = parseInt(search);
     }
 
-    if (value === "name"){
-      return {}
+    if (value === "name") {
+      return {};
     } else {
-      return(
-        {
-          [value]: searchValue
-        }
-      )
+      return {
+        [value]: searchValue,
+      };
     }
   }
 
   function handleClick() {
-    Axois.post(`teacher/get-students?name=${value === "name" ? search : ""}`, body())
+    Axois.post(
+      `teacher/get-students?name=${value === "name" ? search : ""}`,
+      body()
+    )
       .then((res) => {
         setData(res.data);
         setError("");
@@ -81,174 +86,142 @@ export default function StudentDetials() {
 
   return (
     <>
-    <Loader show={loading} />
-    <ScrollView
-      style={{
-        paddingLeft: 40,
-        paddingRight: 40,
-        backgroundColor: "white",
-      }}
-    >
-
-<View>
-        <View
-          style={{
-            flexDirection: "row",
-            alignItems: "center",
-            paddingTop: 50,
-          }}
-        >
-          <Image source={studentDetailsImg} style={styles.newAdmissionImg} />
-          <Text
-            style={{
-              fontSize: 25,
-              fontWeight: 500,
-              borderColor: "#ccc",
-              borderRightWidth: 2,
-              paddingRight: 20,
-            }}
-          >
-            Student Details
-          </Text>
-        </View>
-        <View
-          style={{
-            borderBottomWidth: 2,
-            borderColor: "#ccc",
-            marginBottom: 10,
-          }}
-        />
-        <Text style={{ color: "grey", fontSize: 17, paddingBottom: 50 }}>
-          Home &gt; Admission &gt;{" "}
-          <Text style={{ fontWeight: 500 }}>Student Details</Text>
-        </Text>
-      </View>
-      
-
-      <View style={{ gap: 20 }}>
-        <View style={{ zIndex: 999 }}>
-          <DropDownPicker
-            open={open}
-            value={value}
-            items={[
-              { label: "Admission No.", value: "admissionNo" },
-              { label: "Application No.", value: "applicationNo" },
-              { label: "Name", value: "name", selected: true },
-            ]}
-            setOpen={setOpen}
-            placeholder="Search By"
-            setValue={setValue}
-            listMode="SCROLLVIEW"
-            style={{
-              backgroundColor: "#FAFAFC",
-              borderColor: "#dfdfdf",
-              borderRadius: 10,
-            }}
-            selectedItemContainerStyle={{
-              backgroundColor: "#f2f2f2",
-            }}
-            dropDownContainerStyle={{
-              borderColor: "#dfdfdf",
-            }}
-          />
-        </View>
-        <TextInput
-          style={styles.input}
-          name="search"
-          onChangeText={(text) => {
-            setSearch(text);
-          }}
-          placeholder="Search here"
-          value={search}
-        />
-        <View style={{ alignItems: "flex-end" }}>
-          <TouchableOpacity
-            style={{ ...styles.btn, minWidth: 100 }}
-            onPress={handleClick}
-          >
-            <Text style={styles.btnText}>Search</Text>
-          </TouchableOpacity>
-        </View>
-        <View style={{ gap: 5 }}>
-          <Text
-            style={{
-              color: "red",
-              alignSelf: "center",
-            }}
-          >
-            {error}
-          </Text>
-          <ActivityIndicator
-            size="small"
-            animating={isLoading}
-            color="#28B4AB"
-          />
-        </View>
-      </View>
-      <View
+      <Loader show={loading} />
+      <ScrollView
         style={{
-          borderColor: "#ccc",
-          borderWidth: 1,
-          marginTop: 10,
-          borderRadius: 10,
-          backgroundColor: "#FAFAFC",
-          marginBottom: 50,
+          paddingLeft: 40,
+          paddingRight: 40,
+          backgroundColor: styles.common.backgroundColor,
         }}
       >
-        <FlatList
-          data={data}
-          renderItem={({ item }) => <Item data={item} link={"teacher/admission/profile"}/>}
-          keyExtractor={(item) => item._id}
-          ItemSeparatorComponent={
-            <View style={{ backgroundColor: "#ccc", height: 1 }} />
-          }
-          ListEmptyComponent={
-            <Text style={{ alignSelf: "center", color: "grey", padding: 30 }}>
-              Empty
+        <Hero img={studentDetailsImg} />
+
+        <View style={{ gap: 20 }}>
+          <View style={{ zIndex: 999 }}>
+            <DropDownPickerComponent
+              open={open}
+              value={value}
+              items={[
+                { label: "Admission No.", value: "admissionNo" },
+                { label: "Application No.", value: "applicationNo" },
+                { label: "Name", value: "name", selected: true },
+              ]}
+              setOpen={setOpen}
+              placeholder="Search By"
+              setValue={setValue}
+            />
+          </View>
+          <TextInput
+            style={styles.input}
+            name="search"
+            onChangeText={(text) => {
+              setSearch(text);
+            }}
+            placeholder="Search here"
+            placeholderTextColor={styles.common.color}
+            value={search}
+          />
+          <View style={{ alignItems: "flex-end" }}>
+            <TouchableOpacity
+              style={{ ...styles.btn, minWidth: 100 }}
+              onPress={handleClick}
+            >
+              <Text style={styles.btnText}>Search</Text>
+            </TouchableOpacity>
+          </View>
+          <View style={{ gap: 5 }}>
+            <Text
+              style={{
+                color: "red",
+                alignSelf: "center",
+              }}
+            >
+              {error}
             </Text>
-          }
-          ListHeaderComponent={
-            <View style={{ flexDirection: "row" }}>
-              <Text
+            <ActivityIndicator
+              size="small"
+              animating={isLoading}
+              color="#28B4AB"
+            />
+          </View>
+        </View>
+        <View
+          style={{
+            borderColor: styles.common.borderColor,
+            borderWidth: 1,
+            marginTop: 10,
+            borderRadius: 10,
+            overflow: "hidden",
+            backgroundColor: styles.common.inputBackground,
+            marginBottom: 50,
+          }}
+        >
+          <FlatList
+            data={data}
+            renderItem={({ item }) => (
+              <Item data={item} link={"teacher/admission/profile"} />
+            )}
+            keyExtractor={(item) => item._id}
+            ItemSeparatorComponent={
+              <View
                 style={{
-                  padding: 10,
-                  paddingTop: 15,
-                  flex: 2,
-                  backgroundColor: "#ddd",
-                  borderTopLeftRadius: 8,
+                  backgroundColor: styles.common.borderColor,
+                  height: 1,
+                }}
+              />
+            }
+            ListEmptyComponent={
+              <Text style={{ alignSelf: "center", color: "grey", padding: 30 }}>
+                Empty
+              </Text>
+            }
+            ListHeaderComponent={
+              <View
+                style={{
+                  flexDirection: "row",
+                  backgroundColor: styles.common.primaryColor,
                 }}
               >
-                Name
-              </Text>
-              <Text
-                style={{
-                  padding: 10,
-                  paddingTop: 15,
-                  flex: 1,
-                  backgroundColor: "#ccc",
-                  textAlign: "center",
-                }}
-              >
-                Adm No
-              </Text>
-              <Text
-                style={{
-                  padding: 10,
-                  paddingTop: 15,
-                  flex: 1,
-                  backgroundColor: "#ddd",
-                  textAlign: "center",
-                  borderTopRightRadius: 8,
-                }}
-              >
-                Class
-              </Text>
-            </View>
-          }
-          scrollEnabled={false}
-        />
-      </View>
-    </ScrollView>
+                <Text
+                  style={{
+                    padding: 10,
+                    paddingTop: 15,
+                    flex: 2,
+                    borderTopLeftRadius: 8,
+                    color: "white",
+                  }}
+                >
+                  Name
+                </Text>
+                <Text
+                  style={{
+                    padding: 10,
+                    paddingTop: 15,
+                    flex: 1,
+                    textAlign: "center",
+                    color: "white",
+                  }}
+                >
+                  Adm No
+                </Text>
+                <Text
+                  style={{
+                    padding: 10,
+                    paddingTop: 15,
+                    flex: 1,
+                    textAlign: "center",
+                    borderTopRightRadius: 8,
+                    color: "white",
+                  }}
+                >
+                  Class
+                </Text>
+              </View>
+            }
+            scrollEnabled={false}
+          />
+        </View>
+      </ScrollView>
     </>
   );
 }

@@ -1,7 +1,15 @@
 import { Tabs } from "expo-router";
-import { Ionicons, MaterialCommunityIcons, MaterialIcons , FontAwesome} from "@expo/vector-icons";
+import {
+  Ionicons,
+  MaterialCommunityIcons,
+  MaterialIcons,
+} from "@expo/vector-icons";
+import { useContext } from "react";
+import { Context } from "../../../stores/Context";
 
 export default function Layout() {
+  const { styles } = useContext(Context);
+
   return (
     <Tabs
       screenOptions={{
@@ -10,10 +18,10 @@ export default function Layout() {
         tabBarShowLabel: false,
         tabBarStyle: {
           height: 50,
-          backgroundColor: "#6A2C70",
-          borderTopWidth: 0
+          backgroundColor: styles.common.primaryColor,
+          borderTopWidth: 0,
         },
-        tabBarActiveBackgroundColor: "#461d4a",
+        tabBarActiveBackgroundColor: styles.common.primaryDarkColor,
       }}
     >
       <Tabs.Screen
@@ -49,14 +57,6 @@ export default function Layout() {
         options={{
           tabBarIcon: () => (
             <MaterialIcons name="verified" size={30} color="white" />
-          ),
-        }}
-      />
-      <Tabs.Screen
-        name="take-photo"
-        options={{
-          tabBarIcon: () => (
-            <FontAwesome name="camera" size={27} color="white" />
           ),
         }}
       />

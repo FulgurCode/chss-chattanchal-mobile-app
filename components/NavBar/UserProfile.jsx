@@ -8,15 +8,15 @@ import {
   StyleSheet,
 } from "react-native";
 import Axios from "../../stores/Axios";
+import { useContext } from "react";
+import { Context } from "../../stores/Context";
 
-import { usePathname, useRouter, useNavigation } from "expo-router";
+import { usePathname, useNavigation } from "expo-router";
 import { CommonActions } from "@react-navigation/native";
-import * as WebBrowser from 'expo-web-browser';
-
-
+import * as WebBrowser from "expo-web-browser";
 
 export default function UserProfile({ show, setShow }) {
-  const router = useRouter();
+  const { styles } = useContext(Context);
   const navigation = useNavigation();
   const pathname = usePathname().split("/")[1];
 
@@ -27,9 +27,9 @@ export default function UserProfile({ show, setShow }) {
         navigation.dispatch(
           CommonActions.reset({
             index: 1,
-            routes: [{name: "index"}]
+            routes: [{ name: "index" }],
           })
-        )
+        );
       })
       .catch((err) => {});
   }
@@ -45,7 +45,7 @@ export default function UserProfile({ show, setShow }) {
         paddingTop: 100,
       }}
     >
-      <SafeAreaView style={styles.modal}>
+      <SafeAreaView style={stl.modal}>
         <TouchableOpacity
           onPress={() => {
             setShow(false);
@@ -57,7 +57,12 @@ export default function UserProfile({ show, setShow }) {
             height: "100%",
           }}
         />
-        <View style={styles.container}>
+        <View
+          style={{
+            ...stl.container,
+            backgroundColor: styles.common.popUpBackground,
+          }}
+        >
           <View
             style={{
               paddingVertical: 30,
@@ -107,6 +112,7 @@ export default function UserProfile({ show, setShow }) {
               style={{
                 fontWeight: 500,
                 minWidth: 125,
+                color: styles.common.color,
               }}
               numberOfLines={1}
             >
@@ -120,26 +126,33 @@ export default function UserProfile({ show, setShow }) {
             }}
           >
             <TouchableHighlight
-              underlayColor="#eee"
-              style={styles.button}
-              onPress={async ()=>{
-                let result = await WebBrowser.openBrowserAsync('https://chattanchalhss.com/login');
+              underlayColor={styles.common.borderColor}
+              style={{ ...stl.button, borderColor: styles.common.borderColorLight }}
+              onPress={async () => {
+                let result = await WebBrowser.openBrowserAsync(
+                  "https://chattanchalhss.com/login"
+                );
                 setShow(false);
               }}
             >
-              <Text style={{ alignSelf: "center" }}>Change Password</Text>
+              <Text style={{ alignSelf: "center", color: styles.common.color }}>
+                Change Password
+              </Text>
             </TouchableHighlight>
             <TouchableHighlight
-              underlayColor="#eee"
-              style={styles.button}
+              underlayColor={styles.common.borderColor}
+              style={{ ...stl.button, borderColor: styles.common.borderColorLight }}
               onPress={Logout}
             >
-              <Text style={{ alignSelf: "center" }}>Logout</Text>
+              <Text style={{ alignSelf: "center", color: styles.common.color }}>
+                Logout
+              </Text>
             </TouchableHighlight>
             <TouchableHighlight
-              underlayColor="#eee"
+              underlayColor={styles.common.borderColor}
               style={{
-                ...styles.button,
+                ...stl.button,
+                borderColor: styles.common.borderColorLight,
                 borderBottomLeftRadius: 10,
                 borderBottomRightRadius: 10,
               }}
@@ -147,7 +160,9 @@ export default function UserProfile({ show, setShow }) {
                 setShow(false);
               }}
             >
-              <Text style={{ alignSelf: "center" }}>Close</Text>
+              <Text style={{ alignSelf: "center", color: styles.common.color }}>
+                Close
+              </Text>
             </TouchableHighlight>
           </View>
         </View>
@@ -156,9 +171,8 @@ export default function UserProfile({ show, setShow }) {
   );
 }
 
-const styles = StyleSheet.create({
+const stl = StyleSheet.create({
   container: {
-    backgroundColor: "white",
     borderRadius: 10,
     elevation: 100,
     justifyContent: "center",
@@ -173,6 +187,5 @@ const styles = StyleSheet.create({
   button: {
     paddingVertical: 20,
     borderTopWidth: 1,
-    borderTopColor: "#eee",
   },
 });

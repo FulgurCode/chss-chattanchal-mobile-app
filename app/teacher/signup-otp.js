@@ -1,5 +1,6 @@
 import React from "react";
-import styles from "../../styles/styles";
+import { useContext } from "react";
+import { Context } from "../../stores/Context";
 import { useState } from "react";
 import Axios from "../../stores/Axios";
 import { useRouter } from "expo-router";
@@ -14,6 +15,8 @@ import {
 
 export default function Login() {
   const router = useRouter();
+
+  const {styles} = useContext(Context)
 
   const [open, setOpen] = useState(false);
   const [items, setItems] = useState([
@@ -58,18 +61,18 @@ export default function Login() {
   return (
     <SafeAreaView
       style={{
+        backgroundColor: styles.common.backgroundColor,
         flex: 1,
         justifyContent: "center",
         minHeight: 500,
         padding: 40,
-        backgroundColor: "white",
         gap: 20,
       }}
     >
       <FontAwesome5
         name="lock"
         size={24}
-        color="black"
+        color={styles.common.color}
         style={{ alignSelf: "center", top: 10 }}
       />
       <Text style={{ ...styles.loginHeaderMain, paddingTop: 0 }}>

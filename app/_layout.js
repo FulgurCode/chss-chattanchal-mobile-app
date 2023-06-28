@@ -3,16 +3,37 @@ import { TouchableOpacity, View, Text, StatusBar } from "react-native";
 import { Ionicons, AntDesign } from "@expo/vector-icons";
 import { useRouter, usePathname } from "expo-router";
 import UserProfile from "../components/NavBar/UserProfile";
-import { useState } from "react";
+import { useState, useContext } from "react";
 
-export default function Layout() {
+import { ContextProvider, Context } from "../stores/Context";
+
+export default function App() {
+  return (
+    <ContextProvider>
+      <Layout />
+    </ContextProvider>
+  );
+}
+
+export function Layout() {
   const router = useRouter();
   const pathname = usePathname().split("/");
 
   const [show, setShow] = useState(false);
 
-  if (pathname[1] == "login" || pathname[2] == "signup" || pathname[2] == "signup-otp") {
-    StatusBar.setBarStyle("dark-content");
+  const { styles } = useContext(Context);
+
+  if (
+    pathname[1] == "login" ||
+    pathname[2] == "signup" ||
+    pathname[2] == "signup-otp"
+  ) {
+    StatusBar.setBackgroundColor(styles.common.backgroundColor);
+    if (styles.version.mode == "dark") {
+      StatusBar.setBarStyle("light-content");
+    } else if (styles.version.mode == "light") {
+      StatusBar.setBarStyle("dark-content");
+    }
   } else {
     StatusBar.setBarStyle("light-content");
   }
@@ -20,7 +41,7 @@ export default function Layout() {
   return (
     <Stack
       screenOptions={{
-        headerStyle: { backgroundColor: "#6A2C70" },
+        headerStyle: { backgroundColor: styles.common.primaryColor },
         headerTintColor: "#fff",
         headerTitleAlign: "center",
         headerTitle: "CHSS Chattanchal",

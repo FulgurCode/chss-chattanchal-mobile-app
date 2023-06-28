@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from "react";
-import styles from "../../../styles/styles";
+import React, { useEffect, useState, useContext } from "react";
 import Axios from "../../../stores/Axios";
 import {
   SafeAreaView,
@@ -14,14 +13,19 @@ import {
 } from "react-native";
 import { useRouter } from "expo-router";
 import verificationImg from "../../../imgs/adminImages/item3.png";
+import Hero from "../../../components/common/Hero";
 import Loader from "../../../components/common/Loader";
-import {AdminCheckLogin} from "../../../stores/CheckLogin";
+import { AdminCheckLogin } from "../../../stores/CheckLogin";
 
+import { Context } from "../../../stores/Context";
 
 export default function Verification() {
   const [loading, setLoading] = useState(true);
-  useEffect(()=>{AdminCheckLogin(setLoading, router.replace, link="/login")},[]);
+  useEffect(() => {
+    AdminCheckLogin(setLoading, router.replace, (link = "/login"));
+  }, []);
 
+  const { styles } = useContext(Context);
 
   const [data, setData] = useState([]);
   const [error, setError] = useState("");
@@ -140,7 +144,7 @@ export default function Verification() {
   return (
     <SafeAreaView
       style={{
-        backgroundColor: "white",
+        backgroundColor: styles.common.backgroundColor,
         flex: 1,
       }}
     >
@@ -154,39 +158,7 @@ export default function Verification() {
           paddingRight: 40,
         }}
       >
-        <View>
-          <View
-            style={{
-              flexDirection: "row",
-              alignItems: "center",
-              paddingTop: 50,
-            }}
-          >
-            <Image source={verificationImg} style={styles.verificationImg} />
-            <Text
-              style={{
-                fontSize: 25,
-                fontWeight: 500,
-                borderColor: "#ccc",
-                borderRightWidth: 2,
-                paddingRight: 20,
-              }}
-            >
-              Verification
-            </Text>
-          </View>
-          <View
-            style={{
-              borderBottomWidth: 2,
-              borderColor: "#ccc",
-              marginBottom: 10,
-            }}
-          />
-          <Text style={{ color: "grey", fontSize: 17, paddingBottom: 50 }}>
-            Home &gt; Admission &gt;{" "}
-            <Text style={{ fontWeight: 500 }}>Verification</Text>
-          </Text>
-        </View>
+        <Hero img={verificationImg} />
 
         <View>
           <View
@@ -206,7 +178,10 @@ export default function Verification() {
             <TextInput
               style={{ ...styles.input, marginBottom: 20 }}
               placeholder="Search Name/Adm No"
-              // value={searchQuery}
+              placeholderTextColor={
+                styles.components.textInput.placeHolder.color
+              }
+              value={searchQuery}
               onChangeText={handleSearch}
             />
           </View>
@@ -217,7 +192,12 @@ export default function Verification() {
               <View style={styles.tableHeader}>
                 <TouchableOpacity
                   onPress={() => handleSort("name")}
-                  style={{ flex: 1, alignItems: "center" }}
+                  style={{
+                    flex: 1,
+                    alignItems: "center",
+                    justifyContent: "center",
+                    
+                  }}
                 >
                   <Text style={{ color: "white" }}>
                     Name {getSortIndicator("name")}
@@ -225,7 +205,11 @@ export default function Verification() {
                 </TouchableOpacity>
                 <TouchableOpacity
                   onPress={() => handleSort("class")}
-                  style={{ flex: 1, alignItems: "center" }}
+                  style={{
+                    flex: 1,
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
                 >
                   <Text style={{ color: "white" }}>
                     Class {getSortIndicator("class")}
@@ -233,7 +217,11 @@ export default function Verification() {
                 </TouchableOpacity>
                 <TouchableOpacity
                   onPress={() => handleSort("admissionNo")}
-                  style={{ flex: 1, alignItems: "center" }}
+                  style={{
+                    flex: 1,
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
                 >
                   <Text style={{ color: "white" }}>
                     Adm No. {getSortIndicator("admissionNo")}
@@ -241,7 +229,11 @@ export default function Verification() {
                 </TouchableOpacity>
                 <TouchableOpacity
                   onPress={() => handleSort("dob")}
-                  style={{ flex: 1, alignItems: "center" }}
+                  style={{
+                    flex: 1,
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
                 >
                   <Text style={{ color: "white" }}>
                     D.O.B {getSortIndicator("dob")}
@@ -257,8 +249,8 @@ export default function Verification() {
                   <Text
                     style={{
                       padding: 20,
-                      borderBottomWidth: 1,
-                      borderColor: "#ddd",
+                      color: "grey",
+                      backgroundColor: styles.common.inputBackground
                     }}
                   >
                     No data found
@@ -269,8 +261,9 @@ export default function Verification() {
                       key={item._id}
                       style={{
                         ...styles.tableRow,
-                        borderBottomWidth: 1,
-                        borderColor: "#ddd",
+                        borderTopWidth: 1,
+                        borderColor: styles.common.borderColor,
+                        backgroundColor: styles.common.inputBackground,
                       }}
                     >
                       <TouchableOpacity
@@ -293,27 +286,41 @@ export default function Verification() {
                         <View
                           style={{
                             flex: 1,
-                            backgroundColor: "#eee",
+                            // backgroundColor: styles.common.inputBackground,
                             justifyContent: "center",
                           }}
                         >
-                          <Text style={{ textAlign: "center" }}>
+                          <Text
+                            style={{
+                              textAlign: "center",
+                              color: styles.common.color,
+                            }}
+                          >
                             {item.name}
                           </Text>
                         </View>
                         <View style={{ flex: 1, justifyContent: "center" }}>
-                          <Text style={{ textAlign: "center" }}>
+                          <Text
+                            style={{
+                              textAlign: "center",
+                              color: styles.common.color,
+                            }}
+                          >
                             {item.class}
                           </Text>
                         </View>
                         <View
                           style={{
                             flex: 1,
-                            backgroundColor: "#eee",
                             justifyContent: "center",
                           }}
                         >
-                          <Text style={{ textAlign: "center" }}>
+                          <Text
+                            style={{
+                              textAlign: "center",
+                              color: styles.common.color,
+                            }}
+                          >
                             {item.admissionNo}
                           </Text>
                         </View>
@@ -324,7 +331,12 @@ export default function Verification() {
                             padding: 10,
                           }}
                         >
-                          <Text style={{ textAlign: "center" }}>
+                          <Text
+                            style={{
+                              textAlign: "center",
+                              color: styles.common.color,
+                            }}
+                          >
                             {item.dob}
                           </Text>
                         </View>
