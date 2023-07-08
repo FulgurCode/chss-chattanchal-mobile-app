@@ -7,9 +7,10 @@ export const Context = createContext();
 export function ContextProvider({ children }) {
   const color = useColorScheme();
 
-  const [styles, setStyles] = useState(theme(color))
+  const [styles, setStyles] = useState(theme(color));
   const [isAdminLoggedIn, setIsAdminLoggedIn] = useState();
   const [isTeacherLoggedIn, setIsTeacherLoggedIn] = useState();
+  const [webSocketURL, setWebsocketURL] = useState("wss://chattanchalhss.com/ws/admission-photo");
 
   useEffect(() => {
     setStyles(theme(color));
@@ -22,7 +23,9 @@ export function ContextProvider({ children }) {
         isAdminLoggedIn,
         setIsAdminLoggedIn,
         isTeacherLoggedIn,
-        setIsTeacherLoggedIn
+        setIsTeacherLoggedIn,
+        webSocketURL,
+        setWebsocketURL
       }}
     >
       {children}

@@ -6,7 +6,7 @@
       "resizeMode": "contain"
     },
     "icon": "./imgs/icons/icon.png",
-    "scheme": "acme",
+    "scheme": "chss",
     "web": {
       "bundler": "metro"
     },
@@ -47,7 +47,8 @@
 
     "userInterfaceStyle": "automatic",
     "ios": {
-      "userInterfaceStyle": "automatic"
+      "userInterfaceStyle": "automatic",
+      "bundleIdentifier" : "chss"
     }
   }
 }

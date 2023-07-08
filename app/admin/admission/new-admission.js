@@ -2,7 +2,6 @@ import React from "react";
 import {
   Text,
   Image,
-  Alert,
   View,
   TextInput,
   ScrollView,
@@ -22,6 +21,7 @@ import { useFocusEffect } from "@react-navigation/native";
 
 import Camera from "../../../components/admin/admission/Camera";
 import { Context } from "../../../stores/Context";
+import Alert from "../../../components/common/Alert";
 
 const TextInputComponent = ({ value, onChangeText, name, ...props }) => (
   <TextInput
@@ -143,21 +143,17 @@ export default function NewAdmission() {
                 { headers: { "Content-Type": "multipart/form-data" } }
               ).catch((err) => {
                 if (err?.response?.status == 401) {
-                  Alert.alert("Status", err.response.data);
+                  Alert.alert(err.response.data, "Status");
                 } else if (err?.response?.status == 500) {
-                  Alert.alert(
-                    "Status",
-                    err.response.data,
-                    "Internal server error"
-                  );
+                  Alert.alert("Internal server error", "Status");
                 } else if (err?.response?.status === undefined) {
-                  Alert.alert("Status", "Server connection error");
+                  Alert.alert("Server connection error", "Status");
                 } else {
-                  Alert.alert("Status", err.response.data);
+                  Alert.alert(err.response.data, "Status");
                 }
               });
 
-              Alert.alert("Status", "new admission sucssesfull");
+              Alert.alert("new admission sucssesfull", "New admission");
               setIsLoading(false);
               makeEmpty();
               setDisabled(false);
@@ -167,17 +163,13 @@ export default function NewAdmission() {
               setDisabled(false);
 
               if (err?.response?.status == 401) {
-                Alert.alert("Status", err.response.data);
+                Alert.alert(err.response.data, "Status");
               } else if (err?.response?.status == 500) {
-                Alert.alert(
-                  "Status",
-                  err.response.data,
-                  "Internal server error"
-                );
+                Alert.alert("Internal server error", "Status");
               } else if (err?.response?.status === undefined) {
-                Alert.alert("Status", "Server connection error");
+                Alert.alert("Server connection error", "Status");
               } else {
-                Alert.alert("Status", err.response.data);
+                Alert.alert(err.response.data, "Status");
               }
             });
         } else {
@@ -253,7 +245,7 @@ export default function NewAdmission() {
       await ImagePicker.requestMediaLibraryPermissionsAsync();
 
     if (permissionResult.granted === false) {
-      alert("You've refused to allow this appp to access your photos!");
+      Alert.alert("You've refused to allow this appp to access your photos!");
       return;
     }
 
@@ -778,7 +770,7 @@ export default function NewAdmission() {
             maxHeight: 320,
             maxWidth: 320,
             alignSelf: "center",
-            margin: 10
+            margin: 10,
           }}
         >
           {imageUri && (

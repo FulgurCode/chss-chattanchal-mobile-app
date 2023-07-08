@@ -8,12 +8,12 @@ import {
   View,
   TextInput,
   TouchableOpacity,
-  Alert,
   RefreshControl,
   ScrollView,
 } from "react-native";
 import { useRouter } from "expo-router";
 import verificationImg from "../../../imgs/adminImages/item3.png";
+import Alert from "../../../components/common/Alert";
 
 export default function Verification() {
   
@@ -59,12 +59,14 @@ export default function Verification() {
     setError("");
     Axios.patch(`teacher/verify-student?studentId=${id}`)
       .then((res) => {
-        Alert.alert("Verification", "Student verified successfully!");
+        Alert.alert("Student verified successfully!", "Verification");
         loadData();
       })
       .catch((err) => {
         if (err.response == undefined) {
           setError("Server connection error");
+          Alert.alert("Server connection error", "Verification");
+
         } else {
           setError(err.response.data);
         }

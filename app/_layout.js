@@ -3,18 +3,21 @@ import { TouchableOpacity, View, Text, StatusBar } from "react-native";
 import { Ionicons, AntDesign } from "@expo/vector-icons";
 import { useRouter, usePathname, useNavigation } from "expo-router";
 import UserProfile from "../components/NavBar/UserProfile";
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 
 import { ContextProvider, Context } from "../stores/Context";
 import { CommonActions } from "@react-navigation/native";
+import Alert from "../components/common/Alert"
 
 export default function App() {
   return (
     <ContextProvider>
       <Layout />
+      <Alert/>
     </ContextProvider>
   );
 }
+
 
 export function Layout() {
   const router = useRouter();
@@ -42,7 +45,11 @@ export function Layout() {
 
   return (
     <Stack
+      initialRouteName="home"
       screenOptions={{
+        presentation: "modal",
+        animationTypeForReplace: "push",
+        animation: "slide_from_right",
         headerStyle: { backgroundColor: styles.common.primaryColor },
         headerTintColor: "#fff",
         headerTitleAlign: "center",
@@ -69,7 +76,7 @@ export function Layout() {
               navigation.dispatch(
                 CommonActions.reset({
                   index: 1,
-                  routes: [{ name: "index" }],
+                  routes: [{ name: "home" }],
                 })
               );
             }}
@@ -87,7 +94,12 @@ export function Layout() {
         ),
       }}
     >
-      <Stack.Screen name="login" options={{ headerShown: false }} />
+      <Stack.Screen
+        name="login"
+        options={{
+          headerShown: false,
+        }}
+      />
       <Stack.Screen name="teacher/signup" options={{ headerShown: false }} />
       <Stack.Screen
         name="teacher/signup-otp"

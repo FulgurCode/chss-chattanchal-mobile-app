@@ -7,7 +7,6 @@ import {
   Image,
   TextInput,
   TouchableOpacity,
-  Alert,
   RefreshControl,
   ScrollView,
 } from "react-native";
@@ -16,6 +15,7 @@ import verificationImg from "../../../imgs/adminImages/item3.png";
 import Hero from "../../../components/common/Hero";
 
 import { Context } from "../../../stores/Context";
+import Alert from "../../../components/common/Alert";
 
 export default function Confirmation() {
   const { styles, isAdminLoggedIn } = useContext(Context);
@@ -54,13 +54,14 @@ export default function Confirmation() {
     setError("");
     Axios.patch(`admin/confirm-student?studentId=${id}`)
       .then((res) => {
-        Alert.alert("Confirmation", "Student confirmed successfully!");
+        Alert.alert("Student confirmed successfully!", "Confirmation");
         loadData();
       })
       .catch((err) => {
         if (err.response == undefined) {
           setError("Server connection error");
-        } else {
+        Alert.alert("Server Connection error" ,"Confirmation");
+      } else {
           setError(err.response.data);
         }
       });

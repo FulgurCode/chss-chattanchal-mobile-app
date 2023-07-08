@@ -4,11 +4,9 @@ import {
   View,
   TouchableOpacity,
   Dimensions,
-  StatusBar,
   Image,
   ActivityIndicator,
   AppState,
-  Alert,
   Modal,
 } from "react-native";
 import { BarCodeScanner } from "expo-barcode-scanner";
@@ -18,19 +16,19 @@ import { useRef, useState, useEffect } from "react";
 import * as ImageManipulator from "expo-image-manipulator";
 
 import { MaterialCommunityIcons, Ionicons } from "@expo/vector-icons";
-
 import { useFocusEffect } from "@react-navigation/native";
-
-import Loader from "../../components/common/Loader";
-import { AdminCheckLogin } from "../../stores/CheckLogin";
 import { useRouter } from "expo-router";
+
+import { useContext } from "react";
+import { Context } from "../../stores/Context";
+import Alert from "../../components/common/Alert";
 
 let data;
 
 let Screen = Dimensions.get("window");
 
 export default function TakePhoto(props) {
-  const [loading, setLoading] = useState(true);
+  const { styles, webSocketURL } = useContext(Context);
 
   const [type, setType] = useState(CameraType.back);
   const [imageData, setImageData] = useState();
@@ -66,7 +64,7 @@ export default function TakePhoto(props) {
       setFocus(true);
       if (webSocket) {
         setWebSocket(
-          new WebSocket("wss://chattanchalhss.com/ws/admission-photo")
+          new WebSocket(webSocketURL)
         );
       }
       return () => {
@@ -98,7 +96,7 @@ export default function TakePhoto(props) {
   useEffect(() => {
     if (appState.current == "active" && focus) {
       setWebSocket(
-        new WebSocket("wss://chattanchalhss.com/ws/admission-photo")
+        new WebSocket(webSocketURL)
       );
     }
     return () => {};
@@ -135,16 +133,11 @@ export default function TakePhoto(props) {
     await webSocket.send(JSON.stringify(data));
     setSending(false);
 
-    Alert.alert("Alert", "Photo send successfully!", [
-      {
-        text: "ok",
-        onPress: () => {
-          setScanData(undefined);
-          setImageData(null);
-          props.setVisible(false);
-        },
-      },
-    ]);
+    Alert.alert("Photo send successfully!", "Alert" , () => {
+      setScanData(undefined);
+      setImageData(null);
+      props.setVisible(false);
+    });
   }
 
   // Toggle Back and Front Camera
@@ -228,263 +221,276 @@ export default function TakePhoto(props) {
 
   return (
     <Modal {...props}>
-      {/* <Loader show={loading} /> */}
-
-      {scanData && (
-        <View
-          style={{
-            flex: 1,
-            minHeight: 90,
-            maxHeight: 90,
-            flexDirection: "row",
-            justifyContent: "space-between",
-            alignItems: "center",
-            paddingTop: 20,
-            paddingHorizontal: 50,
-          }}
-        >
-          {!imageData ? (
-            <>
-              <TouchableOpacity onPress={toggleCameraType}>
-                <MaterialCommunityIcons
-                  name="camera-flip"
-                  size={30}
-                  color="#555"
-                />
-              </TouchableOpacity>
-              <TouchableOpacity onPress={toggleFlashMode}>
-                <Ionicons name="flash" size={30} color="#555" />
-              </TouchableOpacity>
-            </>
-          ) : (
-            ""
-          )}
-        </View>
-      )}
-
       <View
-        style={{
+        styles={{
           flex: 1,
+          backgroundColor: "red",
+          minWidth: Screen.width,
+          minHeight: Screen.height,
         }}
       >
+        {scanData && (
+          <View
+            style={{
+              flex: 1,
+              minHeight: 90,
+              maxHeight: 90,
+              flexDirection: "row",
+              justifyContent: "space-between",
+              alignItems: "center",
+              paddingTop: 20,
+              paddingHorizontal: 50,
+              backgroundColor: styles.common.backgroundColor,
+            }}
+          >
+            {!imageData ? (
+              <>
+                <TouchableOpacity onPress={toggleCameraType}>
+                  <MaterialCommunityIcons
+                    name="camera-flip"
+                    size={30}
+                    color="#555"
+                  />
+                </TouchableOpacity>
+                <TouchableOpacity onPress={toggleFlashMode}>
+                  <Ionicons name="flash" size={30} color="#555" />
+                </TouchableOpacity>
+              </>
+            ) : (
+              ""
+            )}
+          </View>
+        )}
+
         <View
           style={{
             flex: 1,
-            width: Screen.width,
-            maxHeight: Screen.width,
-            overflow: scanData ? "hidden" : "visible",
-            minHeight: Screen.width,
           }}
         >
-          {!imageData && hasPermission ? (
-            focus && (
-              <Camera
-                ratio={scanData ? "4:3" : "16:9"}
+          <View
+            style={{
+              flex: 1,
+              width: Screen.width,
+              maxHeight: Screen.width,
+              overflow: scanData ? "hidden" : "visible",
+              minHeight: Screen.width,
+            }}
+          >
+            {!imageData && hasPermission ? (
+              focus && (
+                <Camera
+                  ratio={scanData ? "4:3" : "16:9"}
+                  style={{
+                    flex: 1,
+                    width: scanData ? Screen.width : Screen.width + 50,
+                    maxHeight: scanData
+                      ? (Screen.width / 3) * 4
+                      : (Screen.width / 9) * 16 + 150,
+                    minHeight: scanData
+                      ? (Screen.width / 3) * 4
+                      : (Screen.width / 9) * 16 + 150,
+                  }}
+                  type={type}
+                  ref={cameraRef}
+                  flashMode={flash}
+                  onBarCodeScanned={scanData ? undefined : handleBarCodeScanned}
+                  barCodeScannerSettings={{
+                    barCodeTypes: [BarCodeScanner.Constants.BarCodeType.qr],
+                  }}
+                />
+              )
+            ) : (
+              <View
                 style={{
                   flex: 1,
-                  width: scanData ? Screen.width : Screen.width + 50,
-                  maxHeight: scanData
-                    ? (Screen.width / 3) * 4
-                    : (Screen.width / 9) * 16 + 150,
-                  minHeight: scanData
-                    ? (Screen.width / 3) * 4
-                    : (Screen.width / 9) * 16 + 150,
-                }}
-                type={type}
-                ref={cameraRef}
-                flashMode={flash}
-                onBarCodeScanned={scanData ? undefined : handleBarCodeScanned}
-                barCodeScannerSettings={{
-                  barCodeTypes: [BarCodeScanner.Constants.BarCodeType.qr],
-                }}
-              />
-            )
-          ) : (
-            <View
-              style={{
-                flex: 1,
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-            >
-              <ActivityIndicator
-                style={{
-                  position: "absolute",
-                  alignSelf: "center",
-                }}
-                size={"large"}
-                color="gray"
-                animating={processing}
-              />
-              <Image
-                source={{ uri: data }}
-                width={Screen.width}
-                height={(Screen.width / 3) * 4}
-                style={{
-                  flex: 1,
-                  width: 320,
-                  maxHeight: 320,
-                  minHeight: 320,
-                }}
-              />
-            </View>
-          )}
-        </View>
-        {scanData &&
-          (!imageData ? (
-            <View
-              style={{
-                alignItems: "center",
-                justifyContent: "space-between",
-                flex: 1,
-                paddingTop: 70,
-              }}
-            >
-              <TouchableOpacity
-                onPress={takePicture}
-                style={{
-                  backgroundColor: "#ddd",
-                  borderColor: "#bbb",
-                  borderWidth: 5,
-                  width: 80,
-                  minHeight: 80,
-                  borderRadius: 1000,
-                }}
-              ></TouchableOpacity>
-              <TouchableOpacity
-                onPress={() => {
-                  if (flash == Camera.Constants.FlashMode.torch) {
-                    setFlash(Camera.Constants.FlashMode.off);
-                  } else {
-                    setScanData(undefined);
-                    setFlash(Camera.Constants.FlashMode.off);
-                    setType(CameraType.back);
-                  }
-                }}
-                style={{
-                  backgroundColor: "#bbb",
-                  minHeight: 50,
                   justifyContent: "center",
                   alignItems: "center",
-                  width: "100%",
                 }}
               >
-                <Text style={{ color: "white", fontWeight: 600, fontSize: 17 }}>
-                  Scan Again?
+                <ActivityIndicator
+                  style={{
+                    position: "absolute",
+                    alignSelf: "center",
+                  }}
+                  size={"large"}
+                  color="gray"
+                  animating={processing}
+                />
+                <Image
+                  source={{ uri: data }}
+                  width={Screen.width}
+                  height={(Screen.width / 3) * 4}
+                  style={{
+                    flex: 1,
+                    width: 320,
+                    maxHeight: 320,
+                    minHeight: 320,
+                  }}
+                />
+              </View>
+            )}
+          </View>
+          {scanData &&
+            (!imageData ? (
+              <View
+                style={{
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                  flex: 1,
+                  paddingTop: 70,
+
+                  backgroundColor: styles.common.backgroundColor,
+                }}
+              >
+                <TouchableOpacity
+                  onPress={takePicture}
+                  style={{
+                    backgroundColor: styles.common.inputBackground,
+                    borderColor: styles.common.borderColor,
+                    borderWidth: 5,
+                    width: 80,
+                    minHeight: 80,
+                    borderRadius: 1000,
+                  }}
+                ></TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() => {
+                    if (flash == Camera.Constants.FlashMode.torch) {
+                      setFlash(Camera.Constants.FlashMode.off);
+                    } else {
+                      setScanData(undefined);
+                      setFlash(Camera.Constants.FlashMode.off);
+                      setType(CameraType.back);
+                    }
+                  }}
+                  style={{
+                    backgroundColor: styles.common.borderColor,
+                    minHeight: 50,
+                    justifyContent: "center",
+                    alignItems: "center",
+                    width: "100%",
+                  }}
+                >
+                  <Text
+                    style={{ color: "white", fontWeight: 600, fontSize: 17 }}
+                  >
+                    Scan Again?
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            ) : (
+              <View style={{ backgroundColor: styles.common.backgroundColor }}>
+                <View
+                  style={{
+                    marginTop: Screen.height / 10,
+                    flexDirection: "row",
+                    justifyContent: "space-around",
+                  }}
+                >
+                  <TouchableOpacity
+                    onPress={() => {
+                      setImageData(null);
+                      data = null;
+                    }}
+                    style={{
+                      width: Screen.width / 5,
+                      height: Screen.width / 5,
+                      backgroundColor: "#ccc",
+                      borderRadius: 1000,
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
+                  >
+                    <MaterialCommunityIcons
+                      name="camera-retake"
+                      size={40}
+                      color="#555"
+                    />
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    onPress={sendData}
+                    style={{
+                      width: Screen.width / 5,
+                      height: Screen.width / 5,
+                      backgroundColor: "#ccc",
+                      borderRadius: 1000,
+                      justifyContent: "center",
+                      paddingLeft: 26,
+                    }}
+                  >
+                    <Ionicons name="send" size={35} color="#555" />
+                    <ActivityIndicator
+                      animating={sending}
+                      color="#555"
+                      style={{
+                        position: "absolute",
+                        alignSelf: "center",
+                        transform: [{ scaleX: 2.8 }, { scaleY: 2.8 }],
+                      }}
+                      size="large"
+                    />
+                  </TouchableOpacity>
+                </View>
+                <Text style={{ margin: 20, alignSelf: "center", color: "red" }}>
+                  {error}
                 </Text>
-              </TouchableOpacity>
-            </View>
-          ) : (
+              </View>
+            ))}
+
+          {!scanData && (
             <>
               <View
                 style={{
-                  marginTop: Screen.height / 10,
-                  flexDirection: "row",
-                  justifyContent: "space-around",
+                  width: Screen.width,
+                  height: Screen.height,
+                  position: "absolute",
+                  flex: 1,
+                  zIndex: 2,
+                  justifyContent: "center",
+                  alignItems: "center",
+                  // backgroundColor: "red"
                 }}
               >
+                <View
+                  style={{
+                    borderWidth: 5,
+                    borderColor: "#fff",
+                    width: 250,
+                    height: 250,
+                    borderRadius: 30,
+                  }}
+                ></View>
                 <TouchableOpacity
+                  style={{
+                    width: 100,
+                    height: 100,
+                    backgroundColor: "#0009",
+                    borderRadius: 1000,
+                    position: "absolute",
+                  }}
                   onPress={() => {
-                    setImageData(null);
-                    data = null;
+                    props.setVisible(false);
                   }}
-                  style={{
-                    width: Screen.width / 5,
-                    height: Screen.width / 5,
-                    backgroundColor: "#ccc",
-                    borderRadius: 1000,
-                    justifyContent: "center",
-                    alignItems: "center",
-                  }}
-                >
-                  <MaterialCommunityIcons
-                    name="camera-retake"
-                    size={40}
-                    color="#555"
-                  />
-                </TouchableOpacity>
-                <TouchableOpacity
-                  onPress={sendData}
-                  style={{
-                    width: Screen.width / 5,
-                    height: Screen.width / 5,
-                    backgroundColor: "#ccc",
-                    borderRadius: 1000,
-                    justifyContent: "center",
-                    paddingLeft: 26,
-                  }}
-                >
-                  <Ionicons name="send" size={35} color="#555" />
-                  <ActivityIndicator
-                    animating={sending}
-                    color="#555"
-                    style={{
-                      position: "absolute",
-                      alignSelf: "center",
-                      transform: [{ scaleX: 2.8 }, { scaleY: 2.8 }],
-                    }}
-                    size="large"
-                  />
-                </TouchableOpacity>
+                ></TouchableOpacity>
               </View>
-              <Text style={{ margin: 20, alignSelf: "center", color: "red" }}>
-                {error}
-              </Text>
-            </>
-          ))}
 
-        {!scanData && (
-          <>
-            <View
-              style={{
-                width: Screen.width,
-                height: Screen.height,
-                position: "absolute",
-                flex: 1,
-                zIndex: 2,
-                justifyContent: "center",
-                alignItems: "center",
-                // backgroundColor: "red"
-              }}
-            >
               <View
                 style={{
-                  borderWidth: 5,
-                  borderColor: "#fff",
-                  width: 250,
-                  height: 250,
-                  borderRadius: 30,
-                }}
-              ></View>
-              <TouchableOpacity
-                style={{
-                  width: 100,
-                  height: 100,
-                  backgroundColor: "#0009",
-                  borderRadius: 1000,
                   position: "absolute",
+                  padding: 30,
+                  backgroundColor: "black",
+                  opacity: 0.6,
+                  borderRadius: 20,
+                  alignSelf: "center",
+                  margin: 20,
                 }}
-                onPress={()=>{props.setVisible(false)}}
-              ></TouchableOpacity>
-            </View>
+              >
+                <Text style={{ color: "white", fontWeight: 500, fontSize: 15 }}>
+                  Scan QR Code
+                </Text>
+              </View>
 
-            <View
-              style={{
-                position: "absolute",
-                padding: 30,
-                backgroundColor: "black",
-                opacity: 0.6,
-                borderRadius: 20,
-                alignSelf: "center",
-                margin: 20,
-              }}
-            >
-              <Text style={{ color: "white", fontWeight: 500, fontSize: 15 }}>
-                Scan QR Code
-              </Text>
-            </View>
-
-            {/* <TouchableOpacity onPress={toggleFlashMode}>
+              {/* <TouchableOpacity onPress={toggleFlashMode}>
               <Ionicons
                 name="flash"
                 size={30}
@@ -492,8 +498,9 @@ export default function TakePhoto(props) {
                 style={{ position: "absolute", top: Screen.height/3 }}
               />
             </TouchableOpacity> */}
-          </>
-        )}
+            </>
+          )}
+        </View>
       </View>
     </Modal>
   );

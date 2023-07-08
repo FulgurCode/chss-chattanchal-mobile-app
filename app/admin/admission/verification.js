@@ -7,7 +7,6 @@ import {
   Image,
   TextInput,
   TouchableOpacity,
-  Alert,
   RefreshControl,
   ScrollView,
 } from "react-native";
@@ -16,6 +15,7 @@ import verificationImg from "../../../imgs/adminImages/item3.png";
 import Hero from "../../../components/common/Hero";
 
 import { Context } from "../../../stores/Context";
+import Alert from "../../../components/common/Alert";
 
 export default function Verification() {
   const { styles, isAdminLoggedIn } = useContext(Context);
@@ -57,12 +57,13 @@ export default function Verification() {
     setError("");
     Axios.patch(`admin/verify-student?studentId=${id}`)
       .then((res) => {
-        Alert.alert("Verification", "Student verified successfully!");
+        Alert.alert("Student verified successfully!", "Verification");
         loadData();
       })
       .catch((err) => {
         if (err.response == undefined) {
           setError("Server connection error");
+          Alert.alert("Verification", "Server Connection Error");
         } else {
           setError(err.response.data);
         }

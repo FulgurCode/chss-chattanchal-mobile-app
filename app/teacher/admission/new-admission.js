@@ -2,7 +2,6 @@ import React from "react";
 import {
   Text,
   Image,
-  Alert,
   View,
   TextInput,
   ScrollView,
@@ -12,7 +11,7 @@ import {
 import admissionImg from "../../../imgs/adminImages/item1.png";
 import DropDownPickerComponent from "../../../components/common/DropDown";
 import Axois from "../../../stores/Axios";
-import { useState, useEffect , useContext} from "react";
+import { useState, useEffect, useContext } from "react";
 import { Context } from "../../../stores/Context";
 import { useRouter } from "expo-router";
 import * as ImagePicker from "expo-image-picker";
@@ -21,6 +20,7 @@ import { useFocusEffect } from "@react-navigation/native";
 
 import Camera from "../../../components/admin/admission/Camera";
 import Hero from "../../../components/common/Hero";
+import Alert from "../../../components/common/Alert";
 
 const TextInputComponent = ({ value, onChangeText, name, ...props }) => (
   <TextInput
@@ -33,15 +33,15 @@ const TextInputComponent = ({ value, onChangeText, name, ...props }) => (
 export default function NewAdmission() {
   router = useRouter();
 
-  const {styles, isTeacherLoggedIn} = useContext(Context)
+  const { styles, isTeacherLoggedIn } = useContext(Context);
 
-  if (!isTeacherLoggedIn){
+  if (!isTeacherLoggedIn) {
     router.replace({
       pathname: "/login",
       params: {
-        user: "teacher"
+        user: "teacher",
       },
-    })
+    });
   }
 
   const [imageUri, setImageUri] = useState();
@@ -127,7 +127,7 @@ export default function NewAdmission() {
           setIsLoading(true);
           setDisabled(true);
           Axois.post("/teacher/new-admission", data)
-          
+
             .then((response) => {
               const formData = new FormData();
               formData.append("file", {
@@ -142,21 +142,17 @@ export default function NewAdmission() {
                 { headers: { "Content-Type": "multipart/form-data" } }
               ).catch((err) => {
                 if (err?.response?.status == 401) {
-                  Alert.alert("Status", err.response.data);
+                  Alert.alert(err.response.data, "Status");
                 } else if (err?.response?.status == 500) {
-                  Alert.alert(
-                    "Status",
-                    err.response.data,
-                    "Internal server error"
-                  );
+                  Alert.alert("Internal server error", "Status");
                 } else if (err?.response?.status === undefined) {
-                  Alert.alert("Status", "Server connection error");
+                  Alert.alert("Server connection error", "Status");
                 } else {
-                  Alert.alert("Status", err.response.data);
+                  Alert.alert(err.response.data, "Status");
                 }
               });
 
-              Alert.alert("Status", "new admission sucssesfull");
+              Alert.alert("new admission sucssesfull", "New admission");
               setIsLoading(false);
               makeEmpty();
               setDisabled(false);
@@ -166,17 +162,13 @@ export default function NewAdmission() {
               setDisabled(false);
 
               if (err?.response?.status == 401) {
-                Alert.alert("Status", err.response.data);
+                Alert.alert(err.response.data, "Status");
               } else if (err?.response?.status == 500) {
-                Alert.alert(
-                  "Status",
-                  err.response.data,
-                  "Internal server error"
-                );
+                Alert.alert("Internal server error", "Status");
               } else if (err?.response?.status === undefined) {
-                Alert.alert("Status", "Server connection error");
+                Alert.alert("Server connection error", "Status");
               } else {
-                Alert.alert("Status", err.response.data);
+                Alert.alert(err.response.data, "Status");
               }
             });
         } else {
@@ -246,14 +238,13 @@ export default function NewAdmission() {
     }));
   }
 
-
   const showImagePicker = async () => {
     // Ask the user for the permission to access the media library
     const permissionResult =
       await ImagePicker.requestMediaLibraryPermissionsAsync();
 
     if (permissionResult.granted === false) {
-      alert("You've refused to allow this appp to access your photos!");
+      Alert.alert("You've refused to allow this appp to access your photos!");
       return;
     }
 
@@ -289,7 +280,6 @@ export default function NewAdmission() {
 
   return (
     <>
-
       <ScrollView
         style={{
           paddingLeft: 40,
@@ -297,7 +287,7 @@ export default function NewAdmission() {
           backgroundColor: styles.common.backgroundColor,
         }}
       >
-        <Hero img={admissionImg}/>
+        <Hero img={admissionImg} />
 
         <Text style={styles.newAdmissionHeading}>
           Field marked with <Text style={styles.mandatory}>*</Text> are
@@ -462,7 +452,7 @@ export default function NewAdmission() {
             value={data.caste}
           />
         </View>
-        <View style={{zIndex: open8 ? 1000 : 1}}>
+        <View style={{ zIndex: open8 ? 1000 : 1 }}>
           <Text style={styles.newAdmissionText}>
             Category<Text style={styles.mandatory}>*</Text>
           </Text>
@@ -471,7 +461,7 @@ export default function NewAdmission() {
             value={data.category}
             placeholder="Select a category"
             items={[
-              { label: "general", value: "general",},
+              { label: "general", value: "general" },
               { label: "HinOBC", value: "HinOBC" },
               { label: "ChristOBC", value: "ChristOBC" },
               { label: "OEC", value: "OEC" },
@@ -622,9 +612,7 @@ export default function NewAdmission() {
         <View style={styles.divider} />
 
         <View>
-          <Text style={styles.newAdmissionText}>
-            WGPA
-          </Text>
+          <Text style={styles.newAdmissionText}>WGPA</Text>
           <TextInputComponent
             keyboardType="numeric"
             style={styles.input}
@@ -632,13 +620,11 @@ export default function NewAdmission() {
             onChangeText={(name, value) => {
               handleChange(name, parseInt(value.replace(/[^0-9]/g, "")));
             }}
-            value={ isNaN(data.wgpa) ? "" : data.wgpa.toString()}
+            value={isNaN(data.wgpa) ? "" : data.wgpa.toString()}
           />
         </View>
         <View>
-          <Text style={styles.newAdmissionText}>
-            Rank
-          </Text>
+          <Text style={styles.newAdmissionText}>Rank</Text>
           <TextInputComponent
             keyboardType="numeric"
             style={styles.input}
@@ -646,7 +632,7 @@ export default function NewAdmission() {
             onChangeText={(name, value) => {
               handleChange(name, parseInt(value.replace(/[^0-9]/g, "")));
             }}
-            value={isNaN(data.rank) ? "" :data.rank.toString()}
+            value={isNaN(data.rank) ? "" : data.rank.toString()}
           />
         </View>
         <View style={{ zIndex: open7 ? 1000 : 1 }}>
@@ -765,7 +751,7 @@ export default function NewAdmission() {
         <View style={{ alignItems: "center" }}>
           {imageUri && (
             <Image
-              style={{ margin: 20 }}
+              style={{ margin: 20, borderRadius: 15 }}
               source={{ uri: imageUri }}
               width={320}
               height={320}

@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { View, SafeAreaView, StatusBar } from "react-native";
 import { TileCard } from "../../components";
-import { useRouter } from "expo-router";
+import { useRouter, Redirect } from "expo-router";
 
 import admissionImg from "../../imgs/adminImages/item1.png";
-
 
 import { useContext } from "react";
 import { Context } from "../../stores/Context";
@@ -17,9 +16,13 @@ export default function Admin() {
 
   const [showCamera, setShowCamera] = useState(false);
 
-  if (!isAdminLoggedIn){
-    router.replace("/login")
-  }
+  useEffect(() => {
+    if (!(isAdminLoggedIn == undefined)) {
+      if (!isAdminLoggedIn) {
+        router.replace("/login");
+      }
+    }
+  }, [isAdminLoggedIn]);
 
   if (showCamera) {
     StatusBar.setBackgroundColor("#000");
@@ -29,7 +32,11 @@ export default function Admin() {
 
   return (
     <SafeAreaView
-      style={{ backgroundColor: styles.common.backgroundColor, flex: 1, padding: 40 }}
+      style={{
+        backgroundColor: styles.common.backgroundColor,
+        flex: 1,
+        padding: 40,
+      }}
     >
       <View
         style={{
@@ -73,7 +80,6 @@ export default function Admin() {
           setShowCamera(false);
         }}
       />
-
     </SafeAreaView>
   );
 }

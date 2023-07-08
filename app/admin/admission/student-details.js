@@ -15,7 +15,7 @@ import Axois from "../../../stores/Axios";
 import Item from "../../../components/admin/admission/Item";
 import { useRouter } from "expo-router";
 
-import { useState, useEffect, useContext } from "react";
+import { useContext } from "react";
 import { Context } from "../../../stores/Context";
 
 export default function StudentDetials() {
@@ -28,7 +28,6 @@ export default function StudentDetials() {
 
   const [error, setError] = React.useState("");
   const [isLoading, setIsLoading] = React.useState(false);
-  
 
   const [open, setOpen] = React.useState(false);
 
