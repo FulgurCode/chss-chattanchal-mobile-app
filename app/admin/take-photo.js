@@ -16,12 +16,15 @@ import { useRef, useState, useEffect } from "react";
 import * as ImageManipulator from "expo-image-manipulator";
 
 import { MaterialCommunityIcons, Ionicons } from "@expo/vector-icons";
+import { Entypo } from "@expo/vector-icons";
 import { useFocusEffect } from "@react-navigation/native";
 import { useRouter } from "expo-router";
 
 import { useContext } from "react";
 import { Context } from "../../stores/Context";
 import Alert from "../../components/common/Alert";
+
+import { Svg, Defs, Mask, Rect, Path } from "react-native-svg";
 
 let data;
 
@@ -63,9 +66,7 @@ export default function TakePhoto(props) {
     React.useCallback(() => {
       setFocus(true);
       if (webSocket) {
-        setWebSocket(
-          new WebSocket(webSocketURL)
-        );
+        setWebSocket(new WebSocket(webSocketURL));
       }
       return () => {
         setFocus(false);
@@ -95,9 +96,7 @@ export default function TakePhoto(props) {
   // connect to websocket when window is Active
   useEffect(() => {
     if (appState.current == "active" && focus) {
-      setWebSocket(
-        new WebSocket(webSocketURL)
-      );
+      setWebSocket(new WebSocket(webSocketURL));
     }
     return () => {};
   }, [focus, appStateVisible]);
@@ -133,7 +132,7 @@ export default function TakePhoto(props) {
     await webSocket.send(JSON.stringify(data));
     setSending(false);
 
-    Alert.alert("Photo send successfully!", "Alert" , () => {
+    Alert.alert("Photo send successfully!", "Alert", () => {
       setScanData(undefined);
       setImageData(null);
       props.setVisible(false);
@@ -221,14 +220,16 @@ export default function TakePhoto(props) {
 
   return (
     <Modal {...props}>
-      <View
-        styles={{
-          flex: 1,
-          backgroundColor: "red",
-          minWidth: Screen.width,
-          minHeight: Screen.height,
-        }}
-      >
+      <View style={{ backgroundColor: styles.common.backgroundColor, flex: 1 }}>
+        {/* <View
+          styles={{
+            flex: 1,
+            backgroundColor: "red"
+          }}
+        >
+          <Text style={{color:"white"}}>hello</Text>
+        </View> */}
+        {/*Shows QRCode scanner*/}
         {scanData && (
           <View
             style={{
@@ -305,6 +306,7 @@ export default function TakePhoto(props) {
                   flex: 1,
                   justifyContent: "center",
                   alignItems: "center",
+                  backgroundColor: styles.common.backgroundColor,
                 }}
               >
                 <ActivityIndicator
@@ -325,6 +327,7 @@ export default function TakePhoto(props) {
                     width: 320,
                     maxHeight: 320,
                     minHeight: 320,
+                    borderRadius: 20,
                   }}
                 />
               </View>
@@ -332,52 +335,53 @@ export default function TakePhoto(props) {
           </View>
           {scanData &&
             (!imageData ? (
-              <View
-                style={{
-                  alignItems: "center",
-                  justifyContent: "space-between",
-                  flex: 1,
-                  paddingTop: 70,
-
-                  backgroundColor: styles.common.backgroundColor,
-                }}
-              >
-                <TouchableOpacity
-                  onPress={takePicture}
+              <>
+                <View
                   style={{
-                    backgroundColor: styles.common.inputBackground,
-                    borderColor: styles.common.borderColor,
-                    borderWidth: 5,
-                    width: 80,
-                    minHeight: 80,
-                    borderRadius: 1000,
-                  }}
-                ></TouchableOpacity>
-                <TouchableOpacity
-                  onPress={() => {
-                    if (flash == Camera.Constants.FlashMode.torch) {
-                      setFlash(Camera.Constants.FlashMode.off);
-                    } else {
-                      setScanData(undefined);
-                      setFlash(Camera.Constants.FlashMode.off);
-                      setType(CameraType.back);
-                    }
-                  }}
-                  style={{
-                    backgroundColor: styles.common.borderColor,
-                    minHeight: 50,
-                    justifyContent: "center",
                     alignItems: "center",
-                    width: "100%",
+                    justifyContent: "space-between",
+                    flex: 1,
+                    paddingTop: Screen.height / 10,
+                    gap: 10,
                   }}
                 >
-                  <Text
-                    style={{ color: "white", fontWeight: 600, fontSize: 17 }}
+                  <TouchableOpacity
+                    onPress={takePicture}
+                    style={{
+                      backgroundColor: styles.common.inputBackground,
+                      borderColor: styles.common.borderColor,
+                      borderWidth: 5,
+                      width: 80,
+                      minHeight: 80,
+                      borderRadius: 1000,
+                    }}
+                  ></TouchableOpacity>
+                  <TouchableOpacity
+                    onPress={() => {
+                      if (flash == Camera.Constants.FlashMode.torch) {
+                        setFlash(Camera.Constants.FlashMode.off);
+                      } else {
+                        setScanData(undefined);
+                        setFlash(Camera.Constants.FlashMode.off);
+                        setType(CameraType.back);
+                      }
+                    }}
+                    style={{
+                      backgroundColor: styles.common.borderColor,
+                      minHeight: 50,
+                      justifyContent: "center",
+                      alignItems: "center",
+                      width: "100%",
+                    }}
                   >
-                    Scan Again?
-                  </Text>
-                </TouchableOpacity>
-              </View>
+                    <Text
+                      style={{ color: "white", fontWeight: 600, fontSize: 17 }}
+                    >
+                      Scan Again?
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+              </>
             ) : (
               <View style={{ backgroundColor: styles.common.backgroundColor }}>
                 <View
@@ -395,7 +399,7 @@ export default function TakePhoto(props) {
                     style={{
                       width: Screen.width / 5,
                       height: Screen.width / 5,
-                      backgroundColor: "#ccc",
+                      backgroundColor: styles.common.inputBackground,
                       borderRadius: 1000,
                       justifyContent: "center",
                       alignItems: "center",
@@ -412,7 +416,7 @@ export default function TakePhoto(props) {
                     style={{
                       width: Screen.width / 5,
                       height: Screen.width / 5,
-                      backgroundColor: "#ccc",
+                      backgroundColor: styles.common.inputBackground,
                       borderRadius: 1000,
                       justifyContent: "center",
                       paddingLeft: 26,
@@ -448,30 +452,74 @@ export default function TakePhoto(props) {
                   zIndex: 2,
                   justifyContent: "center",
                   alignItems: "center",
-                  // backgroundColor: "red"
                 }}
               >
+                <Svg height="100%" width="100%">
+                  <Defs>
+                    <Mask id="mask" x="0" y="0" height="100%" width="100%">
+                      <Rect
+                        x={Screen.width / 2 - 300 / 2}
+                        y={Screen.height / 2 - 300 / 2}
+                        rx="50"
+                        ry="50"
+                        width={300}
+                        height={300}
+                        stroke="white"
+                        strokeWidth="10"
+                        fill-opacity="0"
+                        strokeDasharray={"28  ,140,140,  140, 140,  140,140,  140, 140     ,140,140"}
+                      />
+                    </Mask>
+                  </Defs>
+                  <Rect
+                    height="100%"
+                    width="100%"
+                    mask="url(#mask)"
+                    fill="white"
+                  />
+                </Svg>
+
                 <View
                   style={{
-                    borderWidth: 5,
-                    borderColor: "#fff",
-                    width: 250,
-                    height: 250,
-                    borderRadius: 30,
-                  }}
-                ></View>
-                <TouchableOpacity
-                  style={{
-                    width: 100,
-                    height: 100,
-                    backgroundColor: "#0009",
-                    borderRadius: 1000,
                     position: "absolute",
+                    bottom: 20,
+                    flexDirection: "row",
+                    justifyContent: "space-between",
+                    paddingHorizontal: 40,
+                    width: "100%",
                   }}
-                  onPress={() => {
-                    props.setVisible(false);
-                  }}
-                ></TouchableOpacity>
+                >
+                  <TouchableOpacity
+                    style={{
+                      width: 80,
+                      height: 80,
+                      backgroundColor: "#0009",
+                      borderRadius: 1000,
+
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
+                    onPress={toggleFlashMode}
+                  >
+                    <Ionicons name="flash" size={30} color="#ccc" />
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={{
+                      width: 80,
+                      height: 80,
+                      backgroundColor: "#0009",
+                      borderRadius: 1000,
+
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
+                    onPress={() => {
+                      props.setVisible(false);
+                    }}
+                  >
+                    <Entypo name="cross" size={45} color="#ccc" />
+                  </TouchableOpacity>
+                </View>
               </View>
 
               <View
