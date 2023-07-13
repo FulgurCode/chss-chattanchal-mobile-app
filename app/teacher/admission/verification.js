@@ -12,7 +12,7 @@ import {
   ScrollView,
 } from "react-native";
 import { useRouter } from "expo-router";
-import verificationImg from "../../../imgs/adminImages/item3.png";
+import verificationImg from "../../../imgs/adminImages/Tick.png";
 import Alert from "../../../components/common/Alert";
 
 export default function Verification() {

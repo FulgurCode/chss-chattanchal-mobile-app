@@ -8,7 +8,7 @@ import {
   TouchableOpacity,
   ActivityIndicator,
 } from "react-native";
-import admissionImg from "../../../imgs/adminImages/item1.png";
+import admissionImg from "../../../imgs/adminImages/Add.png";
 import DropDownPickerComponent from "../../../components/common/DropDown";
 import Axois from "../../../stores/Axios";
 import { useState, useEffect, useContext } from "react";

@@ -9,11 +9,11 @@ import {
   ActivityIndicator,
   StatusBar,
 } from "react-native";
-import admissionImg from "../../../imgs/adminImages/item1.png";
+import admissionImg from "../../../imgs/adminImages/Add.png";
 import Hero from "../../../components/common/Hero";
 import DropDownPickerComponent from "../../../components/common/DropDown";
 import Axois from "../../../stores/Axios";
-import { useState, useEffect, useContext } from "react";
+import { useState, useContext } from "react";
 import { useRouter } from "expo-router";
 import * as ImagePicker from "expo-image-picker";
 import * as ImageManipulator from "expo-image-manipulator";

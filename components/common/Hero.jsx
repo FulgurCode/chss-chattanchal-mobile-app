@@ -1,4 +1,4 @@
-import { View, Image, Text } from "react-native";
+import { View,  Text, Image } from "react-native";
 import { useContext } from "react";
 import { Context } from "../../stores/Context";
 import { usePathname } from "expo-router";

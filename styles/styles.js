@@ -114,8 +114,8 @@ const styles = (scheme) => {
       height: 150,
     },
     tileImg: {
-      width: 150,
-      height: 150,
+      width: 70,
+      height: 70,
     },
     tileText: {
       fontWeight: 600,
@@ -129,8 +129,9 @@ const styles = (scheme) => {
       marginBottom: 20,
     },
     newAdmissionImg: {
-      width: 60,
-      height: 60,
+      width: 40,
+      height: 40,
+      margin: 10
     },
     newAdmissionHeading: {
       fontSize: 17,

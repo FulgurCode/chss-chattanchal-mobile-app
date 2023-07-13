@@ -1,5 +1,5 @@
 import React from "react";
-import studentDetailsImg from "../../../imgs/adminImages/item2.png";
+import List from "../../../imgs/adminImages/List.png";
 import Hero from "../../../components/common/Hero";
 import {
   ScrollView,
@@ -88,7 +88,7 @@ export default function StudentDetials() {
           paddingRight: 40,
         }}
       >
-        <Hero text={"Student Details"} img={studentDetailsImg} />
+        <Hero text={"Student Details"} img={List} />
 
         <View style={{ gap: 20 }}>
           <View style={{ zIndex: 999 }}>

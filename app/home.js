@@ -2,10 +2,8 @@ import { Link, useRouter, useFocusEffect } from "expo-router";
 import React, { useEffect, useState } from "react";
 import {
   Alert,
-  Button,
   SafeAreaView,
   Text,
-  StatusBar,
   TextInput,
   View,
   ScrollView,
@@ -46,9 +44,6 @@ export default function Home() {
   // const [redirect, setRedirect] = useState(false);
   // Change this to see the home screen
 
-  if (!redirect) {
-    StatusBar.setBackgroundColor("red");
-  }
 
   function CheckLogin() {
     Axios.get("admin/checklogin")

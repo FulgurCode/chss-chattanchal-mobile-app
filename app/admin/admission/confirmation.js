@@ -4,14 +4,13 @@ import {
   SafeAreaView,
   Text,
   View,
-  Image,
   TextInput,
   TouchableOpacity,
   RefreshControl,
   ScrollView,
 } from "react-native";
 import { useRouter } from "expo-router";
-import verificationImg from "../../../imgs/adminImages/item3.png";
+import verificationImg from "../../../imgs/adminImages/Tick.png";
 import Hero from "../../../components/common/Hero";
 
 import { Context } from "../../../stores/Context";

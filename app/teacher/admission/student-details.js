@@ -1,5 +1,5 @@
 import React from "react";
-import studentDetailsImg from "../../../imgs/adminImages/item2.png";
+import studentDetailsImg from "../../../imgs/adminImages/List.png";
 import {
   ScrollView,
   Text,

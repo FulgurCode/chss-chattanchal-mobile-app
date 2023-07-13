@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { View, SafeAreaView, StatusBar } from "react-native";
 import { TileCard } from "../../components";
-import { useRouter, Redirect } from "expo-router";
+import { useRouter } from "expo-router";
 
-import admissionImg from "../../imgs/adminImages/item1.png";
+import admissionImg from "../../imgs/adminImages/Add.png";
+import cameraImg from "../../imgs/adminImages/Camera.png";
 
 import { useContext } from "react";
 import { Context } from "../../stores/Context";
@@ -56,20 +57,12 @@ export default function Admin() {
           }}
         />
         <TileCard
-          source={admissionImg}
+          source={cameraImg}
           text="Camera"
           onPress={() => {
             setShowCamera(true);
           }}
         />
-        <TileCard
-          source={admissionImg}
-          text="Admission"
-          onPress={() => {
-            router.push("/admin/admission");
-          }}
-        />
-        {/* <TileCard source={admissionImg} text="Attendence" /> */}
       </View>
 
       <TakePhoto
