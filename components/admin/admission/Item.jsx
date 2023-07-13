@@ -1,8 +1,11 @@
 import { View, Text, TouchableOpacity } from "react-native";
 import { useRouter } from "expo-router";
+import { useContext } from "react";
+import { Context } from "../../../stores/Context";
 
 export default function Item(props) {
   const router = useRouter();
+  const { styles } = useContext(Context);
   return (
     <View>
       <TouchableOpacity
@@ -16,11 +19,19 @@ export default function Item(props) {
             pathname: props.link,
             params: {
               ...props.data,
+              user: props.user,
             },
           });
         }}
       >
-        <Text style={{ flex: 2, padding: 10, paddingTop: 15 }}>
+        <Text
+          style={{
+            flex: 2,
+            padding: 10,
+            paddingTop: 15,
+            color: styles.common.color,
+          }}
+        >
           {props.data.name}
         </Text>
         <Text
@@ -28,8 +39,9 @@ export default function Item(props) {
             flex: 1,
             padding: 10,
             paddingTop: 15,
-            backgroundColor: "#efefef",
+            backgroundColor: styles.common.inputBackground,
             textAlign: "center",
+            color: styles.common.color,
           }}
         >
           {props.data.admissionNo}
@@ -40,6 +52,7 @@ export default function Item(props) {
             padding: 10,
             paddingTop: 15,
             textAlign: "center",
+            color: styles.common.color,
           }}
         >
           {props.data.class}

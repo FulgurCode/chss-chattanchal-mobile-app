@@ -6,7 +6,7 @@
       "resizeMode": "contain"
     },
     "icon": "./imgs/icons/icon.png",
-    "scheme": "acme",
+    "scheme": "chss",
     "web": {
       "bundler": "metro"
     },
@@ -32,6 +32,8 @@
       }
     },
     "android": {
+      "userInterfaceStyle": "automatic",
+
       "package": "com.fulgurcode.chsschattanchalmobileapp",
       "adaptiveIcon": {
         "foregroundImage": "./imgs/icons/adaptive-icon.png",
@@ -41,6 +43,16 @@
         "android.permission.CAMERA",
         "android.permission.RECORD_AUDIO"
       ]
+    },
+
+    "userInterfaceStyle": "automatic",
+    "ios": {
+      "userInterfaceStyle": "automatic",
+      "bundleIdentifier" : "chss"
     }
   }
+  
 }
+
+
+

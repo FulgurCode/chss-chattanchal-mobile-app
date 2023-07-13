@@ -1,26 +1,56 @@
 import { Stack } from "expo-router";
 import { TouchableOpacity, View, Text, StatusBar } from "react-native";
 import { Ionicons, AntDesign } from "@expo/vector-icons";
-import { useRouter, usePathname } from "expo-router";
+import { useRouter, usePathname, useNavigation } from "expo-router";
 import UserProfile from "../components/NavBar/UserProfile";
-import { useState } from "react";
+import { useState, useContext, useEffect } from "react";
 
-export default function Layout() {
+import { ContextProvider, Context } from "../stores/Context";
+import { CommonActions } from "@react-navigation/native";
+import Alert from "../components/common/Alert"
+
+export default function App() {
+  return (
+    <ContextProvider>
+      <Layout />
+      <Alert/>
+    </ContextProvider>
+  );
+}
+
+
+export function Layout() {
   const router = useRouter();
   const pathname = usePathname().split("/");
+  const navigation = useNavigation();
 
   const [show, setShow] = useState(false);
 
-  if (pathname[1] == "login" || pathname[2] == "signup" || pathname[2] == "signup-otp") {
-    StatusBar.setBarStyle("dark-content");
+  const { styles } = useContext(Context);
+
+  if (
+    pathname[1] == "login" ||
+    pathname[2] == "signup" ||
+    pathname[2] == "signup-otp"
+  ) {
+    StatusBar.setBackgroundColor(styles.common.backgroundColor);
+    if (styles.version.mode == "dark") {
+      StatusBar.setBarStyle("light-content");
+    } else if (styles.version.mode == "light") {
+      StatusBar.setBarStyle("dark-content");
+    }
   } else {
     StatusBar.setBarStyle("light-content");
   }
 
   return (
     <Stack
+      initialRouteName="home"
       screenOptions={{
-        headerStyle: { backgroundColor: "#6A2C70" },
+        presentation: "modal",
+        animationTypeForReplace: "push",
+        animation: "slide_from_right",
+        headerStyle: { backgroundColor: styles.common.primaryColor },
         headerTintColor: "#fff",
         headerTitleAlign: "center",
         headerTitle: "CHSS Chattanchal",
@@ -43,7 +73,12 @@ export default function Layout() {
               }
             }}
             onLongPress={() => {
-              router.push("/");
+              navigation.dispatch(
+                CommonActions.reset({
+                  index: 1,
+                  routes: [{ name: "home" }],
+                })
+              );
             }}
             style={{
               flexDirection: "row",
@@ -59,7 +94,12 @@ export default function Layout() {
         ),
       }}
     >
-      <Stack.Screen name="login" options={{ headerShown: false }} />
+      <Stack.Screen
+        name="login"
+        options={{
+          headerShown: false,
+        }}
+      />
       <Stack.Screen name="teacher/signup" options={{ headerShown: false }} />
       <Stack.Screen
         name="teacher/signup-otp"
