@@ -1,0 +1,20 @@
+{
+  "version": {
+    "name": "Materail-theme",
+    "version": "1.0",
+    "mode": "light"
+  },
+  "color": "#000",
+  "primaryColor": "#6A2C70",
+  "primaryDarkColor": "#461d4a",
+  "secondaryColor": "#4C9EEb",
+  "backgroundColor": "#fff",
+
+  "popUpBackground": "#fff",
+
+  "E1": "#fafafa",
+  "E2": "#eee",
+  "E3": "#ccc",
+
+  "dividerColor": "#ccc"
+}

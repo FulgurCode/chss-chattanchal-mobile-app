@@ -2,26 +2,25 @@ import React from "react";
 import {
   Text,
   Image,
-  Alert,
   View,
   TextInput,
   ScrollView,
   TouchableOpacity,
   ActivityIndicator,
 } from "react-native";
-import styles from "../../../styles/styles";
-import admissionImg from "../../../imgs/adminImages/item1.png";
-import DropDownPicker from "react-native-dropdown-picker";
+import admissionImg from "../../../imgs/adminImages/Add.png";
+import DropDownPickerComponent from "../../../components/common/DropDown";
 import Axois from "../../../stores/Axios";
-import Loader from "../../../components/common/Loader";
-import { TeacherCheckLogin } from "../../../stores/CheckLogin";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
+import { Context } from "../../../stores/Context";
 import { useRouter } from "expo-router";
 import * as ImagePicker from "expo-image-picker";
 import * as ImageManipulator from "expo-image-manipulator";
 import { useFocusEffect } from "@react-navigation/native";
 
 import Camera from "../../../components/admin/admission/Camera";
+import Hero from "../../../components/common/Hero";
+import Alert from "../../../components/common/Alert";
 
 const TextInputComponent = ({ value, onChangeText, name, ...props }) => (
   <TextInput
@@ -33,6 +32,17 @@ const TextInputComponent = ({ value, onChangeText, name, ...props }) => (
 
 export default function NewAdmission() {
   router = useRouter();
+
+  const { styles, isTeacherLoggedIn } = useContext(Context);
+
+  if (!isTeacherLoggedIn) {
+    router.replace({
+      pathname: "/login",
+      params: {
+        user: "teacher",
+      },
+    });
+  }
 
   const [imageUri, setImageUri] = useState();
 
@@ -117,7 +127,7 @@ export default function NewAdmission() {
           setIsLoading(true);
           setDisabled(true);
           Axois.post("/teacher/new-admission", data)
-          
+
             .then((response) => {
               const formData = new FormData();
               formData.append("file", {
@@ -132,21 +142,17 @@ export default function NewAdmission() {
                 { headers: { "Content-Type": "multipart/form-data" } }
               ).catch((err) => {
                 if (err?.response?.status == 401) {
-                  Alert.alert("Status", err.response.data);
+                  Alert.alert(err.response.data, "Status");
                 } else if (err?.response?.status == 500) {
-                  Alert.alert(
-                    "Status",
-                    err.response.data,
-                    "Internal server error"
-                  );
+                  Alert.alert("Internal server error", "Status");
                 } else if (err?.response?.status === undefined) {
-                  Alert.alert("Status", "Server connection error");
+                  Alert.alert("Server connection error", "Status");
                 } else {
-                  Alert.alert("Status", err.response.data);
+                  Alert.alert(err.response.data, "Status");
                 }
               });
 
-              Alert.alert("Status", "new admission sucssesfull");
+              Alert.alert("new admission sucssesfull", "New admission");
               setIsLoading(false);
               makeEmpty();
               setDisabled(false);
@@ -156,17 +162,13 @@ export default function NewAdmission() {
               setDisabled(false);
 
               if (err?.response?.status == 401) {
-                Alert.alert("Status", err.response.data);
+                Alert.alert(err.response.data, "Status");
               } else if (err?.response?.status == 500) {
-                Alert.alert(
-                  "Status",
-                  err.response.data,
-                  "Internal server error"
-                );
+                Alert.alert("Internal server error", "Status");
               } else if (err?.response?.status === undefined) {
-                Alert.alert("Status", "Server connection error");
+                Alert.alert("Server connection error", "Status");
               } else {
-                Alert.alert("Status", err.response.data);
+                Alert.alert(err.response.data, "Status");
               }
             });
         } else {
@@ -236,18 +238,13 @@ export default function NewAdmission() {
     }));
   }
 
-  const [loading, setLoading] = useState(true);
-  useEffect(() => {
-    TeacherCheckLogin(setLoading, router.replace, (link = "/login"));
-  }, []);
-
   const showImagePicker = async () => {
     // Ask the user for the permission to access the media library
     const permissionResult =
       await ImagePicker.requestMediaLibraryPermissionsAsync();
 
     if (permissionResult.granted === false) {
-      alert("You've refused to allow this appp to access your photos!");
+      Alert.alert("You've refused to allow this appp to access your photos!");
       return;
     }
 
@@ -283,48 +280,14 @@ export default function NewAdmission() {
 
   return (
     <>
-      <Loader show={loading} />
-
       <ScrollView
         style={{
           paddingLeft: 40,
           paddingRight: 40,
-          backgroundColor: "white",
+          backgroundColor: styles.common.backgroundColor,
         }}
       >
-        <View>
-          <View
-            style={{
-              flexDirection: "row",
-              alignItems: "center",
-              paddingTop: 50,
-            }}
-          >
-            <Image source={admissionImg} style={styles.newAdmissionImg} />
-            <Text
-              style={{
-                fontSize: 25,
-                fontWeight: 500,
-                borderColor: "#ccc",
-                borderRightWidth: 2,
-                paddingRight: 20,
-              }}
-            >
-              New Admission
-            </Text>
-          </View>
-          <View
-            style={{
-              borderBottomWidth: 2,
-              borderColor: "#ccc",
-              marginBottom: 10,
-            }}
-          />
-          <Text style={{ color: "grey", fontSize: 17, paddingBottom: 50 }}>
-            Home &gt; Admission &gt;{" "}
-            <Text style={{ fontWeight: 500 }}>New Admission</Text>
-          </Text>
-        </View>
+        <Hero img={admissionImg} />
 
         <Text style={styles.newAdmissionHeading}>
           Field marked with <Text style={styles.mandatory}>*</Text> are
@@ -341,6 +304,7 @@ export default function NewAdmission() {
             name="admissionDate"
             onChangeText={handleChange}
             placeholder="dd-mm-yyyy"
+            placeholderTextColor={styles.common.color}
             maxLength={10}
             value={data.admissionDate}
           />
@@ -405,7 +369,7 @@ export default function NewAdmission() {
           <Text style={styles.newAdmissionText}>
             Gender<Text style={styles.mandatory}>*</Text>
           </Text>
-          <DropDownPicker
+          <DropDownPickerComponent
             open={open1}
             value={data.gender}
             items={[
@@ -417,19 +381,6 @@ export default function NewAdmission() {
             placeholder="Select gender"
             setValue={(value) => {
               handleChange("gender", value());
-            }}
-            listMode="SCROLLVIEW"
-            style={{
-              backgroundColor: "#FAFAFC",
-              borderColor: "#dfdfdf",
-              borderRadius: 10,
-            }}
-            selectedItemContainerStyle={{
-              backgroundColor: "#f2f2f2",
-            }}
-            dropDownContainerStyle={{
-              borderColor: "#dfdfdf",
-              elevation: 4,
             }}
           />
         </View>
@@ -501,16 +452,16 @@ export default function NewAdmission() {
             value={data.caste}
           />
         </View>
-        <View style={{zIndex: open8 ? 1000 : 1}}>
+        <View style={{ zIndex: open8 ? 1000 : 1 }}>
           <Text style={styles.newAdmissionText}>
             Category<Text style={styles.mandatory}>*</Text>
           </Text>
-          <DropDownPicker
+          <DropDownPickerComponent
             open={open8}
             value={data.category}
             placeholder="Select a category"
             items={[
-              { label: "general", value: "general",},
+              { label: "general", value: "general" },
               { label: "HinOBC", value: "HinOBC" },
               { label: "ChristOBC", value: "ChristOBC" },
               { label: "OEC", value: "OEC" },
@@ -521,19 +472,6 @@ export default function NewAdmission() {
             setOpen={setOpen8}
             setValue={(value) => {
               handleChange("category", value());
-            }}
-            listMode="SCROLLVIEW"
-            style={{
-              backgroundColor: "#FAFAFC",
-              borderColor: "#dfdfdf",
-              borderRadius: 10,
-            }}
-            selectedItemContainerStyle={{
-              backgroundColor: "#f2f2f2",
-            }}
-            dropDownContainerStyle={{
-              borderColor: "#dfdfdf",
-              elevation: 4,
             }}
           />
         </View>
@@ -553,7 +491,7 @@ export default function NewAdmission() {
             Does the student belongs to OBC
             <Text style={styles.mandatory}>*</Text>
           </Text>
-          <DropDownPicker
+          <DropDownPickerComponent
             open={open2}
             value={data.obc}
             items={[
@@ -563,19 +501,6 @@ export default function NewAdmission() {
             setOpen={setOpen2}
             setValue={(value) => {
               handleChange("obc", value());
-            }}
-            listMode="SCROLLVIEW"
-            style={{
-              backgroundColor: "#FAFAFC",
-              borderColor: "#dfdfdf",
-              borderRadius: 10,
-            }}
-            selectedItemContainerStyle={{
-              backgroundColor: "#f2f2f2",
-            }}
-            dropDownContainerStyle={{
-              borderColor: "#dfdfdf",
-              elevation: 4,
             }}
           />
         </View>
@@ -589,6 +514,7 @@ export default function NewAdmission() {
             name="dob"
             onChangeText={handleChange}
             placeholder="dd-mm-yyyy"
+            placeholderTextColor={styles.common.color}
             maxLength={10}
             value={data.dob}
           />
@@ -599,7 +525,7 @@ export default function NewAdmission() {
           <Text style={styles.newAdmissionText}>
             Class<Text style={styles.mandatory}>*</Text>
           </Text>
-          <DropDownPicker
+          <DropDownPickerComponent
             open={open3}
             value={data.class}
             items={[
@@ -614,26 +540,13 @@ export default function NewAdmission() {
             setValue={(value) => {
               handleChange("class", value());
             }}
-            listMode="SCROLLVIEW"
-            style={{
-              backgroundColor: "#FAFAFC",
-              borderColor: "#dfdfdf",
-              borderRadius: 10,
-            }}
-            selectedItemContainerStyle={{
-              backgroundColor: "#f2f2f2",
-            }}
-            dropDownContainerStyle={{
-              borderColor: "#dfdfdf",
-              elevation: 4,
-            }}
           />
         </View>
         <View style={{ zIndex: open4 ? 1000 : 1 }}>
           <Text style={styles.newAdmissionText}>
             Course<Text style={styles.mandatory}>*</Text>
           </Text>
-          <DropDownPicker
+          <DropDownPickerComponent
             open={open4}
             value={data.course}
             items={[
@@ -656,26 +569,13 @@ export default function NewAdmission() {
             setValue={(value) => {
               handleChange("course", value());
             }}
-            listMode="SCROLLVIEW"
-            style={{
-              backgroundColor: "#FAFAFC",
-              borderColor: "#dfdfdf",
-              borderRadius: 10,
-            }}
-            selectedItemContainerStyle={{
-              backgroundColor: "#f2f2f2",
-            }}
-            dropDownContainerStyle={{
-              borderColor: "#dfdfdf",
-              elevation: 4,
-            }}
           />
         </View>
         <View style={{ zIndex: open5 ? 1000 : 1 }}>
           <Text style={styles.newAdmissionText}>
             Second language<Text style={styles.mandatory}>*</Text>
           </Text>
-          <DropDownPicker
+          <DropDownPickerComponent
             open={open5}
             value={data.secondLanguage}
             items={[
@@ -688,26 +588,13 @@ export default function NewAdmission() {
             setValue={(value) => {
               handleChange("secondLanguage", value());
             }}
-            listMode="SCROLLVIEW"
-            style={{
-              backgroundColor: "#FAFAFC",
-              borderColor: "#dfdfdf",
-              borderRadius: 10,
-            }}
-            selectedItemContainerStyle={{
-              backgroundColor: "#f2f2f2",
-            }}
-            dropDownContainerStyle={{
-              borderColor: "#dfdfdf",
-              elevation: 4,
-            }}
           />
         </View>
         <View style={{ zIndex: open6 ? 1000 : 1 }}>
           <Text style={styles.newAdmissionText}>
             Student Status<Text style={styles.mandatory}>*</Text>
           </Text>
-          <DropDownPicker
+          <DropDownPickerComponent
             open={open6}
             value={data.status}
             items={[
@@ -719,28 +606,13 @@ export default function NewAdmission() {
             setValue={(value) => {
               handleChange("status", value());
             }}
-            listMode="SCROLLVIEW"
-            style={{
-              backgroundColor: "#FAFAFC",
-              borderColor: "#dfdfdf",
-              borderRadius: 10,
-            }}
-            selectedItemContainerStyle={{
-              backgroundColor: "#f2f2f2",
-            }}
-            dropDownContainerStyle={{
-              borderColor: "#dfdfdf",
-              elevation: 4,
-            }}
           />
         </View>
 
         <View style={styles.divider} />
 
         <View>
-          <Text style={styles.newAdmissionText}>
-            WGPA
-          </Text>
+          <Text style={styles.newAdmissionText}>WGPA</Text>
           <TextInputComponent
             keyboardType="numeric"
             style={styles.input}
@@ -748,13 +620,11 @@ export default function NewAdmission() {
             onChangeText={(name, value) => {
               handleChange(name, parseInt(value.replace(/[^0-9]/g, "")));
             }}
-            value={ isNaN(data.wgpa) ? "" : data.wgpa.toString()}
+            value={isNaN(data.wgpa) ? "" : data.wgpa.toString()}
           />
         </View>
         <View>
-          <Text style={styles.newAdmissionText}>
-            Rank
-          </Text>
+          <Text style={styles.newAdmissionText}>Rank</Text>
           <TextInputComponent
             keyboardType="numeric"
             style={styles.input}
@@ -762,14 +632,14 @@ export default function NewAdmission() {
             onChangeText={(name, value) => {
               handleChange(name, parseInt(value.replace(/[^0-9]/g, "")));
             }}
-            value={isNaN(data.rank) ? "" :data.rank.toString()}
+            value={isNaN(data.rank) ? "" : data.rank.toString()}
           />
         </View>
         <View style={{ zIndex: open7 ? 1000 : 1 }}>
           <Text style={styles.newAdmissionText}>
             Admission category<Text style={styles.mandatory}>*</Text>
           </Text>
-          <DropDownPicker
+          <DropDownPickerComponent
             open={open7}
             value={data.admissionCategory}
             items={[
@@ -782,19 +652,6 @@ export default function NewAdmission() {
             placeholder="Select category"
             setValue={(value) => {
               handleChange("admissionCategory", value());
-            }}
-            listMode="SCROLLVIEW"
-            style={{
-              backgroundColor: "#FAFAFC",
-              borderColor: "#dfdfdf",
-              borderRadius: 10,
-            }}
-            selectedItemContainerStyle={{
-              backgroundColor: "#f2f2f2",
-            }}
-            dropDownContainerStyle={{
-              borderColor: "#dfdfdf",
-              elevation: 4,
             }}
           />
         </View>
@@ -840,6 +697,7 @@ export default function NewAdmission() {
             name="sslcPassingTime"
             onChangeText={handleChange}
             placeholder="mm-yyyy / month-yyyy"
+            placeholderTextColor={styles.common.color}
             value={data.sslcPassingTime.toString()}
           />
         </View>
@@ -873,6 +731,7 @@ export default function NewAdmission() {
             name="tcDate"
             onChangeText={handleChange}
             placeholder="dd-mm-yyyy"
+            placeholderTextColor={styles.common.color}
             maxLength={10}
             value={data.tcDate}
           />
@@ -892,7 +751,7 @@ export default function NewAdmission() {
         <View style={{ alignItems: "center" }}>
           {imageUri && (
             <Image
-              style={{ margin: 20 }}
+              style={{ margin: 20, borderRadius: 15 }}
               source={{ uri: imageUri }}
               width={320}
               height={320}
@@ -927,7 +786,7 @@ export default function NewAdmission() {
           onPress={disabled ? null : handleClick}
           style={{
             ...styles.btn,
-            backgroundColor: disabled ? "grey" : "#28B4AB",
+            backgroundColor: disabled ? "grey" : styles.common.secondaryColor,
             marginTop: 30,
           }}
         >

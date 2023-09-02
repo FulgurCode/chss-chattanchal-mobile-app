@@ -3,14 +3,16 @@ import {
   Ionicons,
   MaterialCommunityIcons,
   MaterialIcons,
-  FontAwesome,
 } from "@expo/vector-icons";
 import Axios from "../../../stores/Axios";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
+import { Context } from "../../../stores/Context";
 
 export default function Layout() {
   const [verification, setVerification] = useState(false);
   const [details, setDetails] = useState(false);
+
+  const {styles} = useContext(Context)
 
   function CheckDuty() {
     Axios.get(`/teacher/get-all-duty`)
@@ -36,10 +38,10 @@ export default function Layout() {
         tabBarShowLabel: false,
         tabBarStyle: {
           height: 50,
-          backgroundColor: "#6A2C70",
+          backgroundColor: styles.common.primaryColor,
           borderTopWidth: 0,
         },
-        tabBarActiveBackgroundColor: "#461d4a",
+        tabBarActiveBackgroundColor: styles.common.primaryDarkColor,
       }}
     >
       <Tabs.Screen
@@ -77,20 +79,6 @@ export default function Layout() {
               }
             : { href: null }
         }
-      />
-      <Tabs.Screen
-        name="take-photo"
-        options={{
-          tabBarIcon: () => (
-            <FontAwesome name="camera" size={27} color="white" />
-          ),
-        }}
-      />
-      <Tabs.Screen
-        name="profile"
-        options={{
-          href: null,
-        }}
       />
     </Tabs>
   );
